@@ -1,0 +1,10 @@
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/Interpreter.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/ScriptFile.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/ScriptLine.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/exceptions/e80RuntimeException.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/Variable.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/Lexer.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/exceptions/VarNotFoundException.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/FunctionProvider.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/testing/TestingMain.java
+/Users/edgelord/git/edgy-script/e80/src/main/java/de/edgelord/edgyscript/e80/main/Main.java
