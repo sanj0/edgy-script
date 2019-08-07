@@ -20,6 +20,11 @@ public class Variable {
         return true;
     }
 
+    public boolean isMathOperator() {
+        return getString().equals("+") || getString().equals("-") || getString().equals("*") || getString().equals("**")
+               || getString().equals("/") || getString().equals("%");
+    }
+
     public void setValue(Object value) {
         this.value = value.toString();
     }

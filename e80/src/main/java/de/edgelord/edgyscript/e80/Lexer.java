@@ -14,16 +14,19 @@ public class Lexer {
         this.lines = scriptFile.getLines();
     }
 
-    public ScriptLine lexLine(int lineNumber) {
-        String line = lines[lineNumber];
-
-        // this array contains the first "word" of the line and as the second element, the complete rest
+    public static ScriptLine lexLine(String line, ScriptFile context) {
         String[] parts = line.split(" ", 2);
 
         // the function name is the first "word" of the line
         String functionName = parts[0];
 
-        return new ScriptLine(functionName, parseVariables(parts[1], scriptFile, functionName.equals("create")).toArray(new Variable[0]));
+        return new ScriptLine(functionName, parseVariables(parts[1], context, functionName.equals("create")).toArray(new Variable[0]));
+    }
+
+    public ScriptLine lexLine(int lineNumber) {
+        String line = lines[lineNumber];
+
+        return lexLine(line, scriptFile);
     }
 
     /**

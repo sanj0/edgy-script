@@ -9,11 +9,9 @@ mkdir -p lib
 
 if [ $# -eq 1 ]
   then
-    java -cp $HOME/.edgy-script/bin/sdk/sdk.jar -jar $e80Path
+    java  -cp $HOME/.edgy-script/bin/sdk/sdk.jar:$e80Path de.edgelord.edgyscript.e80.main.Main $file
   else
-    java -cp $2 -jar $e80Path $file
+    java -verbose:class -cp $2 -jar $e80Path $file
 fi
-
-java -jar $e80Path $file
 
 cd $startDir

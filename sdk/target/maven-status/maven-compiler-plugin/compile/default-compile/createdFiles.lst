@@ -1,3 +1,6 @@
-de/edgyscript/sdk/StdIO.class
-de/edgyscript/sdk/EdgySDK.class
-de/edgyscript/sdk/Variables.class
+de/edgelord/edgyscript/sdk/StdIO.class
+de/edgelord/edgyscript/sdk/NativeExec.class
+de/edgelord/edgyscript/sdk/Math.class
+de/edgelord/edgyscript/sdk/Variables.class
+de/edgelord/edgyscript/sdk/exceptions/SDKException.class
+de/edgelord/edgyscript/sdk/EdgySDK.class
