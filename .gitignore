@@ -1,0 +1,17 @@
+# all target directories
+e80/target
+sdk/target
+
+# .idea dirs
+e80/.idea
+sdk/.idea
+
+# all .iml project files
+*.iml
+
+# compiled java classes 
+*.class
+
+# .DS-Store mac files
+**/.DS_Store
+
