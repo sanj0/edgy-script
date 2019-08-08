@@ -38,7 +38,7 @@ public class Variables extends FunctionProvider {
         }
 
         if (name.equals("set")) {
-            Variable var = scriptFile.getVar(variables[0].getString());
+            Variable var = scriptFile.getVar(variables[0].getName());
             var.setValue(variables[1].getString());
             return var;
         }

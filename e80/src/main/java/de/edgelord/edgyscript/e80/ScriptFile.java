@@ -4,10 +4,8 @@ import de.edgelord.edgyscript.e80.exceptions.VarNotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * This class represents a script-file
@@ -29,6 +27,16 @@ public class ScriptFile {
 
     public ScriptFile(String path) {
         this(new File(path));
+    }
+
+    public static ScriptFile dummy() {
+        try {
+            return new ScriptFile(File.createTempFile("dummyES#" + new Random().nextInt(), null));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**
