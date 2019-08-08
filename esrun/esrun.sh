@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # the first argument is the file
 file="$1"
 fileDir=$(dirname $file)
