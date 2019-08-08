@@ -3,6 +3,8 @@ package de.edgelord.edgyscript.sdk;
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
 import de.edgelord.edgyscript.e80.Variable;
+import de.edgelord.edgyscript.sdk.functionproviders.*;
+import de.edgelord.edgyscript.sdk.functionproviders.Math;
 
 public class EdgySDK extends FunctionProvider {
 
@@ -10,6 +12,7 @@ public class EdgySDK extends FunctionProvider {
     private static final StdIO STDIO = new StdIO();
     private static final NativeExec NATIVE_EXEC = new NativeExec();
     private static final Math MATH = new Math();
+    private static final SystemProvider SYSTEM_PROVIDER = new SystemProvider();
 
     @Override
     public Variable function(String s, Variable[] variables, ScriptFile scriptFile) {
@@ -31,6 +34,11 @@ public class EdgySDK extends FunctionProvider {
         }
 
         var = NATIVE_EXEC.function(s, variables, scriptFile);
+        if (var != null) {
+            return var;
+        }
+
+        var = SYSTEM_PROVIDER.function(s, variables, scriptFile);
         if (var != null) {
             return var;
         }

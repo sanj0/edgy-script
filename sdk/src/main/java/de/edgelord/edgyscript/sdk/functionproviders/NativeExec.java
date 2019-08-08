@@ -1,4 +1,4 @@
-package de.edgelord.edgyscript.sdk;
+package de.edgelord.edgyscript.sdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
