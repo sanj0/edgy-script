@@ -1,5 +1,5 @@
 # Edgy Script
-Edgy Script, a modern, slow, barely-documentated programming language for no purpose.
+Edgy Script: a modern, slow, barely-documented programming language for no purpose.
 
 This projects contains three modules:
 - e80, the interpreter and library API
