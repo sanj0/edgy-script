@@ -15,7 +15,7 @@ import java.util.Scanner;
  * - writeln (alias writeLine, println, printLine, outln, outLine)
  *     writes the first argument to the standard output and creates a newline. returns the written string
  *
- * - read (alias input, readLine)
+ * - read (alias input, getinput, readLine)
  *     writes the first arg and assigns the given input (after ENTER was pressed) to the second arg. returns the var
  *
  * Example usage:
@@ -43,7 +43,7 @@ public class StdIO extends FunctionProvider {
             return variables[0];
         }
 
-        if (name.equals("read") || name.equals("input") || name.equals("readLine")) {
+        if (name.equals("read") || name.equals("input") || name.equals("getinput") || name.equals("readLine")) {
             System.out.print(variables[0].getString());
             variables[1].setValue(inputScanner.nextLine());
             return variables[1];

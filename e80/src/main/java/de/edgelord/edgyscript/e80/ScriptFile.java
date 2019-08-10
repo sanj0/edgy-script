@@ -39,6 +39,15 @@ public class ScriptFile {
         return null;
     }
 
+    public void removeVar(String name) {
+        for (Variable var : varPool) {
+            if (var.getName().equals(name)) {
+                varPool.remove(var);
+                return;
+            }
+        }
+    }
+
     /**
      * Returns an array that contains all the lines of this {@link #file script file}
      *
