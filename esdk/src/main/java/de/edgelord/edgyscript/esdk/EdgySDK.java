@@ -1,10 +1,10 @@
-package de.edgelord.edgyscript.sdk;
+package de.edgelord.edgyscript.esdk;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
 import de.edgelord.edgyscript.e80.Variable;
-import de.edgelord.edgyscript.sdk.functionproviders.*;
-import de.edgelord.edgyscript.sdk.functionproviders.Math;
+import de.edgelord.edgyscript.esdk.functionproviders.*;
+import de.edgelord.edgyscript.esdk.functionproviders.Math;
 
 public class EdgySDK extends FunctionProvider {
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.edgelord.edgy-script</groupId>
-    <artifactId>sdk</artifactId>
+    <artifactId>esdk</artifactId>
     <version>0.1-SNAPSHOT</version>
     <build>
         <plugins>
@@ -34,8 +34,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <finalName>sdk</finalName>
-                    <outputDirectory>${user.home}/.edgy-script/bin/sdk</outputDirectory>
+                    <finalName>esdk</finalName>
+                    <outputDirectory>${user.home}/.edgy-script/bin/esdk</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

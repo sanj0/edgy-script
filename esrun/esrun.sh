@@ -10,11 +10,11 @@ cd $fileDir
 mkdir -p lib
 
 if [ "$#" -eq 1 ]; then
-    java -cp $HOME/.edgy-script/bin/sdk/sdk.jar:$e80Path de.edgelord.edgyscript.e80.main.Main $file
-elif [ "$#" -eq 2]; then
+    java -cp $HOME/.edgy-script/bin/esdk/esdk.jar:$e80Path de.edgelord.edgyscript.e80.main.Main $file
+elif [ "$#" -eq 2 ]; then
     java -cp $2 -jar $e80Path $file
 else
-    java -cp $HOME/.edgy-script/bin/sdk/sdk.jar:$e80Path de.edgelord.edgyscript.e80.main.Main
+    java -cp $HOME/.edgy-script/bin/esdk/esdk.jar:$e80Path de.edgelord.edgyscript.e80.main.Main
 fi
 
 cd $startDir

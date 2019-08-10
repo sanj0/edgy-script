@@ -1,4 +1,4 @@
-package de.edgelord.edgyscript.sdk.exceptions;
+package de.edgelord.edgyscript.esdk.exceptions;
 
 import de.edgelord.edgyscript.e80.Interpreter;
 import de.edgelord.edgyscript.e80.ScriptFile;

@@ -1,9 +1,9 @@
-package de.edgelord.edgyscript.sdk.functionproviders;
+package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
 import de.edgelord.edgyscript.e80.Variable;
-import de.edgelord.edgyscript.sdk.exceptions.SDKException;
+import de.edgelord.edgyscript.esdk.exceptions.SDKException;
 
 import javax.script.ScriptException;
 

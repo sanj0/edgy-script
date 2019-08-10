@@ -41,7 +41,6 @@ public class Interpreter {
             // ignore comments (lines starting with either "#" or "//")
             // also, ignore blank lines
             if (!line.startsWith("#") && !line.startsWith("//") && !line.isEmpty()) {
-
                 execLine(line, script);
             }
         }
