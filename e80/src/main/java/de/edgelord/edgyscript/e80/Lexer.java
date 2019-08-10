@@ -1,5 +1,8 @@
 package de.edgelord.edgyscript.e80;
 
+import de.edgelord.edgyscript.e80.exceptions.VarNotFoundException;
+import de.edgelord.edgyscript.e80.main.Main;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class Lexer {
     }
 
     /**
-     * Creates a list of {@link Variable}s from the given args.
+     * Creates a list of {@link Variable}s from the given args.g
      * Example: parseVariables("314, \"hello, world\", myVar")
      *
      * @param args the args to convert to a Variable list
@@ -77,10 +80,12 @@ public class Lexer {
                 vars.add(new Variable(scriptFile.nextTempvar(), currentToken.toString()));
             } else {
                 String varName = currentToken.toString();
-                if (scriptFile.varExists(varName) || !isCreateFunction) {
+                if (scriptFile.varExists(varName)) {
                     vars.add(scriptFile.getVar(varName));
+                } else if (Main.simpleStringMode || isCreateFunction) {
+                    vars.add(new Variable(scriptFile.nextTempvar(), varName));
                 } else {
-                    vars.add(new Variable(varName, varName));
+                    throw new VarNotFoundException(varName, scriptFile);
                 }
             }
 

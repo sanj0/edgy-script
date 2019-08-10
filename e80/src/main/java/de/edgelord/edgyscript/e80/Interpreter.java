@@ -1,5 +1,7 @@
 package de.edgelord.edgyscript.e80;
 
+import de.edgelord.edgyscript.e80.main.Main;
+
 import java.io.FileNotFoundException;
 
 public class Interpreter {
@@ -38,19 +40,39 @@ public class Interpreter {
             // ignore comments (lines starting with either "#" or "//")
             // also, ignore blank lines
             if (!line.startsWith("#") && !line.startsWith("//") && !line.isEmpty()) {
-                ScriptLine scriptLine = lexer.lexLine(i);
-                execLine(scriptLine, script);
+
+                if (line.toLowerCase().startsWith("simplestringmode")) {
+                    switch (line.split(" " )[1]) {
+                        case "true":
+                            Main.simpleStringMode = true;
+                            break;
+                        case "false":
+                            Main.simpleStringMode = false;
+                            break;
+                    }
+                } else {
+                    execLine(line, script);
+                }
             }
         }
 
         return 0;
     }
 
-    private static Variable execLine(ScriptLine line, ScriptFile context) {
-        return sdk.function(line.getFunctionName(), line.getArgs(), context);
-    }
-
-    public static Variable eval(String line, ScriptFile context) {
-        return execLine(Lexer.lexLine(line, context), context);
+    public static Variable execLine(String line, ScriptFile context) {
+        if (line.toLowerCase().startsWith("simplestringmode")) {
+            switch (line.split(" " )[1]) {
+                case "true":
+                    Main.simpleStringMode = true;
+                    break;
+                case "false":
+                    Main.simpleStringMode = false;
+                    break;
+            }
+            return Variable.empty();
+        } else {
+            ScriptLine scriptLine = Lexer.lexLine(line, context);
+            return sdk.function(scriptLine.getFunctionName(), scriptLine.getArgs(), context);
+        }
     }
 }

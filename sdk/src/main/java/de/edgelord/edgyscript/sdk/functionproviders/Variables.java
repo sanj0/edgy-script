@@ -50,7 +50,7 @@ public class Variables extends FunctionProvider {
         }
 
         if (name.equals("evalset") || name.equals("exprset")) {
-            Variable var = Interpreter.eval(variables[1].getString(), scriptFile);
+            Variable var = Interpreter.execLine(variables[1].getString(), scriptFile);
             variables[0].setValue(var.getString());
             return var;
         }

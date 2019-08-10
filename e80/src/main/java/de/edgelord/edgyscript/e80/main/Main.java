@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static boolean simpleStringMode = true;
+
     public static void main(String[] args) throws FileNotFoundException {
 
         if (args.length > 0) {
@@ -34,7 +36,7 @@ public class Main {
                     verboseReturnVal = true;
                 } else {
 
-                    Variable returnval = Interpreter.eval(line, context);
+                    Variable returnval = Interpreter.execLine(line, context);
 
                     if (verboseReturnVal) {
                         System.out.println("returnval: " + returnval.getName() + " : " + returnval.getString());

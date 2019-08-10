@@ -13,6 +13,7 @@ public class EdgySDK extends FunctionProvider {
     private static final NativeExec NATIVE_EXEC = new NativeExec();
     private static final Math MATH = new Math();
     private static final SystemProvider SYSTEM_PROVIDER = new SystemProvider();
+    private static final Arrays ARRAYS = new Arrays();
 
     @Override
     public Variable function(String s, Variable[] variables, ScriptFile scriptFile) {
@@ -39,6 +40,11 @@ public class EdgySDK extends FunctionProvider {
         }
 
         var = SYSTEM_PROVIDER.function(s, variables, scriptFile);
+        if (var != null) {
+            return var;
+        }
+
+        var = ARRAYS.function(s, variables, scriptFile);
         if (var != null) {
             return var;
         }
