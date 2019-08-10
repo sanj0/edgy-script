@@ -8,7 +8,7 @@ git clone https://www.github.com/edgelord314/edgy-script
 cd edgy-script
 cd e80
 mvn clean install
-cd ../sdk
+cd ../esdk
 mvn clean install
 cd ../esrun
 yes | cp -rf esrun.sh /usr/local/bin/esrun

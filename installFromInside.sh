@@ -5,7 +5,7 @@ echo make sure that git, maven and java are installed properly!
 
 cd e80
 mvn clean install
-cd ../sdk
+cd ../esdk
 mvn clean install
 cd ../esrun
 yes | cp -rf esrun.sh /usr/local/bin/esrun
