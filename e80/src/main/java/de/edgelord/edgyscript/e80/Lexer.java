@@ -59,8 +59,15 @@ public class Lexer {
             // first case: " -> string
             if (character == '"') {
                 valueMode = true;
+                boolean ignoreNextChar = false;
                 character = chars[++i];
-                while (character != '"') {
+                while (character != '"' || ignoreNextChar) {
+                    if (character == '\\') {
+                        ignoreNextChar = true;
+                        character = chars[++i];
+                        continue;
+                    }
+                    ignoreNextChar = false;
                     currentToken.append(character);
                     character = chars[++i];
                 }

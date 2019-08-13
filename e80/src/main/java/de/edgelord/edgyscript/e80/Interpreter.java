@@ -15,6 +15,7 @@ public class Interpreter {
     private static List<String> lines = new ArrayList<>();
     private static Map<String, Integer> gotos = new HashMap<>();
     private static boolean wentTo = false;
+
     static {
         try {
             sdk = Class.forName("de.edgelord.edgyscript.esdk.EdgySDK").asSubclass(FunctionProvider.class).newInstance();
@@ -72,9 +73,12 @@ public class Interpreter {
             return Variable.empty();
         }
 
+
+
         if (!wentTo) {
             lines.add(line);
         }
+
         if (line.toLowerCase().startsWith("simplestringmode")) {
             switch (line.split(" " )[1]) {
                 case "true":
