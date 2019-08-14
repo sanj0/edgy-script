@@ -21,12 +21,12 @@ public class SystemProvider extends FunctionProvider {
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
 
-        if (name.equals("systemctrl") || name.equals("systemctl") || name.equals("syscontrol")) {
+        if (name.equalsIgnoreCase("systemctrl") || name.equalsIgnoreCase("systemctl") || name.equalsIgnoreCase("syscontrol")) {
             String command = variables[0].getString();
 
-            if (command.equals("shutdown") || command.equals("exit")) {
+            if (command.equalsIgnoreCase("shutdown") || command.equalsIgnoreCase("exit")) {
                 System.exit(0);
-            } else if (command.equals("vars") || command.equals("variables")) {
+            } else if (command.equalsIgnoreCase("vars") || command.equalsIgnoreCase("variables")) {
                 for (Variable var : scriptFile.getVarPool()) {
                     System.out.println(var.getName() + " : " + var.getString());
                 }
@@ -34,7 +34,7 @@ public class SystemProvider extends FunctionProvider {
             return Variable.empty();
         }
 
-        if (name.equals("systemprop") || name.equals("sysprop") || name.equals("systemproperty")) {
+        if (name.equalsIgnoreCase("systemprop") || name.equalsIgnoreCase("sysprop") || name.equalsIgnoreCase("systemproperty")) {
             return new Variable(scriptFile.nextTempvar(), System.getProperty(variables[0].getString()));
         }
 

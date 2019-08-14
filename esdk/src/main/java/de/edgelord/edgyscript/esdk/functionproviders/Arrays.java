@@ -43,7 +43,7 @@ public class Arrays extends FunctionProvider {
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
 
-        if (name.equals("array") || name.equals("createarray")) {
+        if (name.equalsIgnoreCase("array") || name.equalsIgnoreCase("createarray")) {
             arrays.put(variables[0].getString(), new Variable[variables[1].getInt()]);
             return new Variable(scriptFile.nextTempvar(), variables[0].getString());
         }

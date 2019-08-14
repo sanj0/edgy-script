@@ -29,7 +29,7 @@ public class Structures extends FunctionProvider {
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
 
-        if (name.equals("if")) {
+        if (name.equalsIgnoreCase("if")) {
             Variable condition = variables[0];
             boolean returnVal = false;
 

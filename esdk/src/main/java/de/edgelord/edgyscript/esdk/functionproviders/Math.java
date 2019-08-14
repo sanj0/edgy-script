@@ -11,7 +11,7 @@ public class Math extends FunctionProvider {
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
 
-        if (name.equals("math")) {
+        if (name.equalsIgnoreCase("math")) {
             StringBuilder mathExpr = new StringBuilder();
 
             for (Variable var : variables) {

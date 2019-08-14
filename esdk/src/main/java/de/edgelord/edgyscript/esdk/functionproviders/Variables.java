@@ -33,10 +33,10 @@ public class Variables extends FunctionProvider {
 
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
-        if (name.equals("create") || name.equals("var")) {
+        if (name.equalsIgnoreCase("create") || name.equalsIgnoreCase("var")) {
             Variable var = new Variable(variables[0].getString(), "");
 
-            if (variables.length == 3 && variables[1].getString().equals("=")) {
+            if (variables.length == 3 && variables[1].getString().equalsIgnoreCase("=")) {
                 var.setValue(variables[2].getString());
             }
 
@@ -44,7 +44,7 @@ public class Variables extends FunctionProvider {
             return var;
         }
 
-        if (name.equals("set")) {
+        if (name.equalsIgnoreCase("set")) {
             Variable var = scriptFile.getVar(variables[0].getName());
             var.setValue(variables[1].getString());
 
@@ -58,7 +58,7 @@ public class Variables extends FunctionProvider {
             return var;
         }
 
-        if (name.equals("createset")) {
+        if (name.equalsIgnoreCase("createset")) {
             Variable var = new Variable(variables[0].getString(), variables[1].getString());
             scriptFile.getVarPool().add(var);
             try {
@@ -69,7 +69,7 @@ public class Variables extends FunctionProvider {
             return var;
         }
 
-        if (name.equals("evalset") || name.equals("exprset")) {
+        if (name.equalsIgnoreCase("evalset") || name.equalsIgnoreCase("exprset")) {
             Variable var = Interpreter.execLine(variables[1].getString(), scriptFile, false);
             variables[0].setValue(var.getString());
 

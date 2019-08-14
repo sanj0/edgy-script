@@ -33,17 +33,17 @@ public class StdIO extends FunctionProvider {
 
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
-        if (name.equals("write") || name.equals("print") || name.equals("out")) {
+        if (name.equalsIgnoreCase("write") || name.equalsIgnoreCase("print") || name.equalsIgnoreCase("out")) {
             System.out.print(variables[0].getString());
             return variables[0];
         }
 
-        if (name.equals("writeln") || name.equals("writeLine") || name.equals("println") || name.equals("printLine") || name.equals("outln") || name.equals("outLine")) {
+        if (name.equalsIgnoreCase("writeln") || name.equalsIgnoreCase("writeLine") || name.equalsIgnoreCase("println") || name.equalsIgnoreCase("printLine") || name.equalsIgnoreCase("outln") || name.equalsIgnoreCase("outLine")) {
             System.out.println(variables[0].getString());
             return variables[0];
         }
 
-        if (name.equals("read") || name.equals("input") || name.equals("getinput") || name.equals("readLine")) {
+        if (name.equalsIgnoreCase("read") || name.equalsIgnoreCase("input") || name.equalsIgnoreCase("getinput") || name.equalsIgnoreCase("readLine")) {
             if (variables.length > 0) {
                 System.out.print(variables[0].getString());
             }
