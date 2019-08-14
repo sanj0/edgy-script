@@ -9,18 +9,24 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.StringWriter;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Provides functions:
  *
- * - js (alisa javascript) builds a js script out of the given arguments and evaluates it, returning its output/value
+ * - js (alisa javascript) evaluates the given js script and evaluates  it, returning its output/value <br>
  *
- * Example usage:
- * # do a simple math calculation, which could also be done using {@code math}
- * createset number1 2
- * createset number2 4
- * js number1 + number2
- * # in this case, the "+"-sign is a string
+ * - feedjs (alias jsfeed) <br>
+ *     - feeds the first given variable into the js engine and adds it to the {@link #jsFedVars list} <p>
+ *
+ * Example usage: <br>
+ * # do a simple math calculation, which could also be done using {@code math} <br>
+ * createset number1 2 <br>
+ * createset number2 4 <br>
+ * feedjs number1
+ * feedjs number2
+ * js "number1 + number2"
  */
 public class NativeExec extends FunctionProvider {
 
@@ -31,21 +37,50 @@ public class NativeExec extends FunctionProvider {
         javaScriptContext.setWriter(javaScriptWriter);
     }
 
+    public static List<Variable> jsFedVars = new LinkedList<>();
+
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
 
-        if (name.equals("js") || name.equals("javascript")) {
+        if (name.equalsIgnoreCase("js") || name.equalsIgnoreCase("javascript")) {
 
             StringBuilder command = new StringBuilder();
             for (Variable var : variables) {
                 command.append(var.getString());
             }
 
+            Object evalValue = null;
             try {
-                return new Variable(scriptFile.nextTempvar(), getJavaScriptEngine().eval(command.toString()).toString());
+                evalValue = getJavaScriptEngine().eval(command.toString());
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
+
+            if (evalValue == null) {
+                return Variable.empty();
+            } else {
+                return new Variable(scriptFile.nextTempvar(), evalValue.toString());
+            }
+        }
+
+        if (name.equalsIgnoreCase("feedjs") || name.equalsIgnoreCase("jsfeed")) {
+            Variable var = variables[0];
+
+            if (var.getString().equals("")) {
+                try {
+                    getJavaScriptEngine().eval("var " + var.getName());
+                } catch (ScriptException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    getJavaScriptEngine().eval("var " + var.getName() + " = " + var.getValueForJS());
+                } catch (ScriptException e) {
+                    e.printStackTrace();
+                }
+            }
+            jsFedVars.add(var);
+            return var;
         }
         return null;
     }

@@ -16,7 +16,7 @@ import java.util.Scanner;
  *     writes the first argument to the standard output and creates a newline. returns the written string
  *
  * - read (alias input, getinput, readLine)
- *     writes the first arg and assigns the given input (after ENTER was pressed) to the second arg. returns the var
+ *     if there is an arg given, it writes its value out to teh screen and then waits for user input. returns the input
  *
  * Example usage:
  *
@@ -44,8 +44,9 @@ public class StdIO extends FunctionProvider {
         }
 
         if (name.equals("read") || name.equals("input") || name.equals("getinput") || name.equals("readLine")) {
-            System.out.print(variables[0].getString());
-            variables[1].setValue(inputScanner.nextLine());
+            if (variables.length > 0) {
+                System.out.print(variables[0].getString());
+            }
             return variables[1];
         }
 

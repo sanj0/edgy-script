@@ -46,14 +46,14 @@ public class Interpreter {
             // ignore comments (lines starting with either "#" or "//")
             // also, ignore blank lines
             if (!line.startsWith("#") && !line.startsWith("//") && !line.isEmpty()) {
-                execLine(line, script);
+                execLine(line, script, true);
             }
         }
 
         return 0;
     }
 
-    public static Variable execLine(String line, ScriptFile context) {
+    public static Variable execLine(String line, ScriptFile context, boolean addToScript) {
 
         Variable lastReturnVal = null;
 
@@ -67,7 +67,7 @@ public class Interpreter {
             int index = gotos.get(line.split(" ")[1]);
 
             for (int i = index; i < lines.size(); i++) {
-                execLine(lines.get(i), context);
+                execLine(lines.get(i), context, addToScript);
             }
             wentTo = false;
             return Variable.empty();
@@ -75,7 +75,7 @@ public class Interpreter {
 
 
 
-        if (!wentTo) {
+        if (!wentTo && addToScript) {
             lines.add(line);
         }
 

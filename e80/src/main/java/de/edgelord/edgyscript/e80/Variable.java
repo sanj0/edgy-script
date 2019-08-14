@@ -20,9 +20,22 @@ public class Variable {
         return true;
     }
 
+    public boolean isBoolean() {
+        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+    }
+
     public boolean isMathOperator() {
         return getString().equals("+") || getString().equals("-") || getString().equals("*") || getString().equals("**")
                || getString().equals("/") || getString().equals("%");
+    }
+
+    public String getValueForJS() {
+
+        if (isBoolean() || isNumber()) {
+            return getString();
+        } else {
+            return "\"" + getString() + "\"";
+        }
     }
 
     public void setValue(Object value) {

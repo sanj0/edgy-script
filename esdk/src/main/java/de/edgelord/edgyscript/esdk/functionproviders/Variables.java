@@ -5,6 +5,8 @@ import de.edgelord.edgyscript.e80.Interpreter;
 import de.edgelord.edgyscript.e80.ScriptFile;
 import de.edgelord.edgyscript.e80.Variable;
 
+import javax.script.ScriptException;
+
 /**
  * Provides functions:
  *
@@ -33,6 +35,11 @@ public class Variables extends FunctionProvider {
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
         if (name.equals("create") || name.equals("var")) {
             Variable var = new Variable(variables[0].getString(), "");
+
+            if (variables.length == 3 && variables[1].getString().equals("=")) {
+                var.setValue(variables[2].getString());
+            }
+
             scriptFile.getVarPool().add(var);
             return var;
         }
@@ -40,18 +47,39 @@ public class Variables extends FunctionProvider {
         if (name.equals("set")) {
             Variable var = scriptFile.getVar(variables[0].getName());
             var.setValue(variables[1].getString());
+
+            if (NativeExec.jsFedVars.contains(var)) {
+                try {
+                    NativeExec.getJavaScriptEngine().eval(var.getName() + " = " + var.getValueForJS());
+                } catch (ScriptException e) {
+                    e.printStackTrace();
+                }
+            }
             return var;
         }
 
         if (name.equals("createset")) {
             Variable var = new Variable(variables[0].getString(), variables[1].getString());
             scriptFile.getVarPool().add(var);
+            try {
+                NativeExec.getJavaScriptEngine().eval("var " + var.getName() + " = " + var.getValueForJS());
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
             return var;
         }
 
         if (name.equals("evalset") || name.equals("exprset")) {
-            Variable var = Interpreter.execLine(variables[1].getString(), scriptFile);
+            Variable var = Interpreter.execLine(variables[1].getString(), scriptFile, false);
             variables[0].setValue(var.getString());
+
+            if (NativeExec.jsFedVars.contains(var)) {
+                try {
+                    NativeExec.getJavaScriptEngine().eval(var.getName() + " = " + var.getValueForJS());
+                } catch (ScriptException e) {
+                    e.printStackTrace();
+                }
+            }
             return var;
         }
 

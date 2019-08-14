@@ -36,7 +36,7 @@ public class Main {
                     verboseReturnVal = true;
                 } else {
 
-                    Variable returnval = Interpreter.execLine(line, context);
+                    Variable returnval = Interpreter.execLine(line, context, true);
 
                     if (verboseReturnVal) {
                         System.out.println("returnval: " + returnval.getName() + " : " + returnval.getString());
