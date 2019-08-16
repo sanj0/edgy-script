@@ -1,0 +1,9 @@
+// Due to the fact that the math function uses JavaScript, 
+// you could make a CL-Calculator way easier and better
+// but for the sake of presenatatino, here we got
+
+create number1
+create number2
+
+input "Number 1: " and set number1
+input "Number 2: " and set number2

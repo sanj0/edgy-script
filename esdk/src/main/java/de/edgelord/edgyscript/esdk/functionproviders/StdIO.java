@@ -43,11 +43,11 @@ public class StdIO extends FunctionProvider {
             return variables[0];
         }
 
-        if (name.equalsIgnoreCase("read") || name.equalsIgnoreCase("input") || name.equalsIgnoreCase("getinput") || name.equalsIgnoreCase("readLine")) {
+        if (name.equalsIgnoreCase("input") || name.equalsIgnoreCase("read") || name.equalsIgnoreCase("getinput") || name.equalsIgnoreCase("readLine")) {
             if (variables.length > 0) {
                 System.out.print(variables[0].getString());
             }
-            return variables[1];
+            return new Variable(scriptFile.nextTempvar(), inputScanner.nextLine());
         }
 
         return null;
