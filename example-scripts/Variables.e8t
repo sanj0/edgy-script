@@ -1,0 +1,5 @@
+var number1 = 8754
+var number2 = 398
+
+join "First number = " number1 and writeLine
+join "Second number = " number2 and writeLine

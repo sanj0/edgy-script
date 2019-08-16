@@ -15,6 +15,7 @@ public class EdgySDK extends FunctionProvider {
     private static final SystemProvider SYSTEM_PROVIDER = new SystemProvider();
     private static final Arrays ARRAYS = new Arrays();
     private static final Structures STRUCTURES = new Structures();
+    private static final StringUtils STRING_UTILS = new StringUtils();
 
     @Override
     public Variable function(String s, Variable[] variables, ScriptFile scriptFile) {
@@ -51,6 +52,11 @@ public class EdgySDK extends FunctionProvider {
         }
 
         var = STRUCTURES.function(s, variables, scriptFile);
+        if (var != null) {
+            return var;
+        }
+
+        var = STRING_UTILS.function(s, variables, scriptFile);
         if (var != null) {
             return var;
         }

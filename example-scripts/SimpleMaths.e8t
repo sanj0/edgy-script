@@ -1,0 +1,7 @@
+var number1 = 8745
+var number2 = 398
+var result
+
+math number1 + number2 and set result
+
+join number1 " + " number2 " = " result and writeLine

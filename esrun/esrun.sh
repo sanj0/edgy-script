@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # the first argument is the file
-file="$1"
+file="$PWD"/"$1"
 fileDir=$(dirname "$file")
 startDir=$PWD
 e80Path="$HOME/.edgy-script/bin/e80/e80.jar"
