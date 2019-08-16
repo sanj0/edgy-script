@@ -16,6 +16,10 @@ public class Main {
 
         if (args.length > 0) {
             ScriptFile scriptFile = new ScriptFile(new File(args[0]));
+
+            if (!scriptFile.getPath().endsWith(".e8t")) {
+                System.err.println("Warning: The given file " + scriptFile.getPath() + " doesn't have the e8t extension!");
+            }
             Interpreter.interpretRun(scriptFile);
         } else {
             System.out.println("Edgy-Script interactive mode. Type \"verbose:returnval\" to see the return value for every line. \nType \"exit\" to exit the program.");

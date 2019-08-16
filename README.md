@@ -4,7 +4,7 @@ Edgy Script: a modern, slow, barely-documented programming language for no purpo
 This projects contains three modules:
 - e80, the interpreter and library API
 - esrun, the script that runs a given ES-Script
-- the sdk, which is a collection of java classes that provide a (not really) solid sdk for ES-Script
+- the sdk, which is a collection of java classes that provide a (not really) solid sdk for Edgy SCripts
 
 ### Edgy Script examples:
 
@@ -56,6 +56,6 @@ On Linux and MacOS, you can use install.sh, on Windows, follow these steps:
     - build it using maven (still `mvn clean install`)
 4. Run a ES Script using esrun/esrun.sh
     - cd into the esrun project (`cd ../esrun`)
-    - run the script using the esrun script (`./esrun.sh path-to-file.es`)
+    - run the script using the esrun script (`./esrun.sh path-to-file.e8t`)
 5. Enjoys the interactive mode (similar to the one from python)
     - run esrun/esrun.sh (`./esrun.sh`)
