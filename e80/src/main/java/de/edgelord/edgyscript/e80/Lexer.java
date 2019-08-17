@@ -56,6 +56,36 @@ public class Lexer {
                 continue;
             }
 
+            // < -> start of a co-line
+            if (character == '<') {
+                boolean ignoreNextChar = false;
+                StringBuilder subLine = new StringBuilder();
+                character = chars[++i];
+                int requiredClosedDiamonds = 1;
+                while (requiredClosedDiamonds != 0 || ignoreNextChar) {
+                    if (character == '\\') {
+                        ignoreNextChar = true;
+                        character = chars[++i];
+                        continue;
+                    }
+
+                    if (character == '<') {
+                        requiredClosedDiamonds++;
+                    } else if (character == '>') {
+                        requiredClosedDiamonds--;
+                        if (requiredClosedDiamonds == 0) {
+                            continue;
+                        }
+                    }
+                    ignoreNextChar = false;
+                    subLine.append(character);
+                    character = chars[++i];
+                }
+                EvalVariable var = new EvalVariable(scriptFile.nextTempvar(), subLine.toString(), scriptFile);
+                vars.add(var);
+                continue;
+            }
+
             // first case: " -> string
             if (character == '"') {
                 valueMode = true;

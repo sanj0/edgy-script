@@ -14,7 +14,6 @@ public class Interpreter {
     private static FunctionProvider sdk;
     private static List<String> lines = new ArrayList<>();
     private static Map<String, Integer> gotos = new HashMap<>();
-    private static boolean wentTo = false;
 
     static {
         try {
@@ -33,7 +32,7 @@ public class Interpreter {
         script.getVarPool().add(new Variable("+", "+")); // addition
         script.getVarPool().add(new Variable("-", "-")); // subtraction
         script.getVarPool().add(new Variable("*", "*")); // multiplication
-        script.getVarPool().add(new Variable("**", "**")); // exponentiation
+        //script.getVarPool().add(new Variable("**", "**")); // exponentiation
         script.getVarPool().add(new Variable("/", "/")); // division
         script.getVarPool().add(new Variable("%", "%")); // modulo
 
@@ -63,19 +62,17 @@ public class Interpreter {
         }
 
         if (line.startsWith("goto ")) {
-            wentTo = true;
             int index = gotos.get(line.split(" ")[1]);
 
             for (int i = index; i < lines.size(); i++) {
                 execLine(lines.get(i), context, addToScript);
             }
-            wentTo = false;
             return Variable.empty();
         }
 
 
 
-        if (!wentTo && addToScript) {
+        if (addToScript) {
             lines.add(line);
         }
 

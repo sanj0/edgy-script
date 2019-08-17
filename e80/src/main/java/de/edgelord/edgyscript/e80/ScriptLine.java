@@ -10,6 +10,15 @@ public class ScriptLine {
         this.args = args;
     }
 
+    public void refresh() {
+        for (Variable var : args) {
+            if (var instanceof EvalVariable) {
+                EvalVariable evalVariable = (EvalVariable) var;
+                evalVariable.reEval();
+            }
+        }
+    }
+
     /**
      * Gets {@link #functionName}.
      *

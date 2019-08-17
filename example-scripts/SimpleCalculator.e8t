@@ -3,7 +3,21 @@
 // but for the sake of presenatatino, here we got
 
 create number1
+jsfeed number1
+
 create number2
 
+create operator
+jsfeed operator
+
+create result
+
+:start
 input "Number 1: " and set number1
+
+if "number1 == \"exit\"" "systemctrl exit"
 input "Number 2: " and set number2
+input "Math operator (+ - * / ** %) " and set operator
+
+math number1 operator number2 and writeLine 
+goto start
