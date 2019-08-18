@@ -1,6 +1,7 @@
 package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
+import de.edgelord.edgyscript.e80.Interpreter;
 import de.edgelord.edgyscript.e80.ScriptFile;
 import de.edgelord.edgyscript.e80.Variable;
 
@@ -20,6 +21,9 @@ import java.util.List;
  * - feedjs (alias jsfeed) <br>
  *     - feeds the first given variable into the js engine and adds it to the {@link #jsFedVars list} <p>
  *
+ * - exec (alias eval, do, execute)
+ *     - executes the given line of Edgy Script code. returns the variable returned by the line
+ *
  * Example usage: <br>
  * # do a simple math calculation, which could also be done using {@code math} <br>
  * createset number1 2 <br>
@@ -27,6 +31,9 @@ import java.util.List;
  * feedjs number1
  * feedjs number2
  * js "number1 + number2"
+ *
+ * # the do (exec) command adds all given variables together
+ * do writeLine hello
  */
 public class NativeExec extends FunctionProvider {
 
@@ -41,6 +48,16 @@ public class NativeExec extends FunctionProvider {
 
     @Override
     public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
+
+        if (name.equalsIgnoreCase("exec") || name.equalsIgnoreCase("eval")
+                || name.equalsIgnoreCase("do") || name.equalsIgnoreCase("execute")) {
+            StringBuilder line = new StringBuilder();
+            for (Variable var : variables) {
+                line.append(var.getString());
+            }
+
+            return Interpreter.execLine(line.toString(), scriptFile, false);
+        }
 
         if (name.equalsIgnoreCase("js") || name.equalsIgnoreCase("javascript")) {
 

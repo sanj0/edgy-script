@@ -1,11 +1,9 @@
 package de.edgelord.edgyscript.esdk.functionproviders;
 
-import de.edgelord.edgyscript.e80.FunctionProvider;
-import de.edgelord.edgyscript.e80.Interpreter;
-import de.edgelord.edgyscript.e80.ScriptFile;
-import de.edgelord.edgyscript.e80.Variable;
+import de.edgelord.edgyscript.e80.*;
 
 import javax.script.ScriptException;
+import java.util.function.BooleanSupplier;
 
 /**
  * Provides functions:
@@ -46,6 +44,22 @@ public class Structures extends FunctionProvider {
             }
 
             return new Variable(scriptFile.nextTempvar(), String.valueOf(returnVal));
+        }
+
+        if (name.equalsIgnoreCase("while")) {
+            Variable condition = variables[0];
+            EvalVariable evalCondition = null;
+
+            if (condition instanceof EvalVariable) {
+                evalCondition = (EvalVariable) condition;
+            }
+            while (condition.getString().equalsIgnoreCase("true")) {
+                if (evalCondition != null) {
+                    evalCondition.reEval();
+                }
+
+                Interpreter.execLine(variables[1].getString(), scriptFile, false);
+            }
         }
         return null;
     }
