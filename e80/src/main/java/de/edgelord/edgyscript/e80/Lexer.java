@@ -56,24 +56,24 @@ public class Lexer {
                 continue;
             }
 
-            // < -> start of a co-line
-            if (character == '<') {
+            // ( -> start of a runtime-evaluated-arg
+            if (character == '(') {
                 boolean ignoreNextChar = false;
                 StringBuilder subLine = new StringBuilder();
                 character = chars[++i];
-                int requiredClosedDiamonds = 1;
-                while (requiredClosedDiamonds != 0 || ignoreNextChar) {
+                int requiredClosedBrackets = 1;
+                while (requiredClosedBrackets != 0 || ignoreNextChar) {
                     if (character == '\\') {
                         ignoreNextChar = true;
                         character = chars[++i];
                         continue;
                     }
 
-                    if (character == '<') {
-                        requiredClosedDiamonds++;
-                    } else if (character == '>') {
-                        requiredClosedDiamonds--;
-                        if (requiredClosedDiamonds == 0) {
+                    if (character == '(') {
+                        requiredClosedBrackets++;
+                    } else if (character == ')') {
+                        requiredClosedBrackets--;
+                        if (requiredClosedBrackets == 0) {
                             continue;
                         }
                     }
@@ -86,8 +86,34 @@ public class Lexer {
                 continue;
             }
 
-            // first case: " -> string
-            if (character == '"') {
+            // < -> start of a string that can have infinite substrings (by convention used for e.g. if-statements)
+            if (character == '<') {
+                valueMode = true;
+                boolean ignoreNextChar = false;
+                character = chars[++i];
+                int requiredClosedBrackets = 1;
+
+                while (requiredClosedBrackets != 0 || ignoreNextChar) {
+                    if (character == '\\') {
+                        ignoreNextChar = true;
+                        character = chars[++i];
+                        continue;
+                    }
+
+                    if (character == '<') {
+                        requiredClosedBrackets++;
+                    } else if (character == '>') {
+                        requiredClosedBrackets--;
+                        if (requiredClosedBrackets == 0) {
+                            continue;
+                        }
+                    }
+                    ignoreNextChar = false;
+                    currentToken.append(character);
+                    character = chars[++i];
+                }
+                // " -> one (max two) dimensional string
+            } else if (character == '"') {
                 valueMode = true;
                 boolean ignoreNextChar = false;
                 character = chars[++i];

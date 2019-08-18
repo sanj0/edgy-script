@@ -1,6 +1,7 @@
 package de.edgelord.edgyscript.e80;
 
 import de.edgelord.edgyscript.e80.exceptions.FunctionNotFoundException;
+import de.edgelord.edgyscript.e80.exceptions.e80RuntimeException;
 import de.edgelord.edgyscript.e80.main.Main;
 
 import java.io.FileNotFoundException;
@@ -54,74 +55,78 @@ public class Interpreter {
 
     public static Variable execLine(String line, ScriptFile context, boolean addToScript) {
 
-        Variable lastReturnVal = null;
+        try {
+            Variable lastReturnVal = null;
 
-        if (line.startsWith(":")) {
-            gotos.put(line.replaceFirst(":", ""), lines.size());
-            return Variable.empty();
-        }
-
-        if (line.startsWith("goto ")) {
-            int index = gotos.get(line.split(" ")[1]);
-
-            for (int i = index; i < lines.size(); i++) {
-                execLine(lines.get(i), context, addToScript);
+            if (line.startsWith(":")) {
+                gotos.put(line.replaceFirst(":", ""), lines.size());
+                return Variable.empty();
             }
-            return Variable.empty();
-        }
 
+            if (line.startsWith("goto ")) {
+                int index = gotos.get(line.split(" ")[1]);
 
-
-        if (addToScript) {
-            lines.add(line);
-        }
-
-        if (line.toLowerCase().startsWith("simplestringmode")) {
-            switch (line.split(" " )[1]) {
-                case "true":
-                    Main.simpleStringMode = true;
-                    break;
-                case "false":
-                    Main.simpleStringMode = false;
-                    break;
+                for (int i = index; i < lines.size(); i++) {
+                    execLine(lines.get(i), context, addToScript);
+                }
+                return Variable.empty();
             }
-            return Variable.empty();
-        } else {
-            String[] parts = line.split(" and ");
-            String pipedVar = null;
-            boolean addedTempVarToPool = false;
 
-            for (int j = 0; j < parts.length; j++) {
-                String part = parts[j];
 
-                if (j > 0) {
-                    if (part.contains("$")) {
-                        part.replaceAll("[$]", pipedVar);
-                    } else {
-                        part += " , " + pipedVar;
+            if (addToScript) {
+                lines.add(line);
+            }
+
+            if (line.toLowerCase().startsWith("simplestringmode")) {
+                switch (line.split(" ")[1]) {
+                    case "true":
+                        Main.simpleStringMode = true;
+                        break;
+                    case "false":
+                        Main.simpleStringMode = false;
+                        break;
+                }
+                return Variable.empty();
+            } else {
+                String[] parts = line.split(" and ");
+                String pipedVar = null;
+                boolean addedTempVarToPool = false;
+
+                for (int j = 0; j < parts.length; j++) {
+                    String part = parts[j];
+
+                    if (j > 0) {
+                        if (part.contains("$")) {
+                            part.replaceAll("[$]", pipedVar);
+                        } else {
+                            part += " , " + pipedVar;
+                        }
+                    }
+
+                    ScriptLine scriptLine = Lexer.lexLine(part, context);
+                    Variable returnVal = sdk.function(scriptLine.getFunctionName(), scriptLine.getArgs(), context);
+                    lastReturnVal = returnVal;
+
+                    if (returnVal == null) {
+                        throw new FunctionNotFoundException(scriptLine.getFunctionName(), context);
+                    }
+
+                    if (addedTempVarToPool) {
+                        context.removeVar(pipedVar);
+                        addedTempVarToPool = false;
+                    }
+
+                    pipedVar = returnVal.getName();
+                    if (!context.varExists(pipedVar)) {
+                        context.getVarPool().add(returnVal);
+                        addedTempVarToPool = true;
                     }
                 }
-
-                ScriptLine scriptLine = Lexer.lexLine(part, context);
-                Variable returnVal = sdk.function(scriptLine.getFunctionName(), scriptLine.getArgs(), context);
-                lastReturnVal = returnVal;
-
-                if (returnVal == null) {
-                    throw new FunctionNotFoundException(scriptLine.getFunctionName(), context);
-                }
-
-                if (addedTempVarToPool) {
-                    context.removeVar(pipedVar);
-                    addedTempVarToPool = false;
-                }
-
-                pipedVar = returnVal.getName();
-                if (!context.varExists(pipedVar)) {
-                    context.getVarPool().add(returnVal);
-                    addedTempVarToPool = true;
-                }
             }
+            return lastReturnVal;
+        } catch (Exception e) {
+            System.err.println(new e80RuntimeException("Error", context).getMessage());
         }
-        return lastReturnVal;
+        return null;
     }
 }
