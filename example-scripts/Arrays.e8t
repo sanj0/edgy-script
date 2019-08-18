@@ -7,11 +7,11 @@ jsfeed currIndex
 :arrayFill
 math currIndex + 1 and myArray set currIndex
 math currIndex + 1 and set currIndex
-if "currIndex < 10" "goto arrayFill"
+if (js currIndex < 10) "goto arrayFill"
 
 set currIndex 0
 
 :arrayOutput
 myArray get currIndex and join "Number " currIndex " = " and writeLine
 math currIndex + 1 and set currIndex
-if "currIndex < 10" "goto arrayOutput"
+if (js currIndex < 10) "goto arrayOutput"

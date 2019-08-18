@@ -2,9 +2,6 @@ package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.*;
 
-import javax.script.ScriptException;
-import java.util.function.BooleanSupplier;
-
 /**
  * Provides functions:
  *
