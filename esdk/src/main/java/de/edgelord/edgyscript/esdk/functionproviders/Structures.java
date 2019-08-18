@@ -29,18 +29,14 @@ public class Structures extends FunctionProvider {
 
         if (name.equalsIgnoreCase("if")) {
             Variable condition = variables[0];
-            boolean returnVal = false;
+            boolean returnVal;
 
             if (condition.getString().equalsIgnoreCase("true")) {
                 returnVal = executeIf(true, variables, scriptFile);
             } else if (condition.getString().equalsIgnoreCase("false") && variables.length >= 4) {
                 returnVal = executeIf(false, variables, scriptFile);
             } else {
-                try {
-                    returnVal = executeIf(Boolean.parseBoolean(NativeExec.getJavaScriptEngine().eval(variables[0].getString()).toString()), variables, scriptFile);
-                } catch (ScriptException e) {
-                    e.printStackTrace();
-                }
+                returnVal = executeIf(Interpreter.execLine(variables[0].getString(), scriptFile, false).getBoolean(), variables, scriptFile);
             }
 
             return new Variable(scriptFile.nextTempvar(), String.valueOf(returnVal));
