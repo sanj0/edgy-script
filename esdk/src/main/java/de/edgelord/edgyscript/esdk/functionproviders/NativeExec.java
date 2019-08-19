@@ -1,9 +1,6 @@
 package de.edgelord.edgyscript.esdk.functionproviders;
 
-import de.edgelord.edgyscript.e80.FunctionProvider;
-import de.edgelord.edgyscript.e80.Interpreter;
-import de.edgelord.edgyscript.e80.ScriptFile;
-import de.edgelord.edgyscript.e80.Variable;
+import de.edgelord.edgyscript.e80.*;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -47,16 +44,16 @@ public class NativeExec extends FunctionProvider {
     public static List<Variable> jsFedVars = new LinkedList<>();
 
     @Override
-    public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
+    public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
 
         if (name.equalsIgnoreCase("exec") || name.equalsIgnoreCase("eval")
                 || name.equalsIgnoreCase("do") || name.equalsIgnoreCase("execute")) {
-            StringBuilder line = new StringBuilder();
+            StringBuilder cmdLine = new StringBuilder();
             for (Variable var : variables) {
-                line.append(var.getString());
+                cmdLine.append(var.getString());
             }
 
-            return Interpreter.execLine(line.toString(), scriptFile, false);
+            return Interpreter.execLine(cmdLine.toString(), scriptFile, false);
         }
 
         if (name.equalsIgnoreCase("js") || name.equalsIgnoreCase("javascript")) {

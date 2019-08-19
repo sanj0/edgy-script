@@ -9,5 +9,5 @@ public abstract class FunctionProvider {
      * @param script the script
      * @return true if the function was found
      */
-    public abstract Variable function(String name, Variable[] args, ScriptFile script);
+    public abstract Variable function(ScriptLine line, String name, Variable[] args, ScriptFile script);
 }

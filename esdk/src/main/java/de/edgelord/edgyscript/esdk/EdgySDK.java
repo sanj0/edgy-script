@@ -2,6 +2,7 @@ package de.edgelord.edgyscript.esdk;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
+import de.edgelord.edgyscript.e80.ScriptLine;
 import de.edgelord.edgyscript.e80.Variable;
 import de.edgelord.edgyscript.esdk.functionproviders.*;
 import de.edgelord.edgyscript.esdk.functionproviders.Math;
@@ -18,45 +19,45 @@ public class EdgySDK extends FunctionProvider {
     private static final StringUtils STRING_UTILS = new StringUtils();
 
     @Override
-    public Variable function(String s, Variable[] variables, ScriptFile scriptFile) {
+    public Variable function(ScriptLine line, String s, Variable[] variables, ScriptFile scriptFile) {
         Variable var;
 
-        var = VARIABLES.function(s, variables, scriptFile);
+        var = VARIABLES.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = STDIO.function(s, variables, scriptFile);
+        var = STDIO.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = MATH.function(s, variables, scriptFile);
+        var = MATH.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = NATIVE_EXEC.function(s, variables, scriptFile);
+        var = NATIVE_EXEC.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = SYSTEM_PROVIDER.function(s, variables, scriptFile);
+        var = SYSTEM_PROVIDER.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = ARRAYS.function(s, variables, scriptFile);
+        var = ARRAYS.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = STRUCTURES.function(s, variables, scriptFile);
+        var = STRUCTURES.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }
 
-        var = STRING_UTILS.function(s, variables, scriptFile);
+        var = STRING_UTILS.function(line, s, variables, scriptFile);
         if (var != null) {
             return var;
         }

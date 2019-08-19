@@ -6,8 +6,9 @@ import de.edgelord.edgyscript.e80.*;
  * Provides functions:
  *
  * - if
- *     - if the first arg is true, the second arg will be executed as a separate line. If it is false and the third arg is "else", the
- *       forth is executed as a separate line. returns the first arg
+ *     - if the given boolean is true, executes all given sublines (inside { })
+ * - else
+ *     - if the last if-call was negative, executes all given sublines
  *
  * Example usage:
  *
@@ -21,22 +22,34 @@ import de.edgelord.edgyscript.e80.*;
  * if
  */
 public class Structures extends FunctionProvider {
+
+    private boolean executeNextElse = false;
     @Override
-    public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
+    public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
 
         if (name.equalsIgnoreCase("if")) {
             Variable condition = variables[0];
             boolean returnVal;
 
-            if (condition.getString().equalsIgnoreCase("true")) {
-                returnVal = executeIf(true, variables, scriptFile);
-            } else if (condition.getString().equalsIgnoreCase("false") && variables.length >= 4) {
-                returnVal = executeIf(false, variables, scriptFile);
+            if (condition.getString().trim().equalsIgnoreCase("true")) {
+                returnVal = executeIf(true, line, scriptFile);
+            } else if (condition.getString().trim().equalsIgnoreCase("false") && variables.length >= 4) {
+                returnVal = executeIf(false, line, scriptFile);
             } else {
-                returnVal = executeIf(Interpreter.execLine(variables[0].getString(), scriptFile, false).getBoolean(), variables, scriptFile);
+                System.out.println("okay");
+                returnVal = executeIf(Interpreter.execLine(variables[0].getString(), scriptFile, false).getBoolean(), line, scriptFile);
             }
 
             return new Variable(scriptFile.nextTempvar(), String.valueOf(returnVal));
+        }
+
+        if (name.equalsIgnoreCase("else")) {
+            if (executeNextElse) {
+                line.runSublines(scriptFile);
+            }
+
+            executeNextElse = !executeNextElse;
+            return new Variable(scriptFile.nextTempvar(), String.valueOf(!executeNextElse));
         }
 
         if (name.equalsIgnoreCase("while")) {
@@ -51,23 +64,17 @@ public class Structures extends FunctionProvider {
                     evalCondition.reEval();
                 }
 
-                Interpreter.execLine(variables[1].getString(), scriptFile, false);
+                line.runSublines(scriptFile);
             }
         }
         return null;
     }
 
-    private boolean executeIf(boolean condition, Variable[] args, ScriptFile context) {
+    private boolean executeIf(boolean condition, ScriptLine line, ScriptFile context) {
         if (condition) {
-            Interpreter.execLine(args[1].getString(), context, false);
-        } else if (args.length > 2) {
-            String line;
-            if (args[2].getString().equalsIgnoreCase("else")) {
-                line = args[3].getString();
-            } else {
-                line = args[2].getString();
-            }
-            Interpreter.execLine(line, context, false);
+            line.runSublines(context);
+        } else {
+            executeNextElse = true;
         }
 
         return condition;

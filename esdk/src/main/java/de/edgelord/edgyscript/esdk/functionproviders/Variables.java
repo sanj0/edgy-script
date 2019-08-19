@@ -1,9 +1,6 @@
 package de.edgelord.edgyscript.esdk.functionproviders;
 
-import de.edgelord.edgyscript.e80.FunctionProvider;
-import de.edgelord.edgyscript.e80.Interpreter;
-import de.edgelord.edgyscript.e80.ScriptFile;
-import de.edgelord.edgyscript.e80.Variable;
+import de.edgelord.edgyscript.e80.*;
 
 import javax.script.ScriptException;
 
@@ -32,7 +29,7 @@ import javax.script.ScriptException;
 public class Variables extends FunctionProvider {
 
     @Override
-    public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
+    public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
         if (name.equalsIgnoreCase("create") || name.equalsIgnoreCase("var")) {
             Variable var = new Variable(variables[0].getString(), "");
 

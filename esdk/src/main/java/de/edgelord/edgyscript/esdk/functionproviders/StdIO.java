@@ -2,6 +2,7 @@ package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
+import de.edgelord.edgyscript.e80.ScriptLine;
 import de.edgelord.edgyscript.e80.Variable;
 
 import java.util.Scanner;
@@ -32,7 +33,7 @@ public class StdIO extends FunctionProvider {
     private static final Scanner inputScanner = new Scanner(System.in);
 
     @Override
-    public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
+    public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
         if (name.equalsIgnoreCase("write") || name.equalsIgnoreCase("print") || name.equalsIgnoreCase("out")) {
             System.out.print(variables[0].getString());
             return variables[0];

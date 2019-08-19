@@ -5,10 +5,7 @@ import de.edgelord.edgyscript.e80.exceptions.e80RuntimeException;
 import de.edgelord.edgyscript.e80.main.Main;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Interpreter {
 
@@ -46,14 +43,33 @@ public class Interpreter {
             // ignore comments (lines starting with either "#" or "//")
             // also, ignore blank lines
             if (!line.startsWith("#") && !line.startsWith("//") && !line.isEmpty()) {
-                execLine(line, script, true);
+                line = prepareLine(line);
+
+                ArrayList<String> sublines = new ArrayList<>();
+                // if the line ends with a {, that means sublines are coming
+                if (line.endsWith("{")) {
+                    line = line.substring(0, line.length() - 1);
+                    for (; !lines[++i].endsWith("}");) {
+                        sublines.add(prepareLine(lines[i]));
+                    }
+                }
+                execLine(line, script, true, sublines.toArray(new String[0]));
             }
         }
 
         return 0;
     }
 
-    public static Variable execLine(String line, ScriptFile context, boolean addToScript) {
+    public static String prepareLine(String prePreparedLine) {
+        prePreparedLine = prePreparedLine.trim();
+        if (prePreparedLine.endsWith(";")) {
+            prePreparedLine = prePreparedLine.substring(0, prePreparedLine.length() - 1);
+        }
+
+        return prePreparedLine;
+    }
+
+    public static Variable execLine(String line, ScriptFile context, boolean addToScript, String... sublines) {
 
         try {
             Variable lastReturnVal = null;
@@ -104,7 +120,8 @@ public class Interpreter {
                     }
 
                     ScriptLine scriptLine = Lexer.lexLine(part, context);
-                    Variable returnVal = sdk.function(scriptLine.getFunctionName(), scriptLine.getArgs(), context);
+                    scriptLine.addSublines(sublines);
+                    Variable returnVal = sdk.function(scriptLine, scriptLine.getFunctionName(), scriptLine.getArgs(), context);
                     lastReturnVal = returnVal;
 
                     if (returnVal == null) {
@@ -126,6 +143,7 @@ public class Interpreter {
             return lastReturnVal;
         } catch (Exception e) {
             System.err.println(new e80RuntimeException("Error", context).getMessage());
+            e.printStackTrace();
         }
         return null;
     }

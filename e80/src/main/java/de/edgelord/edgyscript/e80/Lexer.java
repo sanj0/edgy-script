@@ -56,8 +56,8 @@ public class Lexer {
                 continue;
             }
 
-            // ( -> start of a runtime-evaluated-arg
-            if (character == '(') {
+            // < -> start of a runtime-evaluated-arg
+            if (character == '<') {
                 boolean ignoreNextChar = false;
                 StringBuilder subLine = new StringBuilder();
                 character = chars[++i];
@@ -69,9 +69,9 @@ public class Lexer {
                         continue;
                     }
 
-                    if (character == '(') {
+                    if (character == '<') {
                         requiredClosedBrackets++;
-                    } else if (character == ')') {
+                    } else if (character == '>') {
                         requiredClosedBrackets--;
                         if (requiredClosedBrackets == 0) {
                             continue;
@@ -86,8 +86,8 @@ public class Lexer {
                 continue;
             }
 
-            // < -> start of a string that can have infinite substrings (by convention used for e.g. if-statements)
-            if (character == '<') {
+            // ( -> start of a string that can have infinite substrings (by convention used for e.g. if-statements)
+            if (character == '(') {
                 valueMode = true;
                 boolean ignoreNextChar = false;
                 character = chars[++i];
@@ -100,9 +100,9 @@ public class Lexer {
                         continue;
                     }
 
-                    if (character == '<') {
+                    if (character == '(') {
                         requiredClosedBrackets++;
-                    } else if (character == '>') {
+                    } else if (character == ')') {
                         requiredClosedBrackets--;
                         if (requiredClosedBrackets == 0) {
                             continue;

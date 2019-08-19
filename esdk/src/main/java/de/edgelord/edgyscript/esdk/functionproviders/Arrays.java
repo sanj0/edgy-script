@@ -2,6 +2,7 @@ package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.FunctionProvider;
 import de.edgelord.edgyscript.e80.ScriptFile;
+import de.edgelord.edgyscript.e80.ScriptLine;
 import de.edgelord.edgyscript.e80.Variable;
 
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class Arrays extends FunctionProvider {
     private static Map<String, Variable[]> arrays = new HashMap<>();
 
     @Override
-    public Variable function(String name, Variable[] variables, ScriptFile scriptFile) {
+    public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
 
         if (name.equalsIgnoreCase("array") || name.equalsIgnoreCase("createarray")) {
             arrays.put(variables[0].getString(), new Variable[variables[1].getInt()]);

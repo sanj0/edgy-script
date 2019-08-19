@@ -1,0 +1,8 @@
+if true {
+write "hello, "
+writeLine "world!"
+}
+else {
+write "Hello "
+writeLine "World!"
+}
