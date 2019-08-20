@@ -60,7 +60,7 @@ public class Lexer {
             }
 
             // < -> start of a runtime-evaluated-arg
-            if (character == '<') {
+            if (character == '[') {
                 boolean ignoreNextChar = false;
                 StringBuilder subLine = new StringBuilder();
                 character = chars[++i];
@@ -72,9 +72,9 @@ public class Lexer {
                         continue;
                     }
 
-                    if (character == '<') {
+                    if (character == '[') {
                         requiredClosedBrackets++;
-                    } else if (character == '>') {
+                    } else if (character == ']') {
                         requiredClosedBrackets--;
                         if (requiredClosedBrackets == 0) {
                             continue;
