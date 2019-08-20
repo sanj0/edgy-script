@@ -43,6 +43,7 @@ public class Interpreter {
             // ignore comments (lines starting with either "#" or "//")
             // also, ignore blank lines
             if (!line.startsWith("#") && !line.startsWith("//") && !line.isEmpty()) {
+
                 line = prepareLine(line);
 
                 ArrayList<String> sublines = new ArrayList<>();
@@ -52,6 +53,7 @@ public class Interpreter {
                     for (; !lines[++i].endsWith("}");) {
                         sublines.add(prepareLine(lines[i]));
                     }
+                    i--;
                 }
                 execLine(line, script, true, sublines.toArray(new String[0]));
             }
@@ -61,6 +63,9 @@ public class Interpreter {
     }
 
     public static String prepareLine(String prePreparedLine) {
+        if (prePreparedLine.startsWith("}")) {
+            prePreparedLine = prePreparedLine.replaceFirst("}", "");
+        }
         prePreparedLine = prePreparedLine.trim();
         if (prePreparedLine.endsWith(";")) {
             prePreparedLine = prePreparedLine.substring(0, prePreparedLine.length() - 1);
@@ -115,7 +120,7 @@ public class Interpreter {
                         if (part.contains("$")) {
                             part.replaceAll("[$]", pipedVar);
                         } else {
-                            part += " , " + pipedVar;
+                            part += " " + pipedVar;
                         }
                     }
 

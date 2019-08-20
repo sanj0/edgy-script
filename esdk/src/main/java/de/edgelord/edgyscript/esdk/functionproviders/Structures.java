@@ -28,28 +28,25 @@ public class Structures extends FunctionProvider {
     public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
 
         if (name.equalsIgnoreCase("if")) {
-            Variable condition = variables[0];
-            boolean returnVal;
-
-            if (condition.getString().trim().equalsIgnoreCase("true")) {
-                returnVal = executeIf(true, line, scriptFile);
-            } else if (condition.getString().trim().equalsIgnoreCase("false") && variables.length >= 4) {
-                returnVal = executeIf(false, line, scriptFile);
-            } else {
-                System.out.println("okay");
-                returnVal = executeIf(Interpreter.execLine(variables[0].getString(), scriptFile, false).getBoolean(), line, scriptFile);
-            }
-
-            return new Variable(scriptFile.nextTempvar(), String.valueOf(returnVal));
+            return new Variable(scriptFile.nextTempvar(), String.valueOf(doIf(variables[0], line, scriptFile)));
         }
 
         if (name.equalsIgnoreCase("else")) {
-            if (executeNextElse) {
+
+            if (variables.length > 1) {
+                if (variables[0].getString().equalsIgnoreCase("if")) {
+                    if (executeNextElse) {
+                        doIf(variables[1], line, scriptFile);
+                    }
+                    executeNextElse = false;
+                }
+            } else if (executeNextElse) {
                 line.runSublines(scriptFile);
+                executeNextElse = false;
+                return new Variable(scriptFile.nextTempvar(), "true");
             }
 
-            executeNextElse = !executeNextElse;
-            return new Variable(scriptFile.nextTempvar(), String.valueOf(!executeNextElse));
+            return new Variable(scriptFile.nextTempvar(), "false");
         }
 
         if (name.equalsIgnoreCase("while")) {
@@ -70,11 +67,24 @@ public class Structures extends FunctionProvider {
         return null;
     }
 
+    private boolean doIf(Variable condition, ScriptLine line, ScriptFile scriptFile) {
+        boolean returnVal;
+
+        if (condition.getString().trim().equalsIgnoreCase("true")) {
+            returnVal = executeIf(true, line, scriptFile);
+        } else if (condition.getString().trim().equalsIgnoreCase("false")) {
+            returnVal = executeIf(false, line, scriptFile);
+        } else {
+            returnVal = executeIf(Interpreter.execLine(condition.getString(), scriptFile, false).getBoolean(), line, scriptFile);
+        }
+
+        executeNextElse = !returnVal;
+        return returnVal;
+    }
+
     private boolean executeIf(boolean condition, ScriptLine line, ScriptFile context) {
         if (condition) {
             line.runSublines(context);
-        } else {
-            executeNextElse = true;
         }
 
         return condition;

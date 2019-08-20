@@ -19,6 +19,9 @@ public class Lexer {
 
     public static ScriptLine lexLine(String line, ScriptFile context) {
         String[] parts = line.split(" ", 2);
+        if (parts.length < 2) {
+            return new ScriptLine("write", new Variable[]{Variable.empty()});
+        }
 
         // the function name is the first "word" of the line
         String functionName = parts[0];

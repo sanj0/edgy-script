@@ -1,8 +1,8 @@
-if true {
-write "hello, "
-writeLine "world!"
-}
-else {
-write "Hello "
-writeLine "World!"
+if (false) {
+    writeLine true
+    if (true) {
+        writeLine "true again!"
+    }
+} else if (true) {
+    writeLine false
 }
