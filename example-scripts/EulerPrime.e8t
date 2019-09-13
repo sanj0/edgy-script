@@ -1,0 +1,14 @@
+var euler = [euler 500]
+removeCharAt euler 1
+var startIndex = 0
+var checkValue
+
+while (smallerThan [math startIndex + 10] [length euler]) {
+
+    substring euler startIndex [math startIndex + 10] and set checkValue
+    if (isPrime checkValue) {
+        writeLine "Found first 10-Digit Primenumber within e at starting index " startIndex " : " checkValue
+        system exit
+    }
+    increment startIndex
+}

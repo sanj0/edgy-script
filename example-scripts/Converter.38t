@@ -1,0 +1,38 @@
+# A converter of units
+# First, pick what kind of units you want to convert
+
+array timeUnits 4
+array timeUnitsConversions 4
+
+array moneyUnits 2
+array moneyUnitsConversion 2
+
+# fill timeunits array
+timeUnits set 0 seconds
+timeUnitsConversions set 0 1
+timeUnits set 1 minutes
+timeUnitsConversions set 1 60
+timeUnits set 2 hours
+timeUnitsConversions set 2 60
+timeUnits set 3 days
+timeUnitsConversions set 3 24
+
+# fill moneyunits (currencyies) array
+moneyUnits set 0 Euro
+moneyUnitsConversions set 0 1
+moneyUnits set 1 Dollar
+moneyUnitsConversions set 1 1.11
+
+writeLine "[1] Time"
+writeLine "[2] Money"
+
+input and createset userInput
+
+if (equals userInput 1) {
+    timeUnits clone units
+    timeUnitsConversions clone unitsConversions
+} else if (equals userInput 2) {
+    moneyUnits clone units
+    timeUnitsConversions clone unitsConversions
+}
+
