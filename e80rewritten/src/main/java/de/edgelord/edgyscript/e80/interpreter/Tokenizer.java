@@ -12,11 +12,14 @@ public class Tokenizer {
     private StringBuilder currentTokenValue;
     private boolean escapeNextChar = false;
 
-    public List<Token> tokenize(String line) {
+    public List<Token> tokenize(String s) {
         List<Token> tokens = new ArrayList<>();
-        for (char c : line.toCharArray()) {
+        char[] chars = s.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
             next(c);
-            if (mode == Mode.DONE && isSplitChar(c)) {
+            if (i == chars.length - 1 || (mode == Mode.DONE && isSplitChar(c))) {
                 if (currentTokenValue.length() > 0) {
                     tokens.add(Token.getToken(null, currentTokenValue.toString()));
                     mode = Mode.INIT;
