@@ -1,4 +1,6 @@
-package de.edgelord.edgyscript.e80.interpreter;
+package de.edgelord.edgyscript.e80.interpreter.token;
+
+import de.edgelord.edgyscript.e80.interpreter.Interpreter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
 public class Tokenizer {
 
     private Mode mode = Mode.INIT;
-    private StringBuilder currentTokenValue;
+    private TokenBuilder tokenBuilder;
     private boolean escapeNextChar = false;
 
     public List<Token> tokenize(String s) {
@@ -19,11 +21,23 @@ public class Tokenizer {
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             next(c);
-            if (i == chars.length - 1 || (mode == Mode.DONE && isSplitChar(c))) {
-                if (currentTokenValue.length() > 0) {
-                    tokens.add(Token.getToken(null, currentTokenValue.toString()));
+            if (i == chars.length - 1 || mode == Mode.DONE) {
+                if (tokenBuilder.length() > 0) {
+                    switch (tokenBuilder.getType()) {
+                        case LINK:
+                            tokens.add(Token.getToken(tokenBuilder.toString(), Token.Type.LINK));
+                            break;
+                        case VALUE:
+                            String token = tokenBuilder.toString();
+
+                            if (Interpreter.isKeyWord(token)) {
+                                tokens.add(Token.getToken(token, Token.Type.KEYWORD));
+                            } else {
+                                tokens.add(Token.getToken(token, Token.Type.VALUE));
+                            }
+                            break;
+                    }
                     mode = Mode.INIT;
-                    currentTokenValue = new StringBuilder();
                 }
             }
         }
@@ -36,8 +50,6 @@ public class Tokenizer {
             // mode init: the string builder ha to be initialized.
             // the mode is then set to START and the method calls itself
             case INIT:
-                currentTokenValue = new StringBuilder();
-
                 if (isSplitChar(character)) {
                     return;
                 }
@@ -50,9 +62,13 @@ public class Tokenizer {
                 // first case: " -> begin of a string
                 if (character == '"') {
                     mode = Mode.STRING;
+                    tokenBuilder = new TokenBuilder(Token.Type.VALUE);
                 } else if (character == '.' || Character.isDigit(character)) {
                     mode = Mode.NUMBER;
-                    currentTokenValue.append(character);
+                    tokenBuilder = new TokenBuilder(Token.Type.VALUE);
+                    tokenBuilder.append(character);
+                } else {
+                    tokenBuilder = new TokenBuilder(Token.Type.LINK);
                 }
                 break;
             case STRING:
@@ -60,7 +76,7 @@ public class Tokenizer {
                     escapeNextChar = true;
                 } else {
                     if (character != '"' || escapeNextChar) {
-                        currentTokenValue.append(character);
+                        tokenBuilder.append(character);
                     } else {
                         mode = Mode.DONE;
                     }
@@ -69,7 +85,7 @@ public class Tokenizer {
                 break;
             case NUMBER:
                 if (character == '.' || Character.isDigit(character)) {
-                    currentTokenValue.append(character);
+                    tokenBuilder.append(character);
                 } else {
                     mode = Mode.DONE;
                 }
@@ -78,13 +94,13 @@ public class Tokenizer {
                 if (isSplitChar(character)) {
                     mode = Mode.DONE;
                 } else {
-                    currentTokenValue.append(character);
+                    tokenBuilder.append(character);
                 }
                 break;
         }
     }
 
-    public boolean isSplitChar(char c) {
+    public static boolean isSplitChar(char c) {
         return c == ' ' || c == ',';
     }
 
