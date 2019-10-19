@@ -1,0 +1,7 @@
+use stdio
+
+var greeting = "hello, world!"
+var firstName = "Malte"
+firstName = "edgelord314"
+
+print greeting + " " + firstName + " here!\n"

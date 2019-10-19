@@ -5,10 +5,12 @@ import de.edgelord.edgyscript.e80.ScriptFile;
 import de.edgelord.edgyscript.e80.ScriptLine;
 import de.edgelord.edgyscript.e80.Variable;
 
+import java.util.function.Predicate;
+
 /**
  * provides functions:
  *
- * - systemctrl (alias systemctl, syscontrol)
+ * - system (alias systemctrl, systemctl, syscontrol)
  *     several options via first given arg:
  *       - "shutdown" (alias "exit"): shuts the jvm down
  *       - "vars" (alias "variables"): shows a list of all variables and their values (expect temporary ones)
@@ -22,7 +24,7 @@ public class SystemProvider extends FunctionProvider {
     @Override
     public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
 
-        if (name.equalsIgnoreCase("systemctrl") || name.equalsIgnoreCase("systemctl") || name.equalsIgnoreCase("syscontrol")) {
+        if (name.equalsIgnoreCase("system") || name.equalsIgnoreCase("systemctrl") || name.equalsIgnoreCase("systemctl") || name.equalsIgnoreCase("syscontrol")) {
             String command = variables[0].getString();
 
             if (command.equalsIgnoreCase("shutdown") || command.equalsIgnoreCase("exit")) {
@@ -36,6 +38,11 @@ public class SystemProvider extends FunctionProvider {
         }
 
         if (name.equalsIgnoreCase("systemprop") || name.equalsIgnoreCase("sysprop") || name.equalsIgnoreCase("systemproperty")) {
+
+            String prop = variables[0].getString();
+            if (prop.equalsIgnoreCase("time") || prop.equalsIgnoreCase("millis") || prop.equalsIgnoreCase("epoch") || prop.equalsIgnoreCase("timeMillis")) {
+                return new Variable(scriptFile.nextTempvar(), String.valueOf(System.currentTimeMillis()));
+            }
             return new Variable(scriptFile.nextTempvar(), System.getProperty(variables[0].getString()));
         }
 

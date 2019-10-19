@@ -1,25 +1,124 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.edgelord.edgyscript.e80.interpreter.token.Token;
+import de.edgelord.edgyscript.e80.script.ScriptLine;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.util.*;
 
 public class Interpreter {
 
-    private static final List<String> keywords = new ArrayList<>();
+    private static final List<String> KEYWORDS = new ArrayList<>();
+    private static final List<String> OPERATORS = new ArrayList<>();
+    public static final Map<String, String> MEMORY = new HashMap<>();
+
+    public static final ScriptEngine jsEngine = new ScriptEngineManager().getEngineByName("JavaScript");
+
+    public static NativeProvider ESDK;
 
     static {
-        keywords.add("and");
-        keywords.add("{");
-        keywords.add("}");
-        keywords.add("if");
-        keywords.add("else");
-        keywords.add("while");
-        keywords.add("for");
-        keywords.add("goto");
-        keywords.add("label");
+        try {
+            ESDK = Class.forName("de.edgelord.edgyscript.esdk.ESDK").asSubclass(NativeProvider.class).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        KEYWORDS.add("and");
+        KEYWORDS.add("var");
+        KEYWORDS.add("{");
+        KEYWORDS.add("}");
+        KEYWORDS.add("(");
+        KEYWORDS.add(")");
+        KEYWORDS.add("if");
+        KEYWORDS.add("else");
+        KEYWORDS.add("while");
+        KEYWORDS.add("for");
+        KEYWORDS.add("goto");
+        KEYWORDS.add("label");
+
+        OPERATORS.add("+");
+        OPERATORS.add("-");
+        OPERATORS.add("*");
+        OPERATORS.add("/");
+        OPERATORS.add("**");
+        OPERATORS.add("%");
+        OPERATORS.add("=");
+    }
+
+    public static Value run(ScriptLine line) {
+        return eval(line.getFunctionName(), line.getArgs());
+    }
+
+    public static Value eval(List<Token> tokens, boolean... spaceSeparatorMode) {
+        Token function = tokens.get(0);
+        List<Token> args = tokens.subList(1, tokens.size());
+
+        return eval(function, Tokenizer.evaluateTokens(args, spaceSeparatorMode));
+    }
+
+    public static Value eval(Token function, List<Value> args) {
+
+        String functionName = function.getValue();
+        if (isKeyWord(functionName.toLowerCase())) {
+            if (functionName.equalsIgnoreCase("var")) {
+                String varName = args.get(0).getValue();
+                String varValue = "";
+
+                if (args.size() > 1 && args.get(1).getValue().equals("=")) {
+                    varValue = args.get(2).getValue();
+                }
+                MEMORY.put(varName, varValue);
+                LinkedValue value = new LinkedValue(varName);
+                try {
+                    jsEngine.eval(varName + "=" + value.getValueForJS());
+                } catch (ScriptException e) {
+                    e.printStackTrace();
+                }
+
+                return value;
+            }
+            return null;
+        } else if (args.get(0).getValue().equalsIgnoreCase("=")) {
+            Value newVal = args.get(1);
+            String varName = function.getID();
+
+            MEMORY.replace(varName, newVal.getValue());
+            try {
+                jsEngine.eval(varName + "=" + newVal.getValueForJS());
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+            System.out.printf("SET %s to %s\n", varName, newVal.getValue());
+            return new DirectValue(newVal.getValue());
+        } else {
+
+            Value returnVal = ESDK.function(functionName, args);
+            if (returnVal == null) {
+                throw new RuntimeException("Function " + functionName + " does not exist!");
+            } else {
+                return returnVal;
+            }
+        }
     }
 
     public static boolean isKeyWord(String s) {
-        return keywords.contains(s);
+        return KEYWORDS.contains(s);
+    }
+
+    public static boolean isOperator(String s) {
+        return OPERATORS.contains(s);
+    }
+
+    public static boolean isSplitChar(String s) {
+        if (s.length() > 1) {
+            return false;
+        } else {
+            return isSplitChar(s.charAt(0));
+        }
+    }
+    public static boolean isSplitChar(char c) {
+        return c == ',';
     }
 }

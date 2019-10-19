@@ -2,6 +2,8 @@ package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.*;
 
+import java.util.Objects;
+
 /**
  * Provides functions:
  *
@@ -51,33 +53,27 @@ public class Structures extends FunctionProvider {
 
         if (name.equalsIgnoreCase("while")) {
             Variable condition = variables[0];
-            EvalVariable evalCondition = null;
 
-            if (condition instanceof EvalVariable) {
-                evalCondition = (EvalVariable) condition;
-            }
-            while (condition.getString().equalsIgnoreCase("true")) {
-                if (evalCondition != null) {
-                    evalCondition.reEval();
-                }
-
+            while (getBooleanFromArg(condition, scriptFile)) {
                 line.runSublines(scriptFile);
             }
+            return Variable.empty();
         }
         return null;
     }
 
-    private boolean doIf(Variable condition, ScriptLine line, ScriptFile scriptFile) {
-        boolean returnVal;
-
-        if (condition.getString().trim().equalsIgnoreCase("true")) {
-            returnVal = executeIf(true, line, scriptFile);
-        } else if (condition.getString().trim().equalsIgnoreCase("false")) {
-            returnVal = executeIf(false, line, scriptFile);
+    public static boolean getBooleanFromArg(Variable var, ScriptFile context) {
+        if (var.getString().trim().equalsIgnoreCase("true")) {
+            return true;
+        } else if (var.getString().trim().equalsIgnoreCase("false")) {
+            return false;
         } else {
-            returnVal = executeIf(Interpreter.execLine(condition.getString(), scriptFile, false).getBoolean(), line, scriptFile);
+            return Objects.requireNonNull(Interpreter.execLine(var.getString(), context, false)).getBoolean();
         }
+    }
 
+    private boolean doIf(Variable condition, ScriptLine line, ScriptFile scriptFile) {
+        boolean returnVal = executeIf(getBooleanFromArg(condition, scriptFile), line, scriptFile);
         executeNextElse = !returnVal;
         return returnVal;
     }

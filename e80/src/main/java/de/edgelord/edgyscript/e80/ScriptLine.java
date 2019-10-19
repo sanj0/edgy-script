@@ -25,17 +25,19 @@ public class ScriptLine {
     }
 
     public void runSublines(ScriptFile context) {
-        for (String line : sublines) {
-            Interpreter.execLine(line, context, false);
-        }
-    }
 
-    public void refresh() {
-        for (Variable var : args) {
-            if (var instanceof EvalVariable) {
-                EvalVariable evalVariable = (EvalVariable) var;
-                evalVariable.reEval();
+        String[] sublineArray = sublines.toArray(new String[0]);
+        for (int i = 0; i < sublines.size(); i++) {
+            String line = sublines.get(i);
+
+            String[] newSubLines = new String[0];
+            if (line.trim().endsWith("{")) {
+                line = line.substring(0, line.length() - 1);
+                i++;
+                newSubLines = Interpreter.getSubLines(sublineArray, i);
+                i += Interpreter.lastSubLineCount - 1;
             }
+            Interpreter.execLine(line, context, false, newSubLines);
         }
     }
 

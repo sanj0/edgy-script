@@ -81,7 +81,6 @@ public class ScriptFile {
                 return true;
             }
         }
-
         return false;
     }
 

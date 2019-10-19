@@ -11,6 +11,7 @@ public class Interpreter {
 
     private static FunctionProvider sdk;
     private static List<String> lines = new ArrayList<>();
+    public static String[] allLines = null;
     private static Map<String, Integer> gotos = new HashMap<>();
 
     static {
@@ -25,6 +26,7 @@ public class Interpreter {
 
     public static int interpretRun(ScriptFile script) throws FileNotFoundException {
         String[] lines = script.getLines();
+        allLines = lines;
 
         // add needed variables
         script.getVarPool().add(new Variable("+", "+")); // addition
@@ -44,21 +46,20 @@ public class Interpreter {
             // also, ignore blank lines
             if (!line.startsWith("#") && !line.startsWith("//") && !line.isEmpty()) {
 
-                line = prepareLine(line);
-
-                ArrayList<String> sublines = new ArrayList<>();
-                // if the line ends with a {, that means sublines are coming
-                if (line.endsWith("{")) {
+                String[] subLines = new String[0];
+                if (line.trim().endsWith("{")) {
                     line = line.substring(0, line.length() - 1);
-                    for (; !lines[++i].endsWith("}");) {
-                        sublines.add(prepareLine(lines[i]));
-                    }
-                    i--;
+                    i++;
+                    subLines = getSubLines(lines, i);
+                    i += lastSubLineCount - 1;
                 }
-                execLine(line, script, true, sublines.toArray(new String[0]));
+
+                line = prepareLine(line);
+                execLine(line, script, true, subLines);
             }
         }
 
+        lineNumber = 0;
         return 0;
     }
 
@@ -74,7 +75,25 @@ public class Interpreter {
         return prePreparedLine;
     }
 
-    public static Variable execLine(String line, ScriptFile context, boolean addToScript, String... sublines) {
+    public static int lastSubLineCount = 0;
+    public static String[] getSubLines(String[] lines, int indexOfStartLine) {
+        lastSubLineCount = 0;
+        List<String> subLines = new ArrayList<>();
+        for (int requiredCloseBrackets = 1; requiredCloseBrackets > 0; indexOfStartLine++) {
+            String line = lines[indexOfStartLine];
+            lastSubLineCount++;
+            if (line.trim().startsWith("}")) {
+                requiredCloseBrackets--;
+            } else if (line.trim().endsWith("{")) {
+                requiredCloseBrackets++;
+            }
+            subLines.add(prepareLine(line));
+        }
+
+        return subLines.toArray(new String[0]);
+    }
+
+    public static Variable execLine(String line, ScriptFile context, boolean addToScript, String... subLines) {
 
         try {
             Variable lastReturnVal = null;
@@ -109,6 +128,7 @@ public class Interpreter {
                 }
                 return Variable.empty();
             } else {
+
                 String[] parts = line.split(" and ");
                 String pipedVar = null;
                 boolean addedTempVarToPool = false;
@@ -125,7 +145,7 @@ public class Interpreter {
                     }
 
                     ScriptLine scriptLine = Lexer.lexLine(part, context);
-                    scriptLine.addSublines(sublines);
+                    scriptLine.addSublines(subLines);
                     Variable returnVal = sdk.function(scriptLine, scriptLine.getFunctionName(), scriptLine.getArgs(), context);
                     lastReturnVal = returnVal;
 

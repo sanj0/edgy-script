@@ -36,6 +36,10 @@ import java.util.Map;
  * # should now be 0
  * countries length and writeLine
  *
+ * now, write out all countries:
+ * countries foreach country {
+ *     writeLine country
+ * }
  */
 public class Arrays extends FunctionProvider {
 
@@ -45,7 +49,7 @@ public class Arrays extends FunctionProvider {
     public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
 
         if (name.equalsIgnoreCase("array") || name.equalsIgnoreCase("createarray")) {
-            arrays.put(variables[0].getString(), new Variable[variables[1].getInt()]);
+            arrays.put(variables[0].getString(), new Variable[variables[1].getInteger()]);
             return new Variable(scriptFile.nextTempvar(), variables[0].getString());
         }
 
@@ -55,15 +59,26 @@ public class Arrays extends FunctionProvider {
 
             switch (command) {
                 case "set":
-                    array[variables[1].getInt()] = variables[2];
+                    array[variables[1].getInteger()] = variables[2];
                     return variables[2];
                 case "get":
-                    return array[variables[1].getInt()];
+                    return array[variables[1].getInteger()];
                 case "length":
                     return new Variable(scriptFile.nextTempvar(), String.valueOf(array.length));
                 case "clone":
                     arrays.put(variables[1].getString(), array.clone());
                     return variables[1];
+                 // foreach syntax: myArray foreach string {}
+                case "foreach":
+                    String varName = variables[1].getString();
+                    scriptFile.getVarPool().add(new Variable(varName, ""));
+                    for (Variable entry : array) {
+                        scriptFile.getVar(varName).setValue(entry.getString());
+                        System.out.println(scriptFile.varExists(varName) + " : " + scriptFile.getVar(varName).getString());
+                        line.runSublines(scriptFile);
+                    }
+                    scriptFile.getVarPool().removeIf(var -> var.getName().equals(varName));
+                    return Variable.empty();
             }
         }
 

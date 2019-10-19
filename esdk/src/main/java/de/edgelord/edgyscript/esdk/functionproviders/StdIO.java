@@ -14,7 +14,7 @@ import java.util.Scanner;
  *     writes the first argument to the standard output. returns the written string
  *
  * - writeln (alias writeLine, println, printLine, outln, outLine)
- *     writes the first argument to the standard output and creates a newline. returns the written string
+ *     writes all given arguments merged to the standard output and creates a newline. returns the written string
  *
  * - read (alias input, getinput, readLine)
  *     if there is an arg given, it writes its value out to teh screen and then waits for user input. returns the input
@@ -35,13 +35,15 @@ public class StdIO extends FunctionProvider {
     @Override
     public Variable function(ScriptLine line, String name, Variable[] variables, ScriptFile scriptFile) {
         if (name.equalsIgnoreCase("write") || name.equalsIgnoreCase("print") || name.equalsIgnoreCase("out")) {
-            System.out.print(variables[0].getString());
-            return variables[0];
+            String s = getMergedArgs(variables);
+            System.out.print(s);
+            return new Variable(scriptFile.nextTempvar(), s);
         }
 
         if (name.equalsIgnoreCase("writeln") || name.equalsIgnoreCase("writeLine") || name.equalsIgnoreCase("println") || name.equalsIgnoreCase("printLine") || name.equalsIgnoreCase("outln") || name.equalsIgnoreCase("outLine")) {
-            System.out.println(variables[0].getString());
-            return variables[0];
+            String s = getMergedArgs(variables);
+            System.out.println(s);
+            return new Variable(scriptFile.nextTempvar(), s);
         }
 
         if (name.equalsIgnoreCase("input") || name.equalsIgnoreCase("read") || name.equalsIgnoreCase("getinput") || name.equalsIgnoreCase("readLine")) {
@@ -52,5 +54,15 @@ public class StdIO extends FunctionProvider {
         }
 
         return null;
+    }
+
+    private static String getMergedArgs(Variable[] args) {
+        StringBuilder mergedArgs = new StringBuilder();
+
+        for (Variable arg : args) {
+            mergedArgs.append(arg.getString());
+        }
+
+        return mergedArgs.toString();
     }
 }

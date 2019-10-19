@@ -23,6 +23,10 @@ public class TokenBuilder {
         builder.append(c);
     }
 
+    public void append(String s) {
+        builder.append(s);
+    }
+
     public int length() {
         return builder.length();
     }

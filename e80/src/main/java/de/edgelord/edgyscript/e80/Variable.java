@@ -46,8 +46,12 @@ public class Variable {
         return Float.parseFloat(value);
     }
 
-    public int getInt() {
-        return Integer.valueOf(value);
+    public float getNumber() {
+        return getFloat();
+    }
+
+    public int getInteger() {
+        return Math.round(getFloat());
     }
 
     public String getString() {

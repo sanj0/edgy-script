@@ -1,27 +1,25 @@
-package de.edgelord.edgyscript.e80.interpreter.token.tokens;
+package de.edgelord.edgyscript.e80.interpreter;
 
-import de.edgelord.edgyscript.e80.interpreter.DirectValue;
-import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
-public class ValueToken extends Token {
+public abstract class Value extends Token {
 
     protected String value;
     protected String id;
 
-    public ValueToken(String value, ValueType valueType) {
+    public Value(String value, String id, ValueType valueType) {
         super(valueType);
         this.value = value;
-        this.id = String.valueOf(value.hashCode());
+        this.id = id;
+    }
+
+    public Value(String value, String id) {
+        this(value, id, ValueType.AUTO);
     }
 
     @Override
     public String getID() {
         return id;
-    }
-
-    protected void setID(String newID) {
-        this.id = newID;
     }
 
     @Override
@@ -36,6 +34,6 @@ public class ValueToken extends Token {
 
     @Override
     public Value toValue() {
-        return new DirectValue(getValue());
+        return this;
     }
 }
