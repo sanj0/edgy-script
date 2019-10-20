@@ -50,7 +50,7 @@ public abstract class Token implements Serializable {
                 return ValueType.NUMBER;
             } else if (isBoolean()) {
                 return ValueType.BOOLEAN;
-            } else if (isNumeric()) {
+            } else if (isNumeric() || Interpreter.isOperator(getValue())) {
                 return ValueType.NUMBER;
             } else {
                 return ValueType.STRING;
@@ -66,7 +66,9 @@ public abstract class Token implements Serializable {
             case BOOLEAN:
                 return getValue();
             case STRING:
-                return "\"" + getValue() + "\"";
+
+                String valueForJS = getValue().replace("\\", "\\\\");
+                return "\"" + valueForJS + "\"";
         }
 
         return null;

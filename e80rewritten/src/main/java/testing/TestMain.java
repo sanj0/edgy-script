@@ -14,7 +14,6 @@ import java.util.List;
 public class TestMain {
 
     public static void main(String[] args) throws ScriptException, FileNotFoundException {
-
         Interpreter.ESDK = new DummyESDK();
         Lexer lexer = new Lexer();
 

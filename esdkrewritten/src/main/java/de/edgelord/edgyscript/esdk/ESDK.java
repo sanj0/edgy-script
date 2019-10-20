@@ -4,12 +4,11 @@ import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ESDK implements NativeProvider {
 
-    private List<NativeProvider> usedNativeProviders = new ArrayList<>();
+    private Map<String, NativeProvider> usedNativeProviders = new HashMap<>();
 
     @Override
     public Value function(String function, List<Value> args) {
@@ -18,7 +17,7 @@ public class ESDK implements NativeProvider {
         if (function.equalsIgnoreCase("use")) {
             String value = args.get(0).getValue();
             try {
-                usedNativeProviders.add(getDependency(value));
+                usedNativeProviders.put(value, getDependency(value));
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
@@ -26,8 +25,21 @@ public class ESDK implements NativeProvider {
         } else {
             Value returnVal = null;
 
-            for (int i = 0; i < usedNativeProviders.size() && returnVal == null; i++) {
-                returnVal = usedNativeProviders.get(i).function(function, args);
+            if (function.contains(".")) {
+                String[] parts = function.split("\\.", 2);
+                return usedNativeProviders.get(parts[0]).function(parts[1], args);
+            }
+
+            Iterator it = usedNativeProviders.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                NativeProvider np = (NativeProvider) pair.getValue();
+                returnVal = np.function(function, args);
+
+                if (returnVal != null) {
+                    break;
+                }
+                it.remove();
             }
             return returnVal;
         }

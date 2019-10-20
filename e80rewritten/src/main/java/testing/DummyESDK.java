@@ -1,5 +1,6 @@
 package testing;
 
+import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 
@@ -13,6 +14,6 @@ public class DummyESDK implements NativeProvider {
         if (function.equalsIgnoreCase("println")) {
             System.out.println(args.get(0).getValue());
         }
-        return null;
+        return new DirectValue("dummy-value");
     }
 }

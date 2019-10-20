@@ -1,6 +1,7 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
+import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
 import de.edgelord.edgyscript.e80.script.ScriptLine;
 
 import javax.script.ScriptEngine;
@@ -67,8 +68,9 @@ public class Interpreter {
                 String varValue = "";
 
                 if (args.size() > 1 && args.get(1).getValue().equals("=")) {
-                    varValue = args.get(2).getValue();
+                    varValue = getPartialValue(args, 2, args.size()).getValue();
                 }
+
                 MEMORY.put(varName, varValue);
                 LinkedValue value = new LinkedValue(varName);
                 try {
@@ -81,7 +83,7 @@ public class Interpreter {
             }
             return null;
         } else if (args.get(0).getValue().equalsIgnoreCase("=")) {
-            Value newVal = args.get(1);
+            Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
 
             MEMORY.replace(varName, newVal.getValue());
@@ -90,7 +92,6 @@ public class Interpreter {
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
-            System.out.printf("SET %s to %s\n", varName, newVal.getValue());
             return new DirectValue(newVal.getValue());
         } else {
 
@@ -101,6 +102,18 @@ public class Interpreter {
                 return returnVal;
             }
         }
+    }
+
+    public static Value getPartialValue(List<Value> values, int startIndex, int endIndex) {
+
+        List<Value> sublist = values.subList(startIndex, endIndex);
+        List<Token> tokens = new ArrayList<>();
+
+        for (Value v : sublist) {
+            tokens.add(new ValueToken(v.getValue(), v.getType()));
+        }
+
+        return Tokenizer.evaluateSingle(tokens);
     }
 
     public static boolean isKeyWord(String s) {

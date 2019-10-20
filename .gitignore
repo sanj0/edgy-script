@@ -1,10 +1,8 @@
 # all target directories
-e80/target
-esdk/target
+target/
 
 # .idea dirs
-e80/.idea
-esdk/.idea
+.idea/
 
 # all .iml project files
 *.iml

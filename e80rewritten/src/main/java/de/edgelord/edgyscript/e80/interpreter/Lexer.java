@@ -17,6 +17,8 @@ public class Lexer {
     private boolean escapeNextChar = false;
     private int requiredClosedBrackets = 0;
 
+    public static final String lineSeparator = System.getProperty("line.separator");
+
     public List<Token> tokenize(String s) {
         List<Token> tokens = new ArrayList<>();
         char[] chars = s.toCharArray();
@@ -108,7 +110,7 @@ public class Lexer {
                 if (character != '"' || escapeNextChar) {
 
                     if (escapeNextChar && character == 'n') {
-                        tokenBuilder.append(System.getProperty("line.separator"));
+                        tokenBuilder.append(lineSeparator);
                     } else {
                         tokenBuilder.append(character);
                     }
