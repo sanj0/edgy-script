@@ -41,7 +41,7 @@ This projects contains three modules:
  print "Hello World, " + name + " here!\n"
  ```
 
-4. Enhanced Hello World with Easeteregg (not yet working due to lack of structures like `if` [21.10.2019])
+4. Enhanced Hello World with Easteregg (not yet working due to lack of structures like `if` [21.10.2019])
 
 ```python
 use stdio
