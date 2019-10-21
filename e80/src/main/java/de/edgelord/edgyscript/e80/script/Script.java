@@ -43,6 +43,10 @@ public class Script {
         while (fileScanner.hasNext()) {
             String line = fileScanner.nextLine();
 
+            if (line.startsWith("#") || line.startsWith("//")) {
+                continue;
+            }
+
             if (line.trim().length() > 1) {
 
                 List<Token> tokens = lexer.tokenize(line);
