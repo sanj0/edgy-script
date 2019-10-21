@@ -1,61 +1,74 @@
 # Edgy Script
+
+**TODO:** Make variables a `SimpleBinding` for nashorn
+
 Edgy Script: a modern, slow, barely-documented programming language for no purpose.
 
 This projects contains three modules:
-- e80, the interpreter and library API
+- e80, the interpreter and native provider API
 - esrun, the script that runs a given ES-Script
-- the sdk, which is a collection of java classes that provide a (not really) solid sdk for Edgy SCripts
+- esdk, which is a collection of java classes that provide a sdk for Edgy Scripts
 
-### Edgy Script examples:
+### Examples
+1. The classical Hello World:
 
-- The Hello World! Example:
-    ```
-    write "Hello World!"
-    ```
+ ```python
+ use stdio
 
-- An unnecessarily long version of the Hello World! Example:
-    ```
-    create greet
-    set greet "Hello World!"
-    write greet
-    ```
-  Which is equal to:
-    ```
-    var greet
-    set greet, "Hello World!"
-    print greet
-    ```
-  (Yes, the comma between arguments is not necessary)
+ print "Hello World!\n"
+ ```
 
-- A little bit longer example:
-    ```
-    create name
-    input "What is your name? ", name
-    write "Hello World, here is "
-    println name
-    ```
-  Which is equivalent to:
-    ```
-    var name
-    read "What is your name" name
-    print "Hello World, here is "
-    outln name
-    ```
+2. A stupidly long version of the Hello World:
+
+ ```python
+ use stdio
+ 
+ var hello = "Hello"
+ var world = "World"
+ 
+ print hello + " " + world + "!\n"
+ ```
+ 
+3. An enhanced Hello World with more features:
+
+ ```python
+ use stdio
+ 
+ print "What is your name? "
+ var name = [input]
+ 
+ print "Hello World, " + name + " here!\n"
+ ```
+
+4. Enhanced Hello World with Easeteregg (not yet working due to lack of structures like `if` [21.10.2019])
+
+```python
+use stdio
+ 
+printf "What is your name? "
+var name = [input]
+ 
+if name == "Stormtrooper":
+    printf "These are not the droids you are looking for!"
+print "Hello World, " + name + " here!\n"
+```
+
+Code inside `[]` is evaluated at runtime as Edgy Script code, `input` is a function of `stdio` that return user input upon pressing `ENTER`.
 
 ### How to install Edgy Script
-On Linux and MacOS, you can use install.sh, on Windows, follow these steps:
+On Linux and MacOS, you can use one of the install scripts, on Windows, follow these steps:
 
 1. Make sure that git, maven and Java are installed properly on your system
 2. Clone the repo
     - type `git clone https://www.github.com/edgelord314/edgy-script` into a CLI
-3. Build e80 and the sdk using maven
+3. Build e80 and the esdk using maven
     - cd into the repo (`cd edgy-script`)
     - cd into the e80 project (`cd e80`)
     - build it using maven (`mvn clean install`)
-    - cd into the sdk project (`cd ../sdk`)
+    - cd into the sdk project (`cd ../esdk`)
     - build it using maven (still `mvn clean install`)
 4. Run a ES Script using esrun/esrun.sh
     - cd into the esrun project (`cd ../esrun`)
-    - run the script using the esrun script (`./esrun.sh path-to-file.e8t`)
+    - run the script using the esrun script (`./esrun.sh path-to-file.et`)
 5. Enjoys the interactive mode (similar to the one from python)
     - run esrun/esrun.sh (`./esrun.sh`)

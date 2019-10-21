@@ -1,0 +1,6 @@
+use stdio
+
+print "What is your name? "
+var name = [input]
+
+print "Hello World, " + name + " here!\n"

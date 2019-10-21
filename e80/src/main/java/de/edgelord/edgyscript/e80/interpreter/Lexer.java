@@ -91,7 +91,7 @@ public class Lexer {
             // the mode is then set to START and the method calls itself
             case INIT:
                 if (character == ' ') {
-                    return subToken;
+                    break;
                 }
 
                 if (Interpreter.isSplitChar(character)) {
@@ -163,16 +163,16 @@ public class Lexer {
                 break;
             case INLINE:
                 if (character == '[') {
-                    requiredClosedBrackets--;
-                } else if (character == ']') {
                     requiredClosedBrackets++;
+                } else if (character == ']') {
+                    requiredClosedBrackets--;
                 }
 
                 if (requiredClosedBrackets == 0) {
                     mode = Mode.DONE;
+                } else {
+                    tokenBuilder.append(character);
                 }
-
-                tokenBuilder.append(character);
         }
 
         return subToken;

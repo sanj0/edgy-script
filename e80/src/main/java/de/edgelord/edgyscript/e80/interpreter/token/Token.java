@@ -3,6 +3,7 @@ package de.edgelord.edgyscript.e80.interpreter.token;
 import de.edgelord.edgyscript.e80.interpreter.Interpreter;
 import de.edgelord.edgyscript.e80.interpreter.LinkedValue;
 import de.edgelord.edgyscript.e80.interpreter.Value;
+import de.edgelord.edgyscript.e80.interpreter.token.tokens.InlineToken;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.SpecialToken;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
 
@@ -90,6 +91,8 @@ public abstract class Token implements Serializable {
                 }
             case VALUE:
                 return new ValueToken(s, valueType);
+            case INLINE:
+                return new InlineToken(s, valueType);
         }
 
         return null;

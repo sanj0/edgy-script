@@ -1,0 +1,6 @@
+use stdio
+
+var hello = "Hello"
+var world = "World"
+
+printf hello + " " + world + "!\n"

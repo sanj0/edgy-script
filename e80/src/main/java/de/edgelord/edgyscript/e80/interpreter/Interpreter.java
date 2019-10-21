@@ -62,7 +62,10 @@ public class Interpreter {
     public static Value eval(Token function, List<Value> args) {
 
         String functionName = function.getValue();
-        if (isKeyWord(functionName.toLowerCase())) {
+
+        if (args.size() == 0) {
+            return runFunction(functionName, args);
+        } else if (isKeyWord(functionName.toLowerCase())) {
 
             switch (functionName.toLowerCase()) {
                 case "var":
@@ -96,13 +99,16 @@ public class Interpreter {
             }
             return new DirectValue(newVal.getValue());
         } else {
+            return runFunction(functionName, args);
+        }
+    }
 
-            Value returnVal = ESDK.function(functionName, args);
-            if (returnVal == null) {
-                throw new RuntimeException("Function " + functionName + " does not exist!");
-            } else {
-                return returnVal;
-            }
+    private static Value runFunction(String functionName, List<Value> args) {
+        Value returnVal = ESDK.function(functionName, args);
+        if (returnVal == null) {
+            throw new RuntimeException("Function " + functionName + " does not exist!");
+        } else {
+            return returnVal;
         }
     }
 

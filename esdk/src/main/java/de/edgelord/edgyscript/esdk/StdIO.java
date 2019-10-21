@@ -3,9 +3,12 @@ package de.edgelord.edgyscript.esdk;
 import de.edgelord.edgyscript.e80.interpreter.*;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class StdIO implements NativeProvider {
+
+    public static final Scanner STDINPUT = new Scanner(System.in);
 
     @Override
     public Value function(String function, List<Value> args) {
@@ -32,6 +35,11 @@ public class StdIO implements NativeProvider {
                 print(formattedString);
                 return new DirectValue(formattedString);
 
+            case "input":
+            case "read":
+            case "scan":
+                String input = STDINPUT.nextLine();
+                return new DirectValue(input);
             default:
                 return null;
         }
