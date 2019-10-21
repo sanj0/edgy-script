@@ -1,54 +1,56 @@
 package de.edgelord.edgyscript.e80.main;
 
-import de.edgelord.edgyscript.e80.Interpreter;
-import de.edgelord.edgyscript.e80.ScriptFile;
-import de.edgelord.edgyscript.e80.Variable;
+import de.edgelord.edgyscript.e80.interpreter.Interpreter;
+import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
+import de.edgelord.edgyscript.e80.script.Script;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
-    public static boolean simpleStringMode = true;
+    public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IllegalAccessException, InstantiationException {
 
-    public static void main(String[] args) throws FileNotFoundException {
+        Map<String, String> mappedArgs = mapArgs(args);
 
-        if (args.length > 0) {
-            ScriptFile scriptFile = new ScriptFile(new File(args[0]));
+        if (mappedArgs.containsKey("sdk")) {
+            Interpreter.ESDK = Class.forName(mappedArgs.get("sdk")).asSubclass(NativeProvider.class).newInstance();
+        }
 
-            if (!scriptFile.getPath().endsWith(".e8t")) {
-                System.err.println("Warning: The given file " + scriptFile.getPath() + " doesn't have the e8t extension!");
+        if (args.length >= 1) {
+            Script script = new Script(args[0]);
+
+            if (!script.getFile().getName().endsWith(".et")) {
+                System.err.printf("WARNING: %s might not be an Edgy Script!\n", args[0]);
             }
-            Interpreter.interpretRun(scriptFile);
-        } else {
-            System.out.println("Edgy-Script interactive mode. Type \"verbose:returnval\" to see the return value for every line. \nType \"exit\" to exit the program.");
-            System.out.println("\n");
-            System.out.print(">>>");
 
-            ScriptFile context = ScriptFile.dummy();
-            Scanner inputScanner = new Scanner(System.in);
-            String line = inputScanner.nextLine();
-            boolean verboseReturnVal = false;
+            script.compile();
+            script.run();
+        }
+    }
 
-            while (!line.equals("exit")) {
-                if (line.toLowerCase().equals("verbose:returnval")) {
-                    System.out.println("verbose set to returnval. Use \"verbose:none\" to disable.");
-                    verboseReturnVal = true;
-                } else if (line.toLowerCase().equals("verbose:none")) {
-                    System.out.println("verbose set to none. Use \"verbose:returnval\" to switch.");
-                    verboseReturnVal = true;
-                } else {
+    private static Map<String, String> mapArgs(String[] args) {
 
-                    Variable returnval = Interpreter.execLine(Interpreter.prepareLine(line), context, true);
+        Map<String, String> mappedArgs = new HashMap<>();
+        String key = "";
+        boolean nextIsValue = false;
+        boolean nextIsPath = true;
 
-                    if (verboseReturnVal) {
-                        System.out.println("returnval: " + returnval.getName() + " : " + returnval.getString());
-                    }
-                }
-                System.out.print(">>>");
-                line = inputScanner.nextLine();
+        for (String s : args) {
+
+            if (nextIsPath) {
+                nextIsPath = false;
+                continue;
+            }
+            if (s.startsWith("-") && !nextIsValue) {
+                key = s.replaceFirst("-", "");
+                nextIsValue = true;
+            } else {
+                mappedArgs.put(key, s);
+                nextIsValue = false;
             }
         }
+        return mappedArgs;
     }
 }

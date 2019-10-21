@@ -6,7 +6,7 @@
 
     <groupId>de.edgelord.edgy-script</groupId>
     <artifactId>e80</artifactId>
-    <version>0.1.3-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
 
     <build>
         <plugins>
