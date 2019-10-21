@@ -5,3 +5,5 @@ var firstName = "Malte"
 firstName = "edgelord314"
 
 stdio.print greeting + firstName + " here!\n"
+stdio.printf "%s%s here!\n", greeting, firstName
+printf "Test Script by " + firstName + " ends here.\n"

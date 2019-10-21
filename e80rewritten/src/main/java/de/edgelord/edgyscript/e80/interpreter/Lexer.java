@@ -22,17 +22,41 @@ public class Lexer {
     public List<Token> tokenize(String s) {
         List<Token> tokens = new ArrayList<>();
         char[] chars = s.toCharArray();
+        boolean lastTokenWasSplit = false;
 
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             Token subToken = next(c);
             if (i == chars.length - 1 || mode == Mode.DONE) {
                 if (tokenBuilder.length() > 0) {
+
+                    String tokenValue = tokenBuilder.toString();
+
+                    if (tokenValue.equals(",")) {
+                        if (lastTokenWasSplit) {
+                            continue;
+                        } else {
+                            lastTokenWasSplit = true;
+                        }
+                    } else {
+                        lastTokenWasSplit = false;
+                    }
+
                     tokens.add(Token.getToken(tokenBuilder.toString(), tokenBuilder.getType(), currentValueType));
                     mode = Mode.INIT;
                 }
             }
             if (subToken != null) {
+                String tokenValue = subToken.getValue();
+                if (tokenValue.equals(",")) {
+                    if (lastTokenWasSplit) {
+                        continue;
+                    } else {
+                        lastTokenWasSplit = true;
+                    }
+                } else {
+                    lastTokenWasSplit = false;
+                }
                 tokens.add(subToken);
             }
         }
@@ -127,8 +151,12 @@ public class Lexer {
                 }
                 break;
             case DIRECT:
-                if (Interpreter.isSplitChar(character) || character == ' ') {
+                if (Interpreter.isSplitChar(character) || character == ' ' || Interpreter.isOperator(Character.toString(character))) {
                     mode = Mode.DONE;
+
+                    if (character != ' ') {
+                        subToken = Token.getToken(Character.toString(character), Token.Type.SPLIT, Token.ValueType.NUMBER);
+                    }
                 } else {
                     tokenBuilder.append(character);
                 }

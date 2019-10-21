@@ -63,23 +63,25 @@ public class Interpreter {
 
         String functionName = function.getValue();
         if (isKeyWord(functionName.toLowerCase())) {
-            if (functionName.equalsIgnoreCase("var")) {
-                String varName = args.get(0).getValue();
-                String varValue = "";
 
-                if (args.size() > 1 && args.get(1).getValue().equals("=")) {
-                    varValue = getPartialValue(args, 2, args.size()).getValue();
-                }
+            switch (functionName.toLowerCase()) {
+                case "var":
+                    String varName = args.get(0).getValue();
+                    String varValue = "";
 
-                MEMORY.put(varName, varValue);
-                LinkedValue value = new LinkedValue(varName);
-                try {
-                    jsEngine.eval(varName + "=" + value.getValueForJS());
-                } catch (ScriptException e) {
-                    e.printStackTrace();
-                }
+                    if (args.size() > 1 && args.get(1).getValue().equals("=")) {
+                        varValue = getPartialValue(args, 2, args.size()).getValue();
+                    }
 
-                return value;
+                    MEMORY.put(varName, varValue);
+                    LinkedValue value = new LinkedValue(varName);
+                    try {
+                        jsEngine.eval(varName + "=" + value.getValueForJS());
+                    } catch (ScriptException e) {
+                        e.printStackTrace();
+                    }
+
+                    return value;
             }
             return null;
         } else if (args.get(0).getValue().equalsIgnoreCase("=")) {

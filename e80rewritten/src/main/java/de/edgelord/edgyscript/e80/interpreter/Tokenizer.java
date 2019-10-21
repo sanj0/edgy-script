@@ -1,7 +1,6 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
-import de.edgelord.edgyscript.e80.interpreter.token.tokens.SpecialToken;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,13 +29,9 @@ public class Tokenizer {
 
         for (Token token : tokens) {
             String tokenValue = token.getValue();
-            if (token instanceof SpecialToken) {
-                if (Interpreter.isSplitChar(tokenValue)) {
-                    addToValueList(values, currentTokens);
-                    currentTokens.clear();
-                } else {
-                    currentTokens.add(token);
-                }
+            if (Interpreter.isSplitChar(tokenValue)) {
+                addToValueList(values, currentTokens);
+                currentTokens.clear();
             } else {
                 currentTokens.add(token);
             }
