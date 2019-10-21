@@ -27,6 +27,7 @@ This projects contains three modules:
  var world = "World"
  
  print hello + " " + world + "!\n"
+ # better: printf "%s %s!\n", hello, world
  ```
  
 3. An enhanced Hello World with more features:
