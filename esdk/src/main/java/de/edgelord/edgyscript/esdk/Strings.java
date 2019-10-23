@@ -33,10 +33,10 @@ public class Strings implements NativeProvider {
                 return new DirectValue(String.valueOf(args.get(0).getValue().equals(args.get(1).getValue())));
 
             case "charat":
-                return new DirectValue(Character.toString(args.get(0).getValue().charAt(Integer.parseInt(args.get(1).getValue()))));
+                return new DirectValue(Character.toString(args.get(0).getValue().charAt(args.get(1).getInt())));
 
             case "substring":
-                return new DirectValue(args.get(0).getValue().substring(Integer.parseInt(args.get(1).getValue()), Integer.parseInt(args.get(2).getValue())));
+                return new DirectValue(args.get(0).getValue().substring(args.get(1).getInt(), args.get(2).getInt()));
 
             case "trim":
                 return new DirectValue(args.get(0).getValue().trim());

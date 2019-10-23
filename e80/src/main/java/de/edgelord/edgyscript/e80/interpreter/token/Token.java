@@ -29,6 +29,36 @@ public abstract class Token implements Serializable {
         this.valueType = valueType;
     }
 
+    public double getNumber() {
+        double val;
+        try {
+            val = Double.parseDouble(getValue());
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot use \"" + getValue() + "\" as a number!");
+        }
+        return val;
+    }
+
+    public int getInt() {
+        int val;
+        try {
+            val = Integer.parseInt(getValue());
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot use \"" + getValue() + "\" as a number!");
+        }
+        return val;
+    }
+
+    public boolean getBoolean() {
+        boolean val;
+        try {
+            val = Boolean.parseBoolean(getValue());
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot use \"" + getValue() + "\" as a boolean!");
+        }
+        return val;
+    }
+
     public boolean isBoolean() {
         return getValue().equalsIgnoreCase("true") || getValue().equalsIgnoreCase("false");
     }

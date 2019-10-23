@@ -46,9 +46,16 @@ public class Interpreter {
         OPERATORS.add("-");
         OPERATORS.add("*");
         OPERATORS.add("/");
-        OPERATORS.add("**");
         OPERATORS.add("%");
         OPERATORS.add("=");
+        OPERATORS.add("==");
+        OPERATORS.add("!=");
+        OPERATORS.add("<");
+        OPERATORS.add(">");
+        OPERATORS.add(">=");
+        OPERATORS.add(">=");
+        OPERATORS.add("||");
+        OPERATORS.add("&&");
     }
 
     public static Value run(ScriptLine line) {
