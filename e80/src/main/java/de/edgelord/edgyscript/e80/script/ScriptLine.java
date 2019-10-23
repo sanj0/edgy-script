@@ -1,9 +1,11 @@
 package de.edgelord.edgyscript.e80.script;
 
+import de.edgelord.edgyscript.e80.interpreter.Interpreter;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -13,10 +15,25 @@ public class ScriptLine implements Serializable {
 
     private Token function;
     private List<Value> args;
+    private List<ScriptLine> subLines;
 
-    public ScriptLine(Token function, List<Value> args) {
+    public ScriptLine(Token function, List<Value> args, List<ScriptLine> subLines) {
         this.function = function;
         this.args = args;
+        this.subLines = subLines;
+    }
+
+    public ScriptLine(Token function, List<Value> args) {
+        this(function, args, new LinkedList<>());
+    }
+
+    /**
+     * Runs all {@link #subLines} using {@link Interpreter#run(ScriptLine)}.
+     */
+    public void runSubLines() {
+        for (ScriptLine line : subLines) {
+            Interpreter.run(line);
+        }
     }
 
     /**
@@ -53,5 +70,23 @@ public class ScriptLine implements Serializable {
      */
     public void setArgs(List<Value> args) {
         this.args = args;
+    }
+
+    /**
+     * Gets {@link #subLines}.
+     *
+     * @return the value of {@link #subLines}
+     */
+    public List<ScriptLine> getSubLines() {
+        return subLines;
+    }
+
+    /**
+     * Sets {@link #subLines}.
+     *
+     * @param subLines the new value of {@link #subLines}
+     */
+    public void setSubLines(List<ScriptLine> subLines) {
+        this.subLines = subLines;
     }
 }
