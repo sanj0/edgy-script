@@ -116,7 +116,7 @@ public class Lexer {
                     tokenBuilder = new TokenBuilder(Token.Type.VALUE);
                     tokenBuilder.append(character);
                     currentValueType = Token.ValueType.NUMBER;
-                } else if (character == '!') {
+                } else if (character == '$') {
                     mode = Mode.INLINE;
                     tokenBuilder = new TokenBuilder(Token.Type.INLINE);
                     requiredClosedBrackets = 0;
