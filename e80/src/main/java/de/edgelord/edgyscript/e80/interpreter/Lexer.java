@@ -16,6 +16,7 @@ public class Lexer {
     private TokenBuilder tokenBuilder;
     private boolean escapeNextChar = false;
     private int requiredClosedBrackets = 0;
+    private boolean inlineCastMode = false;
 
     public static final String lineSeparator = System.getProperty("line.separator");
 
@@ -75,7 +76,7 @@ public class Lexer {
 
         Token subToken = null;
 
-        if (mode != Mode.STRING) {
+        if (mode != Mode.STRING && mode != Mode.INLINE) {
             if (character == '(' || character == ')') {
                 String parenthesis = Character.toString(character);
                 character = ' ';
@@ -115,10 +116,11 @@ public class Lexer {
                     tokenBuilder = new TokenBuilder(Token.Type.VALUE);
                     tokenBuilder.append(character);
                     currentValueType = Token.ValueType.NUMBER;
-                } else if (character == '[') {
+                } else if (character == '!') {
                     mode = Mode.INLINE;
                     tokenBuilder = new TokenBuilder(Token.Type.INLINE);
-                    requiredClosedBrackets = 1;
+                    requiredClosedBrackets = 0;
+                    inlineCastMode = true;
                     currentValueType = Token.ValueType.AUTO;
                 } else {
                     tokenBuilder = new TokenBuilder(Token.Type.SPECIAL);
@@ -164,14 +166,25 @@ public class Lexer {
             case INLINE:
                 if (character == '[') {
                     requiredClosedBrackets++;
+
+                    if (inlineCastMode) {
+                        inlineCastMode = false;
+                        tokenBuilder.append(":");
+                    } else {
+                        tokenBuilder.append(character);
+                    }
                 } else if (character == ']') {
                     requiredClosedBrackets--;
-                }
 
-                if (requiredClosedBrackets == 0) {
-                    mode = Mode.DONE;
+                    if (requiredClosedBrackets > 0) {
+                        tokenBuilder.append(character);
+                    }
                 } else {
                     tokenBuilder.append(character);
+                }
+
+                if (requiredClosedBrackets == 0 && !inlineCastMode) {
+                    mode = Mode.DONE;
                 }
         }
 

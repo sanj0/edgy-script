@@ -1,6 +1,7 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
+import de.edgelord.edgyscript.e80.interpreter.token.tokens.InlineToken;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,8 +29,9 @@ public class Tokenizer {
         }
 
         for (Token token : tokens) {
-            String tokenValue = token.getValue();
-            if (Interpreter.isSplitChar(tokenValue)) {
+            if (token instanceof InlineToken) {
+                currentTokens.add(token);
+            } else if (Interpreter.isSplitChar(token.getValue())) {
                 addToValueList(values, currentTokens);
                 currentTokens.clear();
             } else {
@@ -54,12 +56,12 @@ public class Tokenizer {
     }
 
     public static Value evaluateSingle(List<Token> tokens) {
-        StringBuilder value = new StringBuilder();
+        List<Value> values = new LinkedList<>();
 
         for (Token token : tokens) {
-            value.append(token.getValueForJS());
+            values.add(token.toValue());
         }
 
-        return new JSPoweredValue(value.toString());
+        return new JSPoweredValue(values);
     }
 }

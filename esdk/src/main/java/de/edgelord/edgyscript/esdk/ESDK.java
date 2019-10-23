@@ -30,16 +30,13 @@ public class ESDK implements NativeProvider {
                 return usedNativeProviders.get(parts[0]).function(parts[1], args);
             }
 
-            Iterator it = usedNativeProviders.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                NativeProvider np = (NativeProvider) pair.getValue();
+            for (Map.Entry<String, NativeProvider> stringNativeProviderEntry : usedNativeProviders.entrySet()) {
+                NativeProvider np = (NativeProvider) ((Map.Entry) stringNativeProviderEntry).getValue();
                 returnVal = np.function(function, args);
 
                 if (returnVal != null) {
                     break;
                 }
-                it.remove();
             }
             return returnVal;
         }
@@ -49,6 +46,12 @@ public class ESDK implements NativeProvider {
         switch (name.toLowerCase()) {
             case "stdio":
                 return Class.forName("de.edgelord.edgyscript.esdk.StdIO").asSubclass(NativeProvider.class).newInstance();
+
+            case "strings":
+            case "string":
+            case "stringutil":
+                return Class.forName("de.edgelord.edgyscript.esdk.Strings").asSubclass(NativeProvider.class).newInstance();
+
             default:
                 return Class.forName(name).asSubclass(NativeProvider.class).newInstance();
         }

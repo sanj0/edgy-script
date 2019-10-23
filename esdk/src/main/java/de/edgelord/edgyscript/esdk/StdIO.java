@@ -16,7 +16,6 @@ public class StdIO implements NativeProvider {
         switch (function.toLowerCase()) {
             case "print":
                 String value = args.get(0).getValue();
-                value = value.replace("\\n", Lexer.lineSeparator);
                 print(value);
                 return new DirectValue(value);
 

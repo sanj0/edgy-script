@@ -41,7 +41,7 @@ public class Script {
         Scanner fileScanner = new Scanner(scriptFile);
 
         while (fileScanner.hasNext()) {
-            String line = fileScanner.nextLine();
+            String line = fileScanner.nextLine().trim();
 
             if (line.startsWith("#") || line.startsWith("//")) {
                 continue;

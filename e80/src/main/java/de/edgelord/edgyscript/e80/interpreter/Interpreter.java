@@ -4,16 +4,17 @@ import de.edgelord.edgyscript.e80.interpreter.token.Token;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
 import de.edgelord.edgyscript.e80.script.ScriptLine;
 
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 import java.util.*;
 
 public class Interpreter {
 
     private static final List<String> KEYWORDS = new ArrayList<>();
     private static final List<String> OPERATORS = new ArrayList<>();
-    public static final Map<String, String> MEMORY = new HashMap<>();
+    public static final SimpleBindings MEMORY = new SimpleBindings();
 
     public static final ScriptEngine jsEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
@@ -25,6 +26,8 @@ public class Interpreter {
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        jsEngine.setBindings(MEMORY, ScriptContext.ENGINE_SCOPE);
 
         KEYWORDS.add("and");
         KEYWORDS.add("var");
@@ -77,14 +80,7 @@ public class Interpreter {
                     }
 
                     MEMORY.put(varName, varValue);
-                    LinkedValue value = new LinkedValue(varName);
-                    try {
-                        jsEngine.eval(varName + "=" + value.getValueForJS());
-                    } catch (ScriptException e) {
-                        e.printStackTrace();
-                    }
-
-                    return value;
+                    return new LinkedValue(varName);
             }
             return null;
         } else if (args.get(0).getValue().equalsIgnoreCase("=")) {
@@ -92,11 +88,6 @@ public class Interpreter {
             String varName = function.getID();
 
             MEMORY.replace(varName, newVal.getValue());
-            try {
-                jsEngine.eval(varName + "=" + newVal.getValueForJS());
-            } catch (ScriptException e) {
-                e.printStackTrace();
-            }
             return new DirectValue(newVal.getValue());
         } else {
             return runFunction(functionName, args);
@@ -118,7 +109,7 @@ public class Interpreter {
         List<Token> tokens = new ArrayList<>();
 
         for (Value v : sublist) {
-            tokens.add(new ValueToken(v.getValue(), v.getType()));
+            tokens.add(new ValueToken(v.getValue(), v.getValueType()));
         }
 
         return Tokenizer.evaluateSingle(tokens);

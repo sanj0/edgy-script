@@ -1,11 +1,11 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
-import java.util.Map;
+import javax.script.Bindings;
 
 public class LinkedValue extends Value {
-    private Map<String, String> source;
+    private Bindings source;
 
-    public LinkedValue(String id, Map<String, String> source, ValueType type) {
+    public LinkedValue(String id, Bindings source, ValueType type) {
         super("", id, type);
         this.source = source;
     }
@@ -24,7 +24,7 @@ public class LinkedValue extends Value {
         if (!Interpreter.MEMORY.containsKey(getID())) {
             return getID();
         } else {
-            return source.get(getID());
+            return source.get(getID()).toString();
         }
     }
 
@@ -34,10 +34,10 @@ public class LinkedValue extends Value {
     }
 
     @Override
-    public ValueType getType() {
+    public ValueType getValueType() {
 
         if (Interpreter.MEMORY.containsKey(getID())) {
-            return super.getType();
+            return super.getValueType();
         } else {
             return ValueType.NUMBER;
         }

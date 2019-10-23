@@ -44,7 +44,7 @@ public abstract class Token implements Serializable {
         return true;
     }
 
-    public ValueType getType() {
+    public ValueType getValueType() {
         if (valueType == ValueType.AUTO) {
 
             if (getValue() == null) {
@@ -62,7 +62,7 @@ public abstract class Token implements Serializable {
     }
 
     public String getValueForJS() {
-        switch (getType()) {
+        switch (getValueType()) {
             case NUMBER:
             case BOOLEAN:
                 return getValue();
@@ -71,7 +71,6 @@ public abstract class Token implements Serializable {
                 String valueForJS = getValue().replace("\\", "\\\\");
                 return "\"" + valueForJS + "\"";
         }
-
         return null;
     }
 
@@ -96,6 +95,15 @@ public abstract class Token implements Serializable {
         }
 
         return null;
+    }
+
+    /**
+     * Sets {@link #valueType}.
+     *
+     * @param valueType the new value of {@link #valueType}
+     */
+    public void setValueType(ValueType valueType) {
+        this.valueType = valueType;
     }
 
     public enum ValueType {
