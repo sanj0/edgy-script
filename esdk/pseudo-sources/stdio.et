@@ -1,0 +1,36 @@
+/**
+ * This is the pseudo-source for the NativeProvider StdIO.
+ * 
+ * @aliases stdio
+ * @example use stdio
+ */
+ 
+/**
+ * Prints out the given value to the standard 
+ * output using Java's System.out.println()
+ *
+ * @returns the printed text.
+ * @example print "hello, world!"
+ */
+function print text:
+    native print text
+
+/**
+ * Prints a formatted text to the standard output 
+ * with the given format and the given arguments.
+ *
+ * @returns the formatted text
+ * @example printf "Hello World, %s here!", "edgelord"
+ */
+function printf text, args...:
+    native printf text, args
+    
+/**
+ * Waits for the user to press [ENTER] and then returns his input.
+ * 
+ * @returns the user's input
+ * @aliases read, scan
+ * @example var name = [input]
+ */
+function input:
+    native input
