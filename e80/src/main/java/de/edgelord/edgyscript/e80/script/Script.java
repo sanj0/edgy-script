@@ -39,12 +39,23 @@ public class Script {
      */
     public void compile() throws FileNotFoundException {
         Scanner fileScanner = new Scanner(scriptFile);
+        boolean insideMultipleLineComment = false;
 
         while (fileScanner.hasNext()) {
             String line = fileScanner.nextLine().trim();
 
-            if (line.startsWith("#") || line.startsWith("//")) {
+            if (insideMultipleLineComment) {
+                if (line.startsWith("*/")) {
+                    insideMultipleLineComment = false;
+                }
                 continue;
+            } else {
+                if (line.startsWith("#") || line.startsWith("//")) {
+                    continue;
+                } else if (line.startsWith("/*")) {
+                    insideMultipleLineComment = true;
+                    continue;
+                }
             }
 
             if (line.trim().length() > 1) {
