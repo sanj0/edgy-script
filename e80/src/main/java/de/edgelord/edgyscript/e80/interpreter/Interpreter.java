@@ -4,7 +4,6 @@ import de.edgelord.edgyscript.e80.interpreter.token.Token;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
 import de.edgelord.edgyscript.e80.script.ScriptLine;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleBindings;
@@ -27,7 +26,7 @@ public class Interpreter {
             e.printStackTrace();
         }
 
-        jsEngine.setBindings(MEMORY, ScriptContext.ENGINE_SCOPE);
+        //jsEngine.setBindings(MEMORY, ScriptContext.ENGINE_SCOPE);
 
         KEYWORDS.add("and");
         KEYWORDS.add("var");
@@ -50,19 +49,22 @@ public class Interpreter {
         OPERATORS.add("=");
         OPERATORS.add("==");
         OPERATORS.add("!=");
+        OPERATORS.add("!");
         OPERATORS.add("<");
         OPERATORS.add(">");
         OPERATORS.add(">=");
         OPERATORS.add(">=");
         OPERATORS.add("||");
+        OPERATORS.add("|");
         OPERATORS.add("&&");
+        OPERATORS.add("&");
     }
 
     public static Value run(ScriptLine line) {
         return eval(line.getFunctionName(), line.getArgs());
     }
 
-    public static Value eval(List<Token> tokens, boolean... spaceSeparatorMode) {
+    public static Value eval(List<Token> tokens, boolean spaceSeparatorMode) {
         Token function = tokens.get(0);
         List<Token> args = tokens.subList(1, tokens.size());
 
@@ -82,7 +84,7 @@ public class Interpreter {
                     String varName = args.get(0).getValue();
                     String varValue = "";
 
-                    if (args.size() > 1 && args.get(1).getValue().equals("=")) {
+                    if (args.size() > 1 && args.get(1).isEqualSign()) {
                         varValue = getPartialValue(args, 2, args.size()).getValue();
                     }
 
@@ -90,7 +92,7 @@ public class Interpreter {
                     return new LinkedValue(varName);
             }
             return null;
-        } else if (args.get(0).getValue().equalsIgnoreCase("=")) {
+        } else if (args.get(0).isEqualSign()) {
             Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
 

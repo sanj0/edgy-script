@@ -9,4 +9,9 @@ public class DirectValue extends Value {
     public DirectValue(String value, ValueType valueType) {
         super(value, String.valueOf(value.hashCode()), valueType);
     }
+
+    @Override
+    public boolean isEqualSign() {
+        return getValue().equals("=");
+    }
 }

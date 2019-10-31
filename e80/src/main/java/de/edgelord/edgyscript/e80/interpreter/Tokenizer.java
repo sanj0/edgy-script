@@ -15,36 +15,35 @@ public class Tokenizer {
      * @param tokens teh arguments to a function
      * @return a corresponding list of {@link Value}s to the given list of {@link Token}s.
      */
-    public static List<Value> evaluateTokens(List<Token> tokens, boolean... spaceSeparatorMode) {
+    public static List<Value> evaluateTokens(List<Token> tokens, boolean spaceSeparatorMode) {
         List<Value> values = new ArrayList<>();
         List<Token> currentTokens = new LinkedList<>();
 
-        if (spaceSeparatorMode.length > 0) {
-            if (spaceSeparatorMode[0]) {
-                for (Token token : tokens) {
-                    values.add(token.toValue());
+        if (spaceSeparatorMode) {
+            for (Token token : tokens) {
+                values.add(token.toValue());
+            }
+            return values;
+        } else {
+
+            for (Token token : tokens) {
+                if (token instanceof InlineToken) {
+                    currentTokens.add(token);
+                } else if (Interpreter.isSplitChar(token.getValue())) {
+                    addToValueList(values, currentTokens);
+                    currentTokens.clear();
+                } else {
+                    currentTokens.add(token);
                 }
-                return values;
             }
-        }
 
-        for (Token token : tokens) {
-            if (token instanceof InlineToken) {
-                currentTokens.add(token);
-            } else if (Interpreter.isSplitChar(token.getValue())) {
+            if (currentTokens.size() > 0) {
+
                 addToValueList(values, currentTokens);
-                currentTokens.clear();
-            } else {
-                currentTokens.add(token);
             }
+
+            return values;
         }
-
-        if (currentTokens.size() > 0) {
-
-            addToValueList(values, currentTokens);
-        }
-
-        return values;
     }
 
     private static void addToValueList(List<Value> values, List<Token> currentTokens) {

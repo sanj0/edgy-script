@@ -1,6 +1,7 @@
 package de.edgelord.edgyscript.e80.script;
 
 import de.edgelord.edgyscript.e80.interpreter.Interpreter;
+import de.edgelord.edgyscript.e80.interpreter.Tokenizer;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
@@ -25,6 +26,19 @@ public class ScriptLine implements Serializable {
 
     public ScriptLine(Token function, List<Value> args) {
         this(function, args, new LinkedList<>());
+    }
+
+    public ScriptLine(List<Token> tokens) {
+        Token functionName = tokens.get(0);
+
+        if (tokens.size() == 1) {
+            this.function = functionName;
+            this.args = new LinkedList<>();
+        } else {
+            this.function = functionName;
+            this.args = Tokenizer.evaluateTokens(tokens.subList(1, tokens.size()),
+                    Interpreter.isKeyWord(functionName.getValue()) || tokens.get(1).isEqualSign());
+        }
     }
 
     /**

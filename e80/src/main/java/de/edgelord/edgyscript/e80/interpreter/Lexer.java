@@ -77,11 +77,16 @@ public class Lexer {
         Token subToken = null;
 
         if (mode != Mode.STRING && mode != Mode.INLINE) {
+            String characterString = Character.toString(character);
             if (character == '(' || character == ')') {
-                String parenthesis = Character.toString(character);
                 character = ' ';
-                subToken = Token.getToken(parenthesis, Token.Type.SPECIAL, Token.ValueType.NUMBER);
+                subToken = Token.getToken(characterString, Token.Type.SPECIAL, Token.ValueType.NUMBER);
 
+                if (mode != Mode.INIT && mode != Mode.START) {
+                    mode = Mode.DONE;
+                }
+            } else if (Interpreter.isOperator(Character.toString(character))) {
+                subToken = Token.getToken(characterString, Token.Type.SPECIAL, Token.ValueType.NUMBER);
                 if (mode != Mode.INIT && mode != Mode.START) {
                     mode = Mode.DONE;
                 }
@@ -99,6 +104,9 @@ public class Lexer {
                     tokenBuilder = new TokenBuilder(Token.Type.SPLIT);
                     tokenBuilder.append(character);
                     mode = Mode.DONE;
+                } else if (Interpreter.isOperator(Character.toString(character))) {
+                    mode = Mode.INIT;
+                    return subToken;
                 }
                 mode = Mode.START;
                 next(character);
@@ -130,20 +138,22 @@ public class Lexer {
                 }
                 break;
             case STRING:
-                if (character == '\\' && !escapeNextChar) {
-                    escapeNextChar = true;
-                }
-                if (character != '"' || escapeNextChar) {
-
-                    if (escapeNextChar && character == 'n') {
-                        tokenBuilder.append(lineSeparator);
-                    } else {
+                if (character == '"') {
+                    if (escapeNextChar) {
                         tokenBuilder.append(character);
+                    } else {
+                        mode = Mode.DONE;
                     }
+                } else if (character == '\\') {
+                    if (!escapeNextChar) {
+                        escapeNextChar = true;
+                    }
+                    tokenBuilder.append(character);
                 } else {
-                    mode = Mode.DONE;
+                    escapeNextChar = false;
+                    tokenBuilder.append(character);
                 }
-                escapeNextChar = false;
+
                 break;
             case NUMBER:
                 if (character == '.' || Character.isDigit(character)) {

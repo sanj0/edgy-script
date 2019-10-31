@@ -13,6 +13,11 @@ public class JSPoweredValue extends Value {
     }
 
     @Override
+    public boolean isEqualSign() {
+        return false;
+    }
+
+    @Override
     public String getValue() {
         try {
             return Interpreter.jsEngine.eval(buildJS()).toString();

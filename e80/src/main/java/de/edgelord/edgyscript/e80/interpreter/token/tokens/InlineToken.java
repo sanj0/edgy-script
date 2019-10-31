@@ -4,6 +4,9 @@ import de.edgelord.edgyscript.e80.interpreter.Interpreter;
 import de.edgelord.edgyscript.e80.interpreter.Lexer;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
+import de.edgelord.edgyscript.e80.script.ScriptLine;
+
+import java.util.List;
 
 public class InlineToken extends Value {
 
@@ -17,8 +20,15 @@ public class InlineToken extends Value {
     }
 
     @Override
+    public boolean isEqualSign() {
+        return false;
+    }
+
+    @Override
     public String getValue() {
-        return Interpreter.eval(lexer.tokenize(value)).getValue();
+
+        List<Token> tokens = lexer.tokenize(value);
+        return Interpreter.run(new ScriptLine(tokens)).getValue();
     }
 
     @Override

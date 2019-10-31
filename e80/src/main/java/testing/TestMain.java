@@ -41,8 +41,8 @@ public class TestMain {
         }
     }
 
-    private static void testValuenize(String s, Lexer lexer) throws ScriptException {
-        List<Value> values = Tokenizer.evaluateTokens(lexer.tokenize(s));
+    private static void testValuenize(String s, Lexer lexer) {
+        List<Value> values = Tokenizer.evaluateTokens(lexer.tokenize(s), false);
 
         for (Value value : values) {
             System.out.println(value.getClass().getSimpleName() + ":" + value.getValue());

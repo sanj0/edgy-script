@@ -22,6 +22,7 @@ public abstract class Token implements Serializable {
     public abstract String getValue();
     public abstract void setValue(String newValue);
     public abstract Value toValue();
+    public abstract boolean isEqualSign();
 
     private ValueType valueType;
 
@@ -98,7 +99,7 @@ public abstract class Token implements Serializable {
                 return getValue();
             case STRING:
 
-                String valueForJS = getValue().replace("\\", "\\\\");
+                String valueForJS = getValue().replace("\"", "\\\"");
                 return "\"" + valueForJS + "\"";
         }
         return null;

@@ -19,6 +19,11 @@ public class LinkedValue extends Value {
     }
 
     @Override
+    public boolean isEqualSign() {
+        return false;
+    }
+
+    @Override
     public String getValue() {
 
         if (!Interpreter.MEMORY.containsKey(getID())) {

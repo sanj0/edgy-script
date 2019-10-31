@@ -7,6 +7,7 @@ import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,8 +62,7 @@ public class Script {
             if (line.trim().length() > 1) {
 
                 List<Token> tokens = lexer.tokenize(line);
-                Token functionName = tokens.get(0);
-                lines.add(new ScriptLine(functionName, Tokenizer.evaluateTokens(tokens.subList(1, tokens.size()), Interpreter.isKeyWord(functionName.getValue()) || tokens.get(1).getValue().equals("="))));
+                lines.add(new ScriptLine(tokens));
             }
         }
     }

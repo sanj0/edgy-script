@@ -16,6 +16,11 @@ public class ValueToken extends Token {
     }
 
     @Override
+    public boolean isEqualSign() {
+        return value.equals("=");
+    }
+
+    @Override
     public String getID() {
         return id;
     }
