@@ -3,6 +3,7 @@ package de.edgelord.edgyscript.esdk;
 import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
+import de.edgelord.edgyscript.e80.script.ArgumentList;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ public class ESDK implements NativeProvider {
     private Map<String, NativeProvider> usedNativeProviders = new HashMap<>();
 
     @Override
-    public Value function(String function, List<Value> args) {
+    public Value function(String function, ArgumentList args) {
 
         // use a dependency e.g. use stdio
         if (function.equalsIgnoreCase("use")) {

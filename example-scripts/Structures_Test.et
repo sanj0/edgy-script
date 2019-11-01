@@ -7,4 +7,4 @@ use stdio
 print "What's your name? "
 var name = $string[input]
 
-ctrl.ifelse name == "edgelord", $[print "hot dogs"], $[print "meh."]
+ctrl.ifelse name == "edgelord", $[print "hot dogs"]

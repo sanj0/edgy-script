@@ -3,12 +3,11 @@ package de.edgelord.edgyscript.esdk;
 import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
-
-import java.util.List;
+import de.edgelord.edgyscript.e80.script.ArgumentList;
 
 public class Strings implements NativeProvider {
     @Override
-    public Value function(String function, List<Value> args) {
+    public Value function(String function, ArgumentList args) {
 
         switch (function.toLowerCase()) {
 

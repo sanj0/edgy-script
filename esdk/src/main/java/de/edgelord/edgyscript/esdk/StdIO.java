@@ -1,8 +1,8 @@
 package de.edgelord.edgyscript.esdk;
 
 import de.edgelord.edgyscript.e80.interpreter.*;
+import de.edgelord.edgyscript.e80.script.ArgumentList;
 
-import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -11,7 +11,7 @@ public class StdIO implements NativeProvider {
     public static final Scanner STDINPUT = new Scanner(System.in);
 
     @Override
-    public Value function(String function, List<Value> args) {
+    public Value function(String function, ArgumentList args) {
 
         switch (function.toLowerCase()) {
             case "print":

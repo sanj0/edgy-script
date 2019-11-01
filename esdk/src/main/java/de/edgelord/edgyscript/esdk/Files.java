@@ -3,15 +3,15 @@ package de.edgelord.edgyscript.esdk;
 import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
+import de.edgelord.edgyscript.e80.script.ArgumentList;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
 
 public class Files implements NativeProvider {
     @Override
-    public Value function(String function, List<Value> args) {
+    public Value function(String function, ArgumentList args) {
 
         File file = new File(args.get(0).getValue());
         switch (function.toLowerCase()) {
