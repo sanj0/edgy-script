@@ -1,0 +1,8 @@
+// FileIO test
+use files
+use fileio
+use stdio
+
+var file = "/Users/edgelord/testFile"
+
+fileio.write file, "It's \"Hello World!\", you fool!"
