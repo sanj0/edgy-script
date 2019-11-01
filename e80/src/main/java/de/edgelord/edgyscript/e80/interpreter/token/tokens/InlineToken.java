@@ -15,7 +15,12 @@ public class InlineToken extends Value {
     public InlineToken(String value, ValueType valueType) {
         super(value, String.valueOf(value.hashCode()), valueType);
         String[] parts = value.split(":", 2);
-        setValueType(Token.ValueType.getType(parts[0]));
+
+        if (parts[0].equals("")) {
+            setValueType(ValueType.NUMBER);
+        } else {
+            setValueType(Token.ValueType.getType(parts[0]));
+        }
         setValue(parts[1]);
     }
 

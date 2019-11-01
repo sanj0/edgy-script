@@ -9,13 +9,6 @@ import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
 
 import java.io.Serializable;
 
-/**
- * Different subtypes of token:
- *
- * [function name] [direct value] [variable name] [operator] [direct value]
- * e.g.
- * myFunction "hello, world!", myVariable + 3,14
- */
 public abstract class Token implements Serializable {
 
     public abstract String getID();
@@ -154,7 +147,7 @@ public abstract class Token implements Serializable {
                     return BOOLEAN;
             }
 
-            throw new RuntimeException("Variable type" + typeName + " does not exist!");
+            throw new RuntimeException("Variable type " + typeName + " does not exist!");
         }
     }
 
