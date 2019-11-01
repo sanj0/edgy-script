@@ -16,8 +16,15 @@ public class ESDK implements NativeProvider {
         // use a dependency e.g. use stdio
         if (function.equalsIgnoreCase("use")) {
             String value = args.get(0).getValue();
+            String usedName = value;
+
+            if (args.size() >= 3) {
+                if (args.get(1).getValue().equalsIgnoreCase("as")) {
+                    usedName = args.get(2).getValue();
+                }
+            }
             try {
-                usedNativeProviders.put(value, getDependency(value));
+                usedNativeProviders.put(usedName, getDependency(value));
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }

@@ -40,6 +40,7 @@ public class Interpreter {
         KEYWORDS.add("for");
         KEYWORDS.add("goto");
         KEYWORDS.add("label");
+        KEYWORDS.add("use");
 
         OPERATORS.add("+");
         OPERATORS.add("-");
@@ -77,7 +78,7 @@ public class Interpreter {
 
         if (args.size() == 0) {
             return runFunction(functionName, args);
-        } else if (isKeyWord(functionName.toLowerCase())) {
+        } else if (isKeyWord(functionName.toLowerCase()) && !functionName.equalsIgnoreCase("use")) {
 
             switch (functionName.toLowerCase()) {
                 case "var":

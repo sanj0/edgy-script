@@ -1,6 +1,6 @@
 // Full test of all stringutil features:
-use strings
-use stdio
+use strings as s
+use stdio as io
 
 var s1
 var s2
@@ -8,16 +8,16 @@ var n1
 var n2
 
 print "Please input two strings and then two numbers for the stringutil tests: "
-s1 = $[input]
-s2 = $[input]
+s1 = $[io.input]
+s2 = $[io.input]
 n1 = $[input]
-n2 = $[input]
+n2 = $[io.input]
 
-print "\nmerge/join " + s1 + " and " + s2
-print "\n" + $string[join s1, s2]
+io.print "\nmerge/join " + s1 + " and " + s2
+io.print "\n" + $string[s.join s1, s2]
 
 print "\nlowercase " + s1
 print "\n" + $string[lowercase s1]
 
 print "\nuppercase " + s1
-print "\n" + $string[uppercase s1]
+print "\n" + $string[s.uppercase s1]
