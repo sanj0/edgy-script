@@ -2,12 +2,10 @@ package de.edgelord.edgyscript.e80.script;
 
 import de.edgelord.edgyscript.e80.interpreter.Interpreter;
 import de.edgelord.edgyscript.e80.interpreter.Lexer;
-import de.edgelord.edgyscript.e80.interpreter.Tokenizer;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,6 +17,7 @@ public class Script {
 
     public Script(String absolutePath) {
         scriptFile = new File(absolutePath);
+        ScriptException.SCRIPT_PATH = absolutePath;
     }
 
     public void loadPreCompiled() {
@@ -41,8 +40,11 @@ public class Script {
     public void compile() throws FileNotFoundException {
         Scanner fileScanner = new Scanner(scriptFile);
         boolean insideMultipleLineComment = false;
+        int currentLineNumber = 0;
 
         while (fileScanner.hasNext()) {
+            currentLineNumber++;
+            ScriptException.LINE_NUMBER = currentLineNumber;
             String line = fileScanner.nextLine().trim();
 
             if (insideMultipleLineComment) {
@@ -62,7 +64,7 @@ public class Script {
             if (line.trim().length() > 1) {
 
                 List<Token> tokens = lexer.tokenize(line);
-                lines.add(new ScriptLine(tokens));
+                lines.add(new ScriptLine(tokens, currentLineNumber));
             }
         }
     }
@@ -82,6 +84,7 @@ public class Script {
 
     public void run() {
         for (ScriptLine line : lines) {
+            ScriptException.LINE_NUMBER = line.getLineNumber();
             Interpreter.run(line);
         }
     }

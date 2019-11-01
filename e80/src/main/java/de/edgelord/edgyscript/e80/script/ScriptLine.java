@@ -17,6 +17,7 @@ public class ScriptLine implements Serializable {
     private Token function;
     private List<Value> args;
     private List<ScriptLine> subLines;
+    private int lineNumber = -1;
 
     public ScriptLine(Token function, List<Value> args, List<ScriptLine> subLines) {
         this.function = function;
@@ -24,8 +25,9 @@ public class ScriptLine implements Serializable {
         this.subLines = subLines;
     }
 
-    public ScriptLine(Token function, List<Value> args) {
-        this(function, args, new LinkedList<>());
+    public ScriptLine(Token function, List<Value> args, List<ScriptLine> subLines, int lineNumber) {
+        this(function, args, subLines);
+        this.lineNumber = lineNumber;
     }
 
     public ScriptLine(List<Token> tokens) {
@@ -39,6 +41,11 @@ public class ScriptLine implements Serializable {
             this.args = Tokenizer.evaluateTokens(tokens.subList(1, tokens.size()),
                     Interpreter.isKeyWord(functionName.getValue()) || tokens.get(1).isEqualSign());
         }
+    }
+
+    public ScriptLine (List<Token> tokens, int lineNumber) {
+        this(tokens);
+        this.lineNumber = lineNumber;
     }
 
     /**
@@ -102,5 +109,23 @@ public class ScriptLine implements Serializable {
      */
     public void setSubLines(List<ScriptLine> subLines) {
         this.subLines = subLines;
+    }
+
+    /**
+     * Gets {@link #lineNumber}.
+     *
+     * @return the value of {@link #lineNumber}
+     */
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    /**
+     * Sets {@link #lineNumber}.
+     *
+     * @param lineNumber the new value of {@link #lineNumber}
+     */
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
     }
 }

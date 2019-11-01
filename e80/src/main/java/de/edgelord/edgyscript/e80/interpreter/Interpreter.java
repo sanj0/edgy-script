@@ -2,6 +2,8 @@ package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
+import de.edgelord.edgyscript.e80.script.ArgumentList;
+import de.edgelord.edgyscript.e80.script.ScriptException;
 import de.edgelord.edgyscript.e80.script.ScriptLine;
 
 import javax.script.ScriptEngine;
@@ -62,17 +64,17 @@ public class Interpreter {
     }
 
     public static Value run(ScriptLine line) {
-        return eval(line.getFunctionName(), line.getArgs());
+        return eval(line.getFunctionName(), new ArgumentList(line.getArgs(), line.getFunctionName().getValue()));
     }
 
     public static Value eval(List<Token> tokens, boolean spaceSeparatorMode) {
         Token function = tokens.get(0);
         List<Token> args = tokens.subList(1, tokens.size());
 
-        return eval(function, Tokenizer.evaluateTokens(args, spaceSeparatorMode));
+        return eval(function, new ArgumentList(Tokenizer.evaluateTokens(args, spaceSeparatorMode), function.getValue()));
     }
 
-    public static Value eval(Token function, List<Value> args) {
+    public static Value eval(Token function, ArgumentList args) {
 
         String functionName = function.getValue();
 
@@ -104,10 +106,10 @@ public class Interpreter {
         }
     }
 
-    private static Value runFunction(String functionName, List<Value> args) {
+    private static Value runFunction(String functionName, ArgumentList args) {
         Value returnVal = ESDK.function(functionName, args);
         if (returnVal == null) {
-            throw new RuntimeException("Function " + functionName + " does not exist!");
+            throw new ScriptException("Function " + functionName + " does not exist!");
         } else {
             return returnVal;
         }

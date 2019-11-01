@@ -1,8 +1,8 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
-import java.util.List;
+import de.edgelord.edgyscript.e80.script.ArgumentList;
 
 public interface NativeProvider {
 
-    Value function(String function, List<Value> args);
+    Value function(String function, ArgumentList args);
 }

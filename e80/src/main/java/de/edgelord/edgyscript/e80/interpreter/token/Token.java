@@ -6,6 +6,7 @@ import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.InlineToken;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.SpecialToken;
 import de.edgelord.edgyscript.e80.interpreter.token.tokens.ValueToken;
+import de.edgelord.edgyscript.e80.script.ScriptException;
 
 import java.io.Serializable;
 
@@ -28,7 +29,7 @@ public abstract class Token implements Serializable {
         try {
             val = Double.parseDouble(getValue());
         } catch (Exception e) {
-            throw new RuntimeException("Cannot use \"" + getValue() + "\" as a number!");
+            throw new ScriptException("Cannot use \"" + getValue() + "\" as a number!");
         }
         return val;
     }
@@ -38,7 +39,7 @@ public abstract class Token implements Serializable {
         try {
             val = Integer.parseInt(getValue());
         } catch (Exception e) {
-            throw new RuntimeException("Cannot use \"" + getValue() + "\" as a number!");
+            throw new ScriptException("Cannot use \"" + getValue() + "\" as a number!");
         }
         return val;
     }
@@ -48,7 +49,7 @@ public abstract class Token implements Serializable {
         try {
             val = Boolean.parseBoolean(getValue());
         } catch (Exception e) {
-            throw new RuntimeException("Cannot use \"" + getValue() + "\" as a boolean!");
+            throw new ScriptException("Cannot use \"" + getValue() + "\" as a boolean!");
         }
         return val;
     }
@@ -147,7 +148,7 @@ public abstract class Token implements Serializable {
                     return BOOLEAN;
             }
 
-            throw new RuntimeException("Variable type " + typeName + " does not exist!");
+            throw new ScriptException("Variable type " + typeName + " does not exist!");
         }
     }
 
