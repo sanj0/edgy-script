@@ -15,7 +15,7 @@ This projects contains three modules:
  ```python
  use stdio
 
- print "Hello World!\n"
+ print("Hello World!\n")
  ```
 
 2. A stupidly long version of the Hello World:
@@ -26,8 +26,9 @@ This projects contains three modules:
  var hello = "Hello"
  var world = "World"
  
- print hello + " " + world + "!\n"
+ print(hello + " " + world + "!\n")
  # better: printf "%s %s!\n", hello, world
+ // should not make a real performance difference though
  ```
  
 3. An enhanced Hello World with more features:
@@ -35,26 +36,28 @@ This projects contains three modules:
  ```python
  use stdio
  
- print "What is your name? "
- var name = [input]
+ print("What is your name? ")
+ var name = $string[input()]
  
- print "Hello World, " + name + " here!\n"
+ print("Hello World, " + name + " here!\n")
  ```
 
-4. Enhanced Hello World with Easteregg (not yet working due to lack of structures like `if` [21.10.2019])
+4. Enhanced Hello World with Easteregg (a bit clunky because `if` is not builtin yet [21.10.2019])
 
 ```python
 use stdio
+use structures as ctrl
  
-printf "What is your name? "
-var name = [input]
+printf("What is your name? ")
+var name = [input()]
  
-if name == "Stormtrooper":
-    printf "These are not the droids you are looking for!"
-print "Hello World, " + name + " here!\n"
+ctrl.if(name == "Stormtrooper", $[printf("These are not the droids you are looking for!")])
+print("Hello World, " + name + " here!\n")
 ```
 
-Code inside `[]` is evaluated at runtime as Edgy Script code, `input` is a function of `stdio` that return user input upon pressing `ENTER`.
+Code inside `[]` is evaluated at runtime as Edgy Script code, `input` is a function of `stdio` that returns user input upon pressing `ENTER`. <br>
+Comments are either made by putting `//` or `#` in front of a line or `/*` and `*/` at the beginning of lines to have everythign in between (inclusively) commented. <br>
+A `;` at the end of a line is allowed but not needed.
 
 ### How to install Edgy Script
 On Linux and MacOS, you can use one of the install scripts, on Windows, follow these steps:
