@@ -1,7 +1,5 @@
 # Edgy Script
 
-**TODO:** Make variables a `SimpleBinding` for nashorn
-
 Edgy Script: a modern, slow, barely-documented programming language for no purpose.
 
 This projects contains three modules:
