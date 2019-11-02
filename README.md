@@ -60,7 +60,7 @@ Comments are either made by putting `//` or `#` in front of a line or `/*` and `
 A `;` at the end of a line is allowed but not needed.
 
 ### How to install Edgy Script
-On Linux and MacOS, you can use one of the install scripts, on Windows, follow these steps:
+On Linux and MacOS, you can use one of the install scripts, on Windows (not supported yet), follow these steps:
 
 1. Make sure that git, maven and Java are installed properly on your system
 2. Clone the repo
@@ -71,8 +71,6 @@ On Linux and MacOS, you can use one of the install scripts, on Windows, follow t
     - build it using maven (`mvn clean install`)
     - cd into the sdk project (`cd ../esdk`)
     - build it using maven (still `mvn clean install`)
-4. Run a ES Script using esrun/esrun.sh
+4. Run a script using esrun/esrun.sh
     - cd into the esrun project (`cd ../esrun`)
     - run the script using the esrun script (`./esrun.sh path-to-file.et`)
-5. Enjoys the interactive mode (similar to the one from python)
-    - run esrun/esrun.sh (`./esrun.sh`)
