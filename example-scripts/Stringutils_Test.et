@@ -1,23 +1,13 @@
-// Full test of all stringutil features:
-use strings as s
-use stdio as io
+// test of string utils features
 
-var s1
-var s2
-var n1
-var n2
+use stdio;
+use stringutils;
 
-print "Please input two strings and then two numbers for the stringutil tests: "
-s1 = $[io.input]
-s2 = $[io.input]
-n1 = $[input]
-n2 = $[io.input]
+var s1 = $string[input("Please input a string: ")];
+var s2 = $string[input("Please input a second string: ")];
 
-io.print "\nmerge/join " + s1 + " and " + s2
-io.print "\n" + $string[s.join s1, s2]
+var n1 = $number[input("Please input a number: ")];
+var n2 = $number[input("Please input a second number: ")];
 
-print "\nlowercase " + s1
-print "\n" + $string[lowercase s1]
-
-print "\nuppercase " + s1
-print "\n" + $string[s.uppercase s1]
+printf("\nWatch me join %s and %s together using pure magic!\n", s1, s2);
+printf($string[join(s1, s2)]);

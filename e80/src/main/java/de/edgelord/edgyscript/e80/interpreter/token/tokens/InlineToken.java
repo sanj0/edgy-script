@@ -32,7 +32,7 @@ public class InlineToken extends Value {
     @Override
     public String getValue() {
 
-        List<Token> tokens = lexer.tokenize(value);
+        List<Token> tokens = lexer.tokenize(value, !value.startsWith("var"));
         return Interpreter.run(new ScriptLine(tokens)).getValue();
     }
 

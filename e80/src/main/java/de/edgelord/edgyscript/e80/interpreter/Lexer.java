@@ -2,6 +2,7 @@ package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 import de.edgelord.edgyscript.e80.interpreter.token.TokenBuilder;
+import de.edgelord.edgyscript.e80.script.ScriptException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,19 @@ public class Lexer {
 
     public static final String lineSeparator = System.getProperty("line.separator");
 
-    public List<Token> tokenize(String s) {
+    public List<Token> tokenize(String s, boolean removeParentheses) {
+
+        if (removeParentheses) {
+            // remove first an last parentheses
+            try {
+                StringBuilder builder = new StringBuilder(s.replaceFirst("\\(", " "));
+                builder.deleteCharAt(s.lastIndexOf(')'));
+                s = builder.toString();
+            } catch (Exception e) {
+                throw new ScriptException(e.getMessage());
+            }
+        }
+
         List<Token> tokens = new ArrayList<>();
         char[] chars = s.toCharArray();
         boolean lastTokenWasSplit = false;

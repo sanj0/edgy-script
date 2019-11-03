@@ -57,7 +57,7 @@ public class ESDK implements NativeProvider {
 
             case "strings":
             case "string":
-            case "stringutil":
+            case "stringutils":
                 return Class.forName("de.edgelord.edgyscript.esdk.Strings").asSubclass(NativeProvider.class).newInstance();
 
             case "fileio":

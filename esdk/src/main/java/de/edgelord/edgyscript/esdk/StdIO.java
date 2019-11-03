@@ -37,6 +37,10 @@ public class StdIO implements NativeProvider {
             case "input":
             case "read":
             case "scan":
+
+                if (args.size() >= 1) {
+                    print(args.get(0).getValue());
+                }
                 String input = STDINPUT.nextLine();
                 return new DirectValue(input);
             default:

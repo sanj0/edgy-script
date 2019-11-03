@@ -34,7 +34,7 @@ public class TestMain {
     }
 
     private static void testTokenize(String s, Lexer lexer) {
-        List<Token> tokens = lexer.tokenize(s);
+        List<Token> tokens = lexer.tokenize(s, true);
 
         for (Token token : tokens) {
             System.out.println(token.getClass().getSimpleName() + ":" +  token.getValue());
@@ -42,7 +42,7 @@ public class TestMain {
     }
 
     private static void testValuenize(String s, Lexer lexer) {
-        List<Value> values = Tokenizer.evaluateTokens(lexer.tokenize(s), false);
+        List<Value> values = Tokenizer.evaluateTokens(lexer.tokenize(s, true), false);
 
         for (Value value : values) {
             System.out.println(value.getClass().getSimpleName() + ":" + value.getValue());

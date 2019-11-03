@@ -46,6 +46,9 @@ public class Script {
             currentLineNumber++;
             ScriptException.LINE_NUMBER = currentLineNumber;
             String line = fileScanner.nextLine().trim();
+            if (line.endsWith(";")) {
+                line = line.substring(0, line.length() - 1);
+            }
 
             if (insideMultipleLineComment) {
                 if (line.startsWith("*/")) {
@@ -61,9 +64,9 @@ public class Script {
                 }
             }
 
-            if (line.trim().length() > 1) {
+            if (line.length() > 1) {
 
-                List<Token> tokens = lexer.tokenize(line);
+                List<Token> tokens = lexer.tokenize(line, !line.startsWith("use") && !line.startsWith("var"));
                 lines.add(new ScriptLine(tokens, currentLineNumber));
             }
         }
