@@ -109,6 +109,10 @@ public abstract class Token implements Serializable {
                 } else {
                     if (s.contains(":")) {
                         String[] parts = s.split(":");
+
+                        if (parts.length < 2) {
+                            return new LinkedValue(s);
+                        }
                         return new LinkedValue(parts[1], ValueType.getType(parts[0]));
                     }
                     return new LinkedValue(s);

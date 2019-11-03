@@ -3,11 +3,11 @@
 use stdio;
 use stringutils;
 
-var s1 = $string[input("Please input a string: ")];
-var s2 = $string[input("Please input a second string: ")];
+var string1 = $string[input("Please input a string: ")];
+var string2 = $string[input("Please input a second string: ")];
 
-var n1 = $number[input("Please input a number: ")];
-var n2 = $number[input("Please input a second number: ")];
+var number1 = $number[input("Please input a number: ")];
+var number2 = $number[input("Please input a second number: ")];
 
-printf("\nWatch me join %s and %s together using pure magic!\n", s1, s2);
-printf($string[join(s1, s2)]);
+printf("\nWatch me join %s and %s together using pure magic!\n", string1, string2);
+printf($string[join(string1, string2)]);
