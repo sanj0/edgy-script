@@ -50,7 +50,7 @@ public class Main {
         String currentLine;
 
         while (true) {
-            System.out.println(">>> ");
+            System.out.print(">>> ");
             currentLine = inputScanner.nextLine();
 
             if (currentLine.equalsIgnoreCase("exit")) {

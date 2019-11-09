@@ -50,6 +50,16 @@ public class ESDK implements NativeProvider {
         }
     }
 
+    public String getUsedProviders() {
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<String, NativeProvider> stringNativeProviderEntry : usedNativeProviders.entrySet()) {
+            builder.append(stringNativeProviderEntry.getValue().getClass().getSimpleName());
+            builder.append(", ");
+        }
+
+        return builder.toString();
+    }
+
     private NativeProvider getDependency(String name) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         switch (name.toLowerCase()) {
             case "stdio":
