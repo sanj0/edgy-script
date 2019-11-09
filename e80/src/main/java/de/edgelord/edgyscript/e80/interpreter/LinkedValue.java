@@ -24,6 +24,11 @@ public class LinkedValue extends Value {
     }
 
     @Override
+    public boolean isBracket() {
+        return false;
+    }
+
+    @Override
     public String getValue() {
 
         if (!Interpreter.MEMORY.containsKey(getID())) {

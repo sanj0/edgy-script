@@ -66,7 +66,7 @@ public class Script {
 
             if (line.length() > 1) {
 
-                List<Token> tokens = lexer.tokenize(line, !line.startsWith("use") && !line.startsWith("var"));
+                List<Token> tokens = lexer.tokenize(line);
                 lines.add(new ScriptLine(tokens, currentLineNumber));
             }
         }

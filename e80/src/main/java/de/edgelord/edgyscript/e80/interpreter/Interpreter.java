@@ -18,6 +18,7 @@ public class Interpreter {
     public static final SimpleBindings MEMORY = new SimpleBindings();
 
     public static final ScriptEngine jsEngine = new ScriptEngineManager().getEngineByName("JavaScript");
+    private static final Lexer LEXER = new Lexer();
 
     public static NativeProvider ESDK;
 
@@ -67,6 +68,11 @@ public class Interpreter {
         return eval(line.getFunctionName(), new ArgumentList(line.getArgs(), line.getFunctionName().getValue()));
     }
 
+    public static Value run(String line, int lineNumber) {
+        List<Token> tokens = LEXER.tokenize(line);
+        return run(new ScriptLine(tokens, lineNumber));
+    }
+
     public static Value eval(List<Token> tokens, boolean spaceSeparatorMode) {
         Token function = tokens.get(0);
         List<Token> args = tokens.subList(1, tokens.size());
@@ -99,7 +105,7 @@ public class Interpreter {
             Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
 
-            MEMORY.replace(varName, newVal.getValue());
+            MEMORY.put(varName, newVal.getValue());
             return new DirectValue(newVal.getValue());
         } else {
             return runFunction(functionName, args);
@@ -109,7 +115,7 @@ public class Interpreter {
     private static Value runFunction(String functionName, ArgumentList args) {
         Value returnVal = ESDK.function(functionName, args);
         if (returnVal == null) {
-            throw new ScriptException("Function " + functionName + " does not exist!");
+            throw new ScriptException("Function " + functionName + " does not exist! Maybe your forgot to import the provider of it?");
         } else {
             return returnVal;
         }

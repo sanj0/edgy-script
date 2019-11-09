@@ -30,9 +30,14 @@ public class InlineToken extends Value {
     }
 
     @Override
+    public boolean isBracket() {
+        return false;
+    }
+
+    @Override
     public String getValue() {
 
-        List<Token> tokens = lexer.tokenize(value, !value.startsWith("var"));
+        List<Token> tokens = lexer.tokenize(value);
         return Interpreter.run(new ScriptLine(tokens)).getValue();
     }
 

@@ -21,18 +21,7 @@ public class Lexer {
 
     public static final String lineSeparator = System.getProperty("line.separator");
 
-    public List<Token> tokenize(String s, boolean removeParentheses) {
-
-        if (removeParentheses) {
-            // remove first an last parentheses
-            try {
-                StringBuilder builder = new StringBuilder(s.replaceFirst("\\(", " "));
-                builder.deleteCharAt(s.lastIndexOf(')'));
-                s = builder.toString();
-            } catch (Exception e) {
-                throw new ScriptException(e.getMessage());
-            }
-        }
+    public List<Token> tokenize(String s) {
 
         List<Token> tokens = new ArrayList<>();
         char[] chars = s.toCharArray();
@@ -41,7 +30,7 @@ public class Lexer {
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             Token subToken = next(c);
-            if (i == chars.length - 1 || mode == Mode.DONE) {
+            if ((i == chars.length - 1 || mode == Mode.DONE) && mode != Mode.INIT && mode != Mode.START) {
                 if (tokenBuilder.length() > 0) {
 
                     String tokenValue = tokenBuilder.toString();
@@ -72,6 +61,18 @@ public class Lexer {
                     lastTokenWasSplit = false;
                 }
                 tokens.add(subToken);
+            }
+        }
+
+        if (tokens.size() > 1) {
+            if (tokens.get(1).isBracket()) {
+                for (int i = tokens.size() - 1; i > 0; i--) {
+                    if (tokens.get(i).isBracket()) {
+                        tokens.remove(i);
+                        tokens.remove(1);
+                        break;
+                    }
+                }
             }
         }
 

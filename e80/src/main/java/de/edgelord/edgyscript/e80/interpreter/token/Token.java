@@ -17,6 +17,7 @@ public abstract class Token implements Serializable {
     public abstract void setValue(String newValue);
     public abstract Value toValue();
     public abstract boolean isEqualSign();
+    public abstract boolean isBracket();
 
     private ValueType valueType;
 
@@ -114,8 +115,9 @@ public abstract class Token implements Serializable {
                             return new LinkedValue(s);
                         }
                         return new LinkedValue(parts[1], ValueType.getType(parts[0]));
+                    } else {
+                        return new LinkedValue(s, ValueType.AUTO);
                     }
-                    return new LinkedValue(s);
                 }
             case VALUE:
                 return new ValueToken(s, valueType);

@@ -14,4 +14,9 @@ public class DirectValue extends Value {
     public boolean isEqualSign() {
         return getValue().equals("=");
     }
+
+    @Override
+    public boolean isBracket() {
+        return getValue().equals("(") || getValue().equals(")");
+    }
 }
