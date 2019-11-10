@@ -81,6 +81,14 @@ public class ESDK implements NativeProvider {
             case "controls":
                 return Class.forName("de.edgelord.edgyscript.esdk.Structures").asSubclass(NativeProvider.class).newInstance();
 
+            case "math":
+            case "maths":
+                return Class.forName("de.edgelord.edgyscript.esdk.Math").asSubclass(NativeProvider.class).newInstance();
+
+            case "system":
+            case "os":
+                return Class.forName("de.edgelord.edgyscript.esdk.System").asSubclass(NativeProvider.class).newInstance();
+
             default:
                 return Class.forName(name).asSubclass(NativeProvider.class).newInstance();
         }

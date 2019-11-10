@@ -105,7 +105,7 @@ public abstract class Token implements Serializable {
             case SPECIAL:
             case SPLIT:
 
-                if (Interpreter.isKeyWord(s) || Interpreter.isOperator(s)) {
+                if (Interpreter.isKeyWord(s) || Interpreter.isOperator(s) || Interpreter.isSplitChar(s)) {
                     return new SpecialToken(s, valueType);
                 } else {
                     if (s.contains(":")) {

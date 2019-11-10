@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 public class StdIO implements NativeProvider {
 
-    public static final Scanner STDINPUT = new Scanner(System.in);
+    public static final Scanner STDINPUT = new Scanner(java.lang.System.in);
 
     @Override
     public Value function(String function, ArgumentList args) {
@@ -49,6 +49,6 @@ public class StdIO implements NativeProvider {
     }
 
     public static void print(String text) {
-        System.out.print(text.replace("\\n", Lexer.lineSeparator));
+        java.lang.System.out.print(text.replace("\\n", Lexer.lineSeparator));
     }
 }

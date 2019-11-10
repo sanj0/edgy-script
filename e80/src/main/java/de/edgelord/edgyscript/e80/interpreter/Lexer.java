@@ -25,7 +25,6 @@ public class Lexer {
 
         List<Token> tokens = new ArrayList<>();
         char[] chars = s.toCharArray();
-        boolean lastTokenWasSplit = false;
 
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
@@ -33,33 +32,11 @@ public class Lexer {
             if ((i == chars.length - 1 || mode == Mode.DONE) && mode != Mode.INIT && mode != Mode.START) {
                 if (tokenBuilder.length() > 0) {
 
-                    String tokenValue = tokenBuilder.toString();
-
-                    if (tokenValue.equals(",")) {
-                        if (lastTokenWasSplit) {
-                            continue;
-                        } else {
-                            lastTokenWasSplit = true;
-                        }
-                    } else {
-                        lastTokenWasSplit = false;
-                    }
-
                     tokens.add(Token.getToken(tokenBuilder.toString(), tokenBuilder.getType(), currentValueType));
                     mode = Mode.INIT;
                 }
             }
             if (subToken != null) {
-                String tokenValue = subToken.getValue();
-                if (tokenValue.equals(",")) {
-                    if (lastTokenWasSplit) {
-                        continue;
-                    } else {
-                        lastTokenWasSplit = true;
-                    }
-                } else {
-                    lastTokenWasSplit = false;
-                }
                 tokens.add(subToken);
             }
         }
@@ -104,21 +81,22 @@ public class Lexer {
                 if (mode != Mode.INIT && mode != Mode.START) {
                     mode = Mode.DONE;
                 }
+            } else if (Interpreter.isSplitChar(character)) {
+                if (mode != Mode.INIT && mode != Mode.START) {
+                    mode = Mode.DONE;
+                }
+                subToken = Token.getToken(characterString, Token.Type.SPLIT, Token.ValueType.NUMBER);
             }
         }
         switch (mode) {
             // mode init: the string builder has to be initialized.
             // the mode is then set to START and the method calls itself
             case INIT:
-                if (character == ' ') {
+                if (character == ' ' | character == ',') {
                     break;
                 }
 
-                if (Interpreter.isSplitChar(character)) {
-                    tokenBuilder = new TokenBuilder(Token.Type.SPLIT);
-                    tokenBuilder.append(character);
-                    mode = Mode.DONE;
-                } else if (Interpreter.isOperator(Character.toString(character))) {
+               if (Interpreter.isOperator(Character.toString(character))) {
                     mode = Mode.INIT;
                     return subToken;
                 }
@@ -177,12 +155,9 @@ public class Lexer {
                 }
                 break;
             case DIRECT:
-                if (Interpreter.isSplitChar(character) || character == ' ' || Interpreter.isOperator(Character.toString(character))) {
+                if (character == ' ' || Interpreter.isOperator(Character.toString(character))) {
                     mode = Mode.DONE;
 
-                    if (character != ' ') {
-                        subToken = Token.getToken(Character.toString(character), Token.Type.SPLIT, Token.ValueType.NUMBER);
-                    }
                 } else {
                     tokenBuilder.append(character);
                 }

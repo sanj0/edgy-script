@@ -47,10 +47,13 @@ public class Tokenizer {
     }
 
     private static void addToValueList(List<Value> values, List<Token> currentTokens) {
-        if (currentTokens.size() == 1) {
-            values.add(currentTokens.get(0).toValue());
-        } else {
-            values.add(evaluateSingle(currentTokens));
+
+        if (currentTokens.size() != 0) {
+            if (currentTokens.size() == 1) {
+                values.add(currentTokens.get(0).toValue());
+            } else {
+                values.add(evaluateSingle(currentTokens));
+            }
         }
     }
 
