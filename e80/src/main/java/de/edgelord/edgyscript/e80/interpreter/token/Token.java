@@ -40,7 +40,7 @@ public abstract class Token implements Serializable {
         try {
             val = Integer.parseInt(getValue());
         } catch (Exception e) {
-            throw new ScriptException("Cannot use \"" + getValue() + "\" as a number!");
+            throw new ScriptException("Cannot use \"" + getValue() + "\" as an Integer!");
         }
         return val;
     }
