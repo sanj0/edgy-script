@@ -42,7 +42,10 @@ public class System implements NativeProvider {
             case "nanoseconds":
                 return new DirectValue(String.valueOf(java.lang.System.nanoTime()));
 
-
+            case "executeall":
+                for (Value value : args) {
+                    value.getValue();
+                }
         }
         return null;
     }
