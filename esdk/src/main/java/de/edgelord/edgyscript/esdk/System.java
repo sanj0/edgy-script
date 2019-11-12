@@ -46,6 +46,7 @@ public class System implements NativeProvider {
                 for (Value value : args) {
                     value.getValue();
                 }
+                return new DirectValue("");
         }
         return null;
     }
