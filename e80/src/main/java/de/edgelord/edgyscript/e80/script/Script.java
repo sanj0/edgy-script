@@ -41,14 +41,12 @@ public class Script {
         Scanner fileScanner = new Scanner(scriptFile);
         boolean insideMultipleLineComment = false;
         int currentLineNumber = 0;
+        StringBuilder lineBuilder = new StringBuilder();
 
         while (fileScanner.hasNext()) {
             currentLineNumber++;
             ScriptException.LINE_NUMBER = currentLineNumber;
             String line = fileScanner.nextLine().trim();
-            if (line.endsWith(";")) {
-                line = line.substring(0, line.length() - 1);
-            }
 
             if (insideMultipleLineComment) {
                 if (line.startsWith("*/")) {
@@ -66,9 +64,22 @@ public class Script {
 
             if (line.length() > 1) {
 
-                List<Token> tokens = lexer.tokenize(line);
-                lines.add(new ScriptLine(tokens, currentLineNumber));
+                if (buildLine(lineBuilder, line)) {
+                    List<Token> tokens = lexer.tokenize(lineBuilder.toString());
+                    lines.add(new ScriptLine(tokens, currentLineNumber));
+                    lineBuilder.setLength(0);
+                }
             }
+        }
+    }
+
+    private boolean buildLine(StringBuilder lineBuilder, String line) {
+        if (line.endsWith(";")) {
+            lineBuilder.append(line, 0, line.length() - 1);
+            return true;
+        } else {
+            lineBuilder.append(line);
+            return false;
         }
     }
 
