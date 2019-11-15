@@ -46,6 +46,6 @@ public class ValueToken extends Token {
 
     @Override
     public Value toValue() {
-        return new DirectValue(getValue());
+        return new DirectValue(getValue(), getValueType());
     }
 }

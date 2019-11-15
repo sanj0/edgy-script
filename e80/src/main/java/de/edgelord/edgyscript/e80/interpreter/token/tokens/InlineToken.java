@@ -17,7 +17,7 @@ public class InlineToken extends Value {
         String[] parts = value.split(":", 2);
 
         if (parts[0].equals("")) {
-            setValueType(ValueType.NUMBER);
+            setValueType(ValueType.STRING);
         } else {
             setValueType(Token.ValueType.getType(parts[0]));
         }
