@@ -63,31 +63,40 @@ public class ESDK implements NativeProvider {
     private NativeProvider getDependency(String name) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         switch (name.toLowerCase()) {
             case "stdio":
-                return Class.forName("de.edgelord.edgyscript.esdk.StdIO").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.StdIO").asSubclass(NativeProvider.class).newInstance();
 
             case "strings":
             case "string":
             case "stringutils":
-                return Class.forName("de.edgelord.edgyscript.esdk.Strings").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Strings").asSubclass(NativeProvider.class).newInstance();
 
             case "fileio":
-                return Class.forName("de.edgelord.edgyscript.esdk.FileIO").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.FileIO").asSubclass(NativeProvider.class).newInstance();
 
             case "files":
             case "file":
-                return Class.forName("de.edgelord.edgyscript.esdk.Files").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Files").asSubclass(NativeProvider.class).newInstance();
 
             case "structures":
             case "controls":
-                return Class.forName("de.edgelord.edgyscript.esdk.Structures").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Structures").asSubclass(NativeProvider.class).newInstance();
 
             case "math":
             case "maths":
-                return Class.forName("de.edgelord.edgyscript.esdk.Math").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Math").asSubclass(NativeProvider.class).newInstance();
 
             case "system":
             case "os":
-                return Class.forName("de.edgelord.edgyscript.esdk.System").asSubclass(NativeProvider.class).newInstance();
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.System").asSubclass(NativeProvider.class).newInstance();
+
+            case "variables":
+            case "vars":
+            case "varutils":
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Variables").asSubclass(NativeProvider.class).newInstance();
+
+            case "random":
+            case "rng":
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Random").asSubclass(NativeProvider.class).newInstance();
 
             default:
                 return Class.forName(name).asSubclass(NativeProvider.class).newInstance();

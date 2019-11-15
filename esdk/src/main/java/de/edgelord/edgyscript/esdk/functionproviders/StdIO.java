@@ -1,4 +1,4 @@
-package de.edgelord.edgyscript.esdk;
+package de.edgelord.edgyscript.esdk.functionproviders;
 
 import de.edgelord.edgyscript.e80.interpreter.*;
 import de.edgelord.edgyscript.e80.script.ArgumentList;
