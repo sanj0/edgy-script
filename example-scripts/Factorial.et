@@ -1,0 +1,21 @@
+/*
+ * This solution of the Factorial is very crappy and only temporary until 
+ * real structures (in this case the while loop and if statement) 
+ * is implemented into Edgy Script.
+ */
+
+use stdio
+use structures as ctrl
+use system
+use varutils
+
+print("Please input a number: ");
+number = $[input()];
+result = 1;
+i = 1;
+
+ctrl.if !$[isNumeric number], $[executeAll $[print number + " is not a number!"], $[exit 1]]
+
+ctrl.while i <= number, $[executeAll($[result = result * i], $[i = i + 1])]
+
+printf ("Result: %s", result)

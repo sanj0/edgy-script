@@ -1,0 +1,16 @@
+/* A crappy guess-the-random-number game
+ * Random number are generated between 1 and 100.
+ */
+
+use stdio;
+use random;
+use structures as ctrl;
+use system
+
+var randomNumber = $[random.nextInt(1, 100)];
+var guesses = 0;
+var guess = 0;
+
+ctrl.while guess != randomNumber, $[executeAll($[print("Your guess number " + (guesses + 1) + " (number is " + randomNumber + "): ")], $[guess = $[input()]], $[guesses = guesses + 1])]
+
+printf("Congats! It took you %s guesses to guess %s from 100 possibilities!", guesses, randomNumber)
