@@ -1,0 +1,13 @@
+/*
+ * This script serves two reasons:
+ * 1. Give a good overview of the language
+ * 2. Work as a test script
+ */
+use stdio;
+use structures as ctrl;
+use system;
+
+ctrl.if true,
+    $[executeAll(
+        $[print "hello world!"],
+        $[printf "\nYes, it is me, %s!", "edgelord"])];

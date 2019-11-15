@@ -1,6 +1,6 @@
-use stdio
+use stdio;
 
-print "What is your name? "
-var name = [input]
+print "What is your name? ";
+var name = [input];
 
-print "Hello World, " + name + " here!\n"
+print "Hello World, " + name + " here!\n";

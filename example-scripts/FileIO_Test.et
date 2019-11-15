@@ -1,8 +1,8 @@
 // FileIO test
-use files
-use fileio
-use stdio
+use files;
+use fileio;
+use stdio;
 
-var file = "/Users/edgelord/testFile"
+var file = "/Users/edgelord/testFile";
 
-fileio.write file, "It's \"Hello World!\", you fool!"
+fileio.write file, "It's \"Hello World!\", you fool!";

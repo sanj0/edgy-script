@@ -1,6 +1,6 @@
-use stdio
+use stdio;
 
-var hello = "Hello"
-var world = "World"
+var hello = "Hello";
+var world = "World";
 
-printf hello + " " + world + "!\n"
+printf hello + " " + world + "!\n";
