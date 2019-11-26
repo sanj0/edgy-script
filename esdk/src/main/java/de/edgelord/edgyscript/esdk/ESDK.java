@@ -15,7 +15,7 @@ public class ESDK implements NativeProvider {
     public Value function(String function, ArgumentList args) {
 
         // use a dependency e.g. use stdio
-        if (function.equalsIgnoreCase("use")) {
+        if (function.equalsIgnoreCase("use") || function.equalsIgnoreCase("import")) {
             String value = args.get(0).getValue();
             String usedName = value;
 

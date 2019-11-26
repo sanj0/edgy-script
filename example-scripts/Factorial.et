@@ -16,7 +16,7 @@ i = 1;
 
 ctrl.if !$[isNumeric number], 
     $[executeAll 
-        $[print number + " is not a number!"], 
+        $[print number + " is not a number!"],
         $[exit 1]];
 
 ctrl.while i <= number, 
