@@ -15,6 +15,10 @@ public class Script {
     private List<ScriptLine> lines = new ArrayList<>();
     private Lexer lexer = new Lexer();
 
+    private ScriptLine currentLine = null;
+    private int lastIndentionLevel = 0;
+    private int currIndentionLevel = 0;
+
     public Script(String absolutePath) {
         scriptFile = new File(absolutePath);
         ScriptException.SCRIPT_PATH = absolutePath;
@@ -46,7 +50,10 @@ public class Script {
         while (fileScanner.hasNext()) {
             currentLineNumber++;
             ScriptException.LINE_NUMBER = currentLineNumber;
-            String line = fileScanner.nextLine().trim();
+            String oLine = fileScanner.nextLine();
+            String line = oLine.trim();
+            int indention;
+            int indentionLevel;
 
             if (insideMultipleLineComment) {
                 if (line.startsWith("*/")) {
@@ -62,18 +69,61 @@ public class Script {
                 }
             }
 
+            indention = oLine.indexOf(line);
+            indentionLevel = indention / 4;
+
+            if (indention % 4 != 0) {
+                throw new ScriptException("indention must be a multiple of 4");
+            }
+
             if (line.length() > 1) {
 
+                if (lineBuilder.length() == 0) {
+                    currIndentionLevel = indentionLevel;
+                }
+
                 if (buildLine(lineBuilder, line)) {
-                    List<Token> tokens = lexer.tokenize(lineBuilder.toString());
-                    lines.add(new ScriptLine(tokens, currentLineNumber));
+                    String finalLine = lineBuilder.toString();
+                    List<Token> tokens = lexer.tokenize(finalLine.endsWith(";") || finalLine.endsWith(":") ? removeLastChar(finalLine) : finalLine);
+                    ScriptLine scriptLine = new ScriptLine(tokens, currentLineNumber);
+
+                    if (currIndentionLevel < lastIndentionLevel) {
+                        ScriptLine nextCurrLine = currentLine.getDirectParent();
+                        int indentionLevelDiff = lastIndentionLevel - currIndentionLevel;
+
+                        for (int i = 1; i < indentionLevelDiff; i++) {
+                            nextCurrLine = nextCurrLine.getDirectParent();
+                        }
+                        currentLine = nextCurrLine;
+                    }
+                    if (finalLine.endsWith(":")) {
+                        scriptLine.setDirectParent(currentLine);
+                        addLine(scriptLine, currIndentionLevel);
+                        currentLine = scriptLine;
+                    } else {
+                        addLine(scriptLine, currIndentionLevel);
+                    }
+
                     lineBuilder.setLength(0);
                 }
             }
         }
     }
 
+    private String removeLastChar(String s) {
+        return s.substring(0, s.length() - 1);
+    }
+
+    private void addLine(ScriptLine line, int indentionLevel) {
+        if (indentionLevel == 0) {
+            lines.add(line);
+        } else {
+            currentLine.addSubline(line);
+        }
+    }
+
     private boolean buildLine(StringBuilder lineBuilder, String line) {
+        /*
         if (line.endsWith(";")) {
             lineBuilder.append(line, 0, line.length() - 1);
             return true;
@@ -81,6 +131,12 @@ public class Script {
             lineBuilder.append(line);
             return false;
         }
+        */
+        if (line.endsWith(";")) {
+            line = removeLastChar(line);
+        }
+        lineBuilder.append(line);
+        return true;
     }
 
     public void saveCompiledScript(String path) {

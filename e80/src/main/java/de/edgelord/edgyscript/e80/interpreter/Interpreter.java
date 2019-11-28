@@ -44,6 +44,7 @@ public class Interpreter {
         KEYWORDS.add("goto");
         KEYWORDS.add("label");
         KEYWORDS.add("use");
+        KEYWORDS.add("import");
 
         OPERATORS.add("+");
         OPERATORS.add("-");
@@ -65,7 +66,7 @@ public class Interpreter {
     }
 
     public static Value run(ScriptLine line) {
-        return eval(line.getFunctionName(), new ArgumentList(line.getArgs(), line.getFunctionName().getValue()));
+        return eval(line);
     }
 
     public static Value run(String line, int lineNumber) {
@@ -77,17 +78,18 @@ public class Interpreter {
         Token function = tokens.get(0);
         List<Token> args = tokens.subList(1, tokens.size());
 
-        return eval(function, new ArgumentList(Tokenizer.evaluateTokens(args, spaceSeparatorMode), function.getValue()));
+        return eval(new ScriptLine(function, new ArgumentList(Tokenizer.evaluateTokens(args, spaceSeparatorMode), function.getValue())));
     }
 
-    public static Value eval(Token function, ArgumentList args) {
+    public static Value eval(ScriptLine line) {
 
+        Token function = line.getFunctionName();
         String functionName = function.getValue();
+        ArgumentList args = new ArgumentList(line.getArgs(), functionName);
 
         if (args.size() == 0) {
             return runFunction(functionName, args);
-        } else if (isKeyWord(functionName.toLowerCase()) && !functionName.equalsIgnoreCase("use")) {
-
+        } else if (isKeyWord(functionName.toLowerCase()) && !(functionName.equalsIgnoreCase("use") || functionName.equalsIgnoreCase("import"))) {
             switch (functionName.toLowerCase()) {
                 case "var":
                     String varName = args.get(0).getValue();
@@ -99,6 +101,13 @@ public class Interpreter {
 
                     MEMORY.put(varName, varValue);
                     return new LinkedValue(varName);
+
+                case "if":
+                    boolean condition = args.get(0).getBoolean();
+
+                    if (condition) {
+                        line.runSubLines();
+                    }
             }
             return null;
         } else if (args.get(0).isEqualSign()) {

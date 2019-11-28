@@ -6,6 +6,7 @@ import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,12 +18,17 @@ public class ScriptLine implements Serializable {
     private Token function;
     private List<Value> args;
     private List<ScriptLine> subLines;
+    private ScriptLine directParent = null;
     private int lineNumber = -1;
 
     public ScriptLine(Token function, List<Value> args, List<ScriptLine> subLines) {
         this.function = function;
         this.args = args;
         this.subLines = subLines;
+    }
+
+    public ScriptLine(Token function, ArgumentList args) {
+        this(function, args, new ArrayList<>());
     }
 
     public ScriptLine(Token function, List<Value> args, List<ScriptLine> subLines, int lineNumber) {
@@ -39,8 +45,9 @@ public class ScriptLine implements Serializable {
         } else {
             this.function = functionName;
             this.args = Tokenizer.evaluateTokens(tokens.subList(1, tokens.size()),
-                    Interpreter.isKeyWord(functionName.getValue()) || tokens.get(1).isEqualSign());
+                    functionName.getValue().equalsIgnoreCase("use") || functionName.getValue().equalsIgnoreCase("import") || tokens.get(1).isEqualSign());
         }
+        subLines = new ArrayList<>();
     }
 
     public ScriptLine (List<Token> tokens, int lineNumber) {
@@ -55,6 +62,14 @@ public class ScriptLine implements Serializable {
         for (ScriptLine line : subLines) {
             Interpreter.run(line);
         }
+    }
+
+    public void addSubline(ScriptLine line) {
+        subLines.add(line);
+    }
+
+    public ScriptLine getSubline(int index) {
+        return subLines.get(index);
     }
 
     /**
@@ -127,5 +142,23 @@ public class ScriptLine implements Serializable {
      */
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
+    }
+
+    /**
+     * Gets {@link #directParent}.
+     *
+     * @return the value of {@link #directParent}
+     */
+    public ScriptLine getDirectParent() {
+        return directParent;
+    }
+
+    /**
+     * Sets {@link #directParent}.
+     *
+     * @param directParent the new value of {@link #directParent}
+     */
+    public void setDirectParent(ScriptLine directParent) {
+        this.directParent = directParent;
     }
 }
