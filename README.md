@@ -11,20 +11,20 @@ This projects contains three modules:
 1. The classical Hello World:
 
  ```python
- use stdio
+ use stdio;
 
- print("Hello World!\n")
+ print("Hello World!\n");
  ```
 
 2. A stupidly long version of the Hello World:
 
  ```python
- use stdio
+ use stdio;
  
- var hello = "Hello"
- var world = "World"
+ var hello = "Hello";
+ var world = "World";
  
- print(hello + " " + world + "!\n")
+ print(hello + " " + world + "!\n");
  # better: printf "%s %s!\n", hello, world
  // should not make a real performance difference though
  ```
@@ -32,30 +32,31 @@ This projects contains three modules:
 3. An enhanced Hello World with more features:
 
  ```python
- use stdio
+ use stdio;
  
- print("What is your name? ")
- var name = $string[input()]
+ print("What is your name? ");
+ var name = $string[input()];
  
- print("Hello World, " + name + " here!\n")
+ print("Hello World, " + name + " here!\n");
  ```
 
-4. Enhanced Hello World with Easteregg (a bit clunky because `if` is not builtin yet [21.10.2019])
+4. Enhanced Hello World with Easteregg
 
 ```python
-use stdio
-use structures as ctrl
+use stdio;
  
-printf("What is your name? ")
-var name = [input()]
+printf("What is your name? ");
+var name = $[input()];
  
-ctrl.if(name == "Stormtrooper", $[printf("These are not the droids you are looking for!")])
-print("Hello World, " + name + " here!\n")
+if name == "Stormtrooper":
+    print("These are not the droids you are looking for!");
+else:
+    print("Hello World, " + name + " here!\n")
 ```
 
-Code inside `[]` is evaluated at runtime as Edgy Script code, `input` is a function of `stdio` that returns user input upon pressing `ENTER`. <br>
+Code inside `$TYPE[]` is evaluated at runtime as Edgy Script code, and optionally being cast to the non-bligtory TYPE, `input` is a function of `stdio` that returns user input upon pressing `ENTER`. <br>
 Comments are either made by putting `//` or `#` in front of a line or `/*` and `*/` at the beginning of lines to have everythign in between (inclusively) commented. <br>
-A `;` at the end of a line is allowed but not needed.
+A `;` at the end of a line is allowed and considered good practice but not needed.
 
 ### How to install Edgy Script
 On Linux and MacOS, you can use one of the install scripts, on Windows (not supported yet), follow these steps:
