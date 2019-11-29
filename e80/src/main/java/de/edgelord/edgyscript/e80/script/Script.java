@@ -83,12 +83,13 @@ public class Script {
                 }
 
                 if (buildLine(lineBuilder, line)) {
+                    int nextLastIndentionLevel = currIndentionLevel;
                     String finalLine = lineBuilder.toString();
                     List<Token> tokens = lexer.tokenize(finalLine.endsWith(";") || finalLine.endsWith(":") ? removeLastChar(finalLine) : finalLine);
                     ScriptLine scriptLine = new ScriptLine(tokens, currentLineNumber);
 
                     if (currIndentionLevel < lastIndentionLevel) {
-                        ScriptLine nextCurrLine = currentLine.getDirectParent();
+                        ScriptLine nextCurrLine = currIndentionLevel == 0 ? null : currentLine.getDirectParent();
                         int indentionLevelDiff = lastIndentionLevel - currIndentionLevel;
 
                         for (int i = 1; i < indentionLevelDiff; i++) {
@@ -97,7 +98,10 @@ public class Script {
                         currentLine = nextCurrLine;
                     }
                     if (finalLine.endsWith(":")) {
-                        scriptLine.setDirectParent(currentLine);
+
+                        if (lastIndentionLevel != 0) {
+                            scriptLine.setDirectParent(currentLine);
+                        }
                         addLine(scriptLine, currIndentionLevel);
                         currentLine = scriptLine;
                     } else {
@@ -105,6 +109,7 @@ public class Script {
                     }
 
                     lineBuilder.setLength(0);
+                    lastIndentionLevel = nextLastIndentionLevel;
                 }
             }
         }
@@ -115,7 +120,7 @@ public class Script {
     }
 
     private void addLine(ScriptLine line, int indentionLevel) {
-        if (indentionLevel == 0) {
+        if (indentionLevel == 0 || currentLine == null) {
             lines.add(line);
         } else {
             currentLine.addSubline(line);

@@ -108,8 +108,17 @@ public class Interpreter {
                     if (condition) {
                         line.runSubLines();
                     }
+                    return new DirectValue(String.valueOf(condition));
+
+                case "while":
+                    while (args.get(0).getBoolean()) {
+                        line.runSubLines();
+                    }
+                    return new DirectValue(String.valueOf(true));
+
+                default:
+                    return new DirectValue("empty");
             }
-            return null;
         } else if (args.get(0).isEqualSign()) {
             Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
