@@ -14,8 +14,14 @@ import java.util.*;
 public class Interpreter {
 
     private static final List<String> KEYWORDS = new ArrayList<>();
+    public static final List<String> SPECIAL_BUILTINS = new ArrayList<>();
     private static final List<String> OPERATORS = new ArrayList<>();
     public static final SimpleBindings MEMORY = new SimpleBindings();
+    public static final SimpleBindings SCOPE = new SimpleBindings();
+    public static final List<Function> FUNCTIONS = new ArrayList<>();
+
+    public static boolean INSIDE_FUNCTION = false;
+    public static Value NEXT_FUNCTION_RETURN_VAL = null;
 
     public static final ScriptEngine jsEngine = new ScriptEngineManager().getEngineByName("JavaScript");
     private static final Lexer LEXER = new Lexer();
@@ -33,22 +39,30 @@ public class Interpreter {
 
         //jsEngine.setBindings(MEMORY, ScriptContext.ENGINE_SCOPE);
 
-        KEYWORDS.add("and");
         KEYWORDS.add("var");
-        KEYWORDS.add("{");
-        KEYWORDS.add("}");
         KEYWORDS.add("(");
         KEYWORDS.add(")");
+        KEYWORDS.add("{");
+        KEYWORDS.add("}");
         KEYWORDS.add("if");
         KEYWORDS.add("else");
         KEYWORDS.add("ifelse");
         KEYWORDS.add("elif");
         KEYWORDS.add("while");
         KEYWORDS.add("for");
-        KEYWORDS.add("goto");
-        KEYWORDS.add("label");
         KEYWORDS.add("use");
+        SPECIAL_BUILTINS.add("use");
         KEYWORDS.add("import");
+        SPECIAL_BUILTINS.add("import");
+
+        KEYWORDS.add("def");
+        SPECIAL_BUILTINS.add("def");
+        KEYWORDS.add("define");
+        SPECIAL_BUILTINS.add("define");
+        KEYWORDS.add("func");
+        SPECIAL_BUILTINS.add("func");
+        KEYWORDS.add("function");
+        SPECIAL_BUILTINS.add("function");
 
         OPERATORS.add("+");
         OPERATORS.add("-");
@@ -87,9 +101,22 @@ public class Interpreter {
 
     public static Value eval(ScriptLine line) {
 
+        if (INSIDE_FUNCTION && NEXT_FUNCTION_RETURN_VAL != null) {
+            return new DirectValue("null");
+        }
+
         Token function = line.getFunctionName();
         String functionName = function.getValue();
         ArgumentList args = new ArgumentList(line.getArgs(), functionName);
+
+        if (INSIDE_FUNCTION && functionName.equalsIgnoreCase("return")) {
+
+            if (args.size() != 1) {
+                throw new ScriptException("returns statements expects exactly one argument but got " + args.size());
+            }
+            NEXT_FUNCTION_RETURN_VAL = args.get(0);
+            return new DirectValue("null");
+        }
 
         if (isKeyWord(functionName.toLowerCase()) && !(functionName.equalsIgnoreCase("use") || functionName.equalsIgnoreCase("import"))) {
             switch (functionName.toLowerCase()) {
@@ -154,12 +181,34 @@ public class Interpreter {
     }
 
     private static Value runFunction(String functionName, ArgumentList args) {
+
+        Function fn = getFunction(functionName);
+
+        if (fn != null) {
+            return fn.execute(args);
+        }
         Value returnVal = ESDK.function(functionName, args);
         if (returnVal == null) {
-            throw new ScriptException("Function " + functionName + " does not exist! Maybe the provider isn't imported?");
+            throw new ScriptException("unknown function " + functionName);
         } else {
             return returnVal;
         }
+    }
+
+    /**
+     * Returns the function with the given name or null.
+     *
+     * @param name the name
+     * @return teh function with the given name or null
+     */
+    private static Function getFunction(String name) {
+        for (Function f : FUNCTIONS) {
+            if (f.getName().equalsIgnoreCase(name)) {
+                return f;
+            }
+        }
+
+        return null;
     }
 
     public static Value getPartialValue(List<Value> values, int startIndex, int endIndex) {

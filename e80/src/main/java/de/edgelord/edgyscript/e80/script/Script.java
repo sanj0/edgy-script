@@ -1,5 +1,6 @@
 package de.edgelord.edgyscript.e80.script;
 
+import de.edgelord.edgyscript.e80.interpreter.Function;
 import de.edgelord.edgyscript.e80.interpreter.Interpreter;
 import de.edgelord.edgyscript.e80.interpreter.Lexer;
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
@@ -121,7 +122,19 @@ public class Script {
     }
 
     private void addLine(ScriptLine line, int indentionLevel) {
-        if (indentionLevel == 0 || currentLine == null) {
+
+        String function = line.getFunctionName().getValue();
+        if (function.equalsIgnoreCase("def") || function.equalsIgnoreCase("define")
+            || function.equalsIgnoreCase("func") || function.equalsIgnoreCase("function")) {
+
+            if (line.getArgs().size() == 0) {
+                throw new ScriptException("function name missing");
+            } else if (line.getArgs().size() == 1) {
+                Interpreter.FUNCTIONS.add(new Function(line.getArgs().get(0).getValue(), line.getSubLines()));
+            } else {
+                Interpreter.FUNCTIONS.add(new Function(line.getArgs().get(0).getValue(), line.getSubLines(), new ArgumentList(line.getArgs().subList(1, line.getArgs().size()), "").toStringList()));
+            }
+        } else if (indentionLevel == 0 || currentLine == null) {
             lines.add(line);
         } else {
             currentLine.addSubline(line);

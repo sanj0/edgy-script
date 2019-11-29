@@ -46,7 +46,7 @@ public class ScriptLine implements Serializable {
         } else {
             this.function = functionName;
             this.args = Tokenizer.evaluateTokens(tokens.subList(1, tokens.size()),
-                    functionName.getValue().equalsIgnoreCase("use") || functionName.getValue().equalsIgnoreCase("import") || tokens.get(1).isEqualSign());
+                    Interpreter.SPECIAL_BUILTINS.contains(functionName.getValue()) || tokens.get(1).isEqualSign());
         }
         subLines = new ArrayList<>();
     }

@@ -31,10 +31,12 @@ public class LinkedValue extends Value {
     @Override
     public String getValue() {
 
-        if (!Interpreter.MEMORY.containsKey(getID())) {
-            return getID();
-        } else {
+        if (Interpreter.SCOPE.containsKey(getID())) {
+            return Interpreter.SCOPE.get(getID()).toString();
+        } else if (source.containsKey(getID())) {
             return source.get(getID()).toString();
+        } else {
+            return getID();
         }
     }
 
