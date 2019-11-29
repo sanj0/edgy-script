@@ -99,7 +99,7 @@ public class Script {
                     }
                     if (finalLine.endsWith(":")) {
 
-                        if (lastIndentionLevel != 0) {
+                        if (currIndentionLevel != 0) {
                             scriptLine.setDirectParent(currentLine);
                         }
                         addLine(scriptLine, currIndentionLevel);
