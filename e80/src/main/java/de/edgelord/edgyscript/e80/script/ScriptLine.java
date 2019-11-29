@@ -20,6 +20,7 @@ public class ScriptLine implements Serializable {
     private List<ScriptLine> subLines;
     private ScriptLine directParent = null;
     private int lineNumber = -1;
+    private int indentionLevel = -1;
 
     public ScriptLine(Token function, List<Value> args, List<ScriptLine> subLines) {
         this.function = function;
@@ -160,5 +161,23 @@ public class ScriptLine implements Serializable {
      */
     public void setDirectParent(ScriptLine directParent) {
         this.directParent = directParent;
+    }
+
+    /**
+     * Gets {@link #indentionLevel}.
+     *
+     * @return the value of {@link #indentionLevel}
+     */
+    public int getIndentionLevel() {
+        return indentionLevel;
+    }
+
+    /**
+     * Sets {@link #indentionLevel}.
+     *
+     * @param indentionLevel the new value of {@link #indentionLevel}
+     */
+    public void setIndentionLevel(int indentionLevel) {
+        this.indentionLevel = indentionLevel;
     }
 }

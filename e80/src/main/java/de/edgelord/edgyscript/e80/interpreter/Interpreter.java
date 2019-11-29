@@ -20,6 +20,8 @@ public class Interpreter {
     public static final ScriptEngine jsEngine = new ScriptEngineManager().getEngineByName("JavaScript");
     private static final Lexer LEXER = new Lexer();
 
+    private static Map<Integer, Boolean> IF_HISTORY = new HashMap<>();
+
     public static NativeProvider ESDK;
 
     static {
@@ -39,6 +41,8 @@ public class Interpreter {
         KEYWORDS.add(")");
         KEYWORDS.add("if");
         KEYWORDS.add("else");
+        KEYWORDS.add("ifelse");
+        KEYWORDS.add("elif");
         KEYWORDS.add("while");
         KEYWORDS.add("for");
         KEYWORDS.add("goto");
@@ -87,9 +91,7 @@ public class Interpreter {
         String functionName = function.getValue();
         ArgumentList args = new ArgumentList(line.getArgs(), functionName);
 
-        if (args.size() == 0) {
-            return runFunction(functionName, args);
-        } else if (isKeyWord(functionName.toLowerCase()) && !(functionName.equalsIgnoreCase("use") || functionName.equalsIgnoreCase("import"))) {
+        if (isKeyWord(functionName.toLowerCase()) && !(functionName.equalsIgnoreCase("use") || functionName.equalsIgnoreCase("import"))) {
             switch (functionName.toLowerCase()) {
                 case "var":
                     String varName = args.get(0).getValue();
@@ -108,7 +110,26 @@ public class Interpreter {
                     if (condition) {
                         line.runSubLines();
                     }
+
+                    IF_HISTORY.put(line.getIndentionLevel(), condition);
                     return new DirectValue(String.valueOf(condition));
+
+                case "else":
+                    boolean cnd = !IF_HISTORY.getOrDefault(line.getIndentionLevel(), true);
+                    if (cnd) {
+                        line.runSubLines();
+                    }
+                    return new DirectValue(String.valueOf(cnd));
+
+                case "elif":
+                case "elseif":
+                    boolean cndForElse = !IF_HISTORY.getOrDefault(line.getIndentionLevel(), true);
+                    boolean elseifExecuted = false;
+                    if (cndForElse && args.get(0).getBoolean()) {
+                        elseifExecuted = true;
+                        line.runSubLines();
+                    }
+                    return new DirectValue(String.valueOf(elseifExecuted));
 
                 case "while":
                     while (args.get(0).getBoolean()) {
@@ -119,6 +140,8 @@ public class Interpreter {
                 default:
                     return new DirectValue("empty");
             }
+        } else if (args.size() == 0) {
+            return runFunction(functionName, args);
         } else if (args.get(0).isEqualSign()) {
             Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
@@ -133,7 +156,7 @@ public class Interpreter {
     private static Value runFunction(String functionName, ArgumentList args) {
         Value returnVal = ESDK.function(functionName, args);
         if (returnVal == null) {
-            throw new ScriptException("Function " + functionName + " does not exist! Maybe your forgot to import the provider of it?");
+            throw new ScriptException("Function " + functionName + " does not exist! Maybe the provider isn't imported?");
         } else {
             return returnVal;
         }

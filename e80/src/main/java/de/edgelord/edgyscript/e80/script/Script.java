@@ -87,9 +87,10 @@ public class Script {
                     String finalLine = lineBuilder.toString();
                     List<Token> tokens = lexer.tokenize(finalLine.endsWith(";") || finalLine.endsWith(":") ? removeLastChar(finalLine) : finalLine);
                     ScriptLine scriptLine = new ScriptLine(tokens, currentLineNumber);
+                    scriptLine.setIndentionLevel(currIndentionLevel);
 
                     if (currIndentionLevel < lastIndentionLevel) {
-                        ScriptLine nextCurrLine = currIndentionLevel == 0 ? null : currentLine.getDirectParent();
+                        ScriptLine nextCurrLine = currentLine.getDirectParent();
                         int indentionLevelDiff = lastIndentionLevel - currIndentionLevel;
 
                         for (int i = 1; i < indentionLevelDiff; i++) {
