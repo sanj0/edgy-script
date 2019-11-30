@@ -22,6 +22,9 @@ public class Interpreter {
 
     public static boolean INSIDE_FUNCTION = false;
     public static Value NEXT_FUNCTION_RETURN_VAL = null;
+    public static boolean INSIDE_LOOP = false;
+    public static boolean CONTINUE_LOOP = false;
+    public static boolean BREAK_LOOP  = false;
 
     public static final ScriptEngine jsEngine = new ScriptEngineManager().getEngineByName("JavaScript");
     private static final Lexer LEXER = new Lexer();
@@ -105,6 +108,10 @@ public class Interpreter {
             return new DirectValue("null");
         }
 
+        if (INSIDE_LOOP && (CONTINUE_LOOP || BREAK_LOOP)) {
+            return new DirectValue("null");
+        }
+
         Token function = line.getFunctionName();
         String functionName = function.getValue();
         ArgumentList args = new ArgumentList(line.getArgs(), functionName);
@@ -116,6 +123,22 @@ public class Interpreter {
             }
             NEXT_FUNCTION_RETURN_VAL = args.get(0);
             return new DirectValue("null");
+        }
+
+        if (INSIDE_LOOP) {
+            if (functionName.equalsIgnoreCase("break")) {
+                if (args.size() != 0) {
+                    throw new ScriptException("break statements expects no arguments but got " + args.size());
+                }
+                BREAK_LOOP = true;
+                return new DirectValue("null");
+            } else if (functionName.equalsIgnoreCase("continue")) {
+                if (args.size() != 0) {
+                    throw new ScriptException("continue statements expects no arguments but got " + args.size());
+                }
+                CONTINUE_LOOP = true;
+                return new DirectValue("null");
+            }
         }
 
         if (isKeyWord(functionName.toLowerCase()) && !(functionName.equalsIgnoreCase("use") || functionName.equalsIgnoreCase("import"))) {
@@ -159,9 +182,17 @@ public class Interpreter {
                     return new DirectValue(String.valueOf(elseifExecuted));
 
                 case "while":
+                    INSIDE_LOOP = true;
                     while (args.get(0).getBoolean()) {
                         line.runSubLines();
+                        if (BREAK_LOOP) {
+                            break;
+                        }
+                        CONTINUE_LOOP = false;
                     }
+                    CONTINUE_LOOP = false;
+                    BREAK_LOOP = false;
+                    INSIDE_LOOP = false;
                     return new DirectValue(String.valueOf(true));
 
                 default:
