@@ -1,0 +1,14 @@
+import stdio;
+
+var userInput = 0;
+
+while userInput != "exit":
+    print "factorial of: ";
+    userInput = $[input()];
+    print("\n" + $[factorial(userInput)] + "\n");
+
+def factorial number:
+    if number == 1:
+        return 1;
+    else:
+        return number * $[factorial(number - 1)];

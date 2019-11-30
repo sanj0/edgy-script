@@ -152,7 +152,7 @@ public class Interpreter {
             switch (functionName.toLowerCase()) {
                 case "var":
                     String varName = args.get(0).getValue();
-                    String varValue = "null";
+                    String varValue = "";
 
                     if (args.size() > 1 && args.get(1).isEqualSign()) {
                         varValue = getPartialValue(args, 2, args.size()).getValue();

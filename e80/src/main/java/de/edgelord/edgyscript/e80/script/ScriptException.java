@@ -8,7 +8,7 @@ public class ScriptException extends RuntimeException {
     public static String SCRIPT_PATH = "";
 
     public ScriptException(String message) {
-        super("An error occurred in " + SCRIPT_PATH + ":" + LINE_NUMBER + " " + message);
+        super("An error occurred in " + SCRIPT_PATH + ":" + LINE_NUMBER + " " + message.split("\\r?\\n")[0]);
     }
 
     @Override

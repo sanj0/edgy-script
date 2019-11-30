@@ -27,16 +27,15 @@ public class JSPoweredValue extends Value {
         try {
             return Interpreter.jsEngine.eval(buildJS()).toString();
         } catch (ScriptException e) {
-            e.printStackTrace();
+            throw new de.edgelord.edgyscript.e80.script.ScriptException(e.getMessage());
         }
-
-        return null;
     }
 
     private String buildJS() {
         StringBuilder command = new StringBuilder();
         for (Value value : values) {
-            command.append(value.getValueForJS());
+            String v = value.getValueForJS();
+            command.append(v.equals("") ? "\"\"" : v);
         }
 
         return command.toString();

@@ -1,7 +1,6 @@
 /*
- * This solution of the Factorial is very crappy and only temporary until 
- * real structures (in this case the while loop and if statement) 
- * is implemented into Edgy Script.
+ * This solution is COMPLETELY OUTDATED. It is only still here due to legacy reasons.
+ * Please check out Recursion_Factorial.et for a newer, better verision.
  */
 
 use stdio;
