@@ -48,7 +48,7 @@ public class LinkedValue extends Value {
     @Override
     public ValueType getValueType() {
 
-        if (Interpreter.MEMORY.containsKey(getID())) {
+        if (Interpreter.MEMORY.containsKey(getID()) || Interpreter.SCOPE.containsKey(getID())) {
             return super.getValueType();
         } else {
             return ValueType.NUMBER;
