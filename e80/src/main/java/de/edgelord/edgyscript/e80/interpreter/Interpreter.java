@@ -118,10 +118,17 @@ public class Interpreter {
 
         if (INSIDE_FUNCTION && functionName.equalsIgnoreCase("return")) {
 
-            if (args.size() != 1) {
-                throw new ScriptException("returns statements expects exactly one argument but got " + args.size());
+            if (args.size() > 1) {
+                throw new ScriptException("returns statements expects a maximum of one argument but got " + args.size());
+            } else if (args.size() == 0) {
+                NEXT_FUNCTION_RETURN_VAL = new DirectValue("null");
+            } else {
+                NEXT_FUNCTION_RETURN_VAL = args.get(0);
             }
-            NEXT_FUNCTION_RETURN_VAL = args.get(0);
+
+            if (INSIDE_LOOP) {
+                BREAK_LOOP = true;
+            }
             return new DirectValue("null");
         }
 
@@ -145,7 +152,7 @@ public class Interpreter {
             switch (functionName.toLowerCase()) {
                 case "var":
                     String varName = args.get(0).getValue();
-                    String varValue = "";
+                    String varValue = "null";
 
                     if (args.size() > 1 && args.get(1).isEqualSign()) {
                         varValue = getPartialValue(args, 2, args.size()).getValue();
