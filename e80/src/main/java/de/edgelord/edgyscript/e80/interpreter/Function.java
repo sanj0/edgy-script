@@ -23,7 +23,7 @@ public class Function {
         this(name, content, new ArrayList<>());
     }
 
-    public Value execute(ArgumentList args) {
+    public Value invoke(ArgumentList args) {
 
         Interpreter.INSIDE_FUNCTION = true;
         if (args.size() != requiredArgs.size()) {

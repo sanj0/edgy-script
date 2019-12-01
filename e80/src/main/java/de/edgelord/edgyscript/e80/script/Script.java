@@ -7,6 +7,7 @@ import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,9 +21,9 @@ public class Script {
     private int lastIndentionLevel = 0;
     private int currIndentionLevel = 0;
 
-    public Script(String absolutePath) {
-        scriptFile = new File(absolutePath);
-        ScriptException.SCRIPT_PATH = absolutePath;
+    public Script(String path) {
+        scriptFile = new File(path);
+        ScriptException.SCRIPT_PATH = path;
     }
 
     public void loadPreCompiled() {
@@ -134,6 +135,8 @@ public class Script {
             } else {
                 Interpreter.FUNCTIONS.add(new Function(line.getArgs().get(0).getValue(), line.getSubLines(), new ArgumentList(line.getArgs().subList(1, line.getArgs().size()), "").toStringList()));
             }
+        } else if (function.equalsIgnoreCase("import") || function.equalsIgnoreCase("use")) {
+            Interpreter.runFunction(line.getFunctionName().getValue(), new ArgumentList(line.getArgs(), line.getFunctionName().getValue()));
         } else if (indentionLevel == 0 || currentLine == null) {
             lines.add(line);
         } else {
@@ -171,7 +174,17 @@ public class Script {
         }
     }
 
+    /**
+     * If there is a main method without arguments, calls it.
+     * Runs the script.
+     */
     public void run() {
+
+        Interpreter.FUNCTIONS.forEach(function -> {
+            if (function.getName().equalsIgnoreCase("main") && function.getRequiredArgs().size() == 0) {
+                function.invoke(new ArgumentList(new LinkedList<>(), function.getName()));
+            }
+        });
         for (ScriptLine line : lines) {
             ScriptException.LINE_NUMBER = line.getLineNumber();
             Interpreter.run(line);

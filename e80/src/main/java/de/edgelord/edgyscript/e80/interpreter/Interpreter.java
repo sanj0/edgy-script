@@ -148,7 +148,7 @@ public class Interpreter {
             }
         }
 
-        if (isKeyWord(functionName.toLowerCase()) && !(functionName.equalsIgnoreCase("use") || functionName.equalsIgnoreCase("import"))) {
+        if (isKeyWord(functionName.toLowerCase())) {
             switch (functionName.toLowerCase()) {
                 case "var":
                     String varName = args.get(0).getValue();
@@ -203,7 +203,7 @@ public class Interpreter {
                     return new DirectValue(String.valueOf(true));
 
                 default:
-                    return new DirectValue("empty");
+                    return new DirectValue("null");
             }
         } else if (args.size() == 0) {
             return runFunction(functionName, args);
@@ -218,12 +218,11 @@ public class Interpreter {
         }
     }
 
-    private static Value runFunction(String functionName, ArgumentList args) {
+    public static Value runFunction(String functionName, ArgumentList args) {
 
         Function fn = getFunction(functionName);
-
         if (fn != null) {
-            return fn.execute(args);
+            return fn.invoke(args);
         }
         Value returnVal = ESDK.function(functionName, args);
         if (returnVal == null) {
