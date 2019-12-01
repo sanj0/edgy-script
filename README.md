@@ -1,3 +1,5 @@
+!https://img.shields.io/badge/-Turing%20Complete-brightgreen
+
 # Edgy Script
 
 Edgy Script: a modern, slow, barely-documented programming language for no purpose.
