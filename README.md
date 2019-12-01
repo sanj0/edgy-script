@@ -1,4 +1,4 @@
-!https://img.shields.io/badge/-Turing%20Complete-brightgreen
+![Foo](https://img.shields.io/badge/-Turing%20Complete-brightgreen)
 
 # Edgy Script
 
