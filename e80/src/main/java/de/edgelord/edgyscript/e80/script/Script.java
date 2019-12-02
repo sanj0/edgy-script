@@ -136,7 +136,7 @@ public class Script {
                 Interpreter.FUNCTIONS.add(new Function(line.getArgs().get(0).getValue(), line.getSubLines(), new ArgumentList(line.getArgs().subList(1, line.getArgs().size()), "").toStringList()));
             }
         } else if (function.equalsIgnoreCase("import") || function.equalsIgnoreCase("use")) {
-            Interpreter.runFunction(line.getFunctionName().getValue(), new ArgumentList(line.getArgs(), line.getFunctionName().getValue()));
+            Interpreter.runFunction(line.getFunctionName().getValue(), new ArgumentList(line.getArgs(), line.getFunctionName().getValue()), line);
         } else if (indentionLevel == 0 || currentLine == null) {
             lines.add(line);
         } else {

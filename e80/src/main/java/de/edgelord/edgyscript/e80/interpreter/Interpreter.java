@@ -15,7 +15,10 @@ public class Interpreter {
 
     private static final List<String> KEYWORDS = new ArrayList<>();
     public static final List<String> SPECIAL_BUILTINS = new ArrayList<>();
+    public static final List<String> SPECIAL_NATIVE_FUNCTIONS = new ArrayList<>();
     private static final List<String> OPERATORS = new ArrayList<>();
+
+    // scope and memory both map String key to String value
     public static final SimpleBindings MEMORY = new SimpleBindings();
     public static final SimpleBindings SCOPE = new SimpleBindings();
     public static final List<Function> FUNCTIONS = new ArrayList<>();
@@ -134,8 +137,9 @@ public class Interpreter {
 
         if (INSIDE_LOOP) {
             if (functionName.equalsIgnoreCase("break")) {
+
                 if (args.size() != 0) {
-                    throw new ScriptException("break statements expects no arguments but got " + args.size());
+                    throw new ScriptException("break expects no arguments");
                 }
                 BREAK_LOOP = true;
                 return new DirectValue("null");
@@ -190,12 +194,15 @@ public class Interpreter {
 
                 case "while":
                     INSIDE_LOOP = true;
+                    int iteration = 0;
                     while (args.get(0).getBoolean()) {
+                        SCOPE.put("iteration", String.valueOf(iteration));
                         line.runSubLines();
                         if (BREAK_LOOP) {
                             break;
                         }
                         CONTINUE_LOOP = false;
+                        iteration++;
                     }
                     CONTINUE_LOOP = false;
                     BREAK_LOOP = false;
@@ -206,7 +213,7 @@ public class Interpreter {
                     return new DirectValue("null");
             }
         } else if (args.size() == 0) {
-            return runFunction(functionName, args);
+            return runFunction(functionName, args, line);
         } else if (args.get(0).isEqualSign()) {
             Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
@@ -214,17 +221,17 @@ public class Interpreter {
             MEMORY.put(varName, newVal.getValue());
             return new DirectValue(newVal.getValue());
         } else {
-            return runFunction(functionName, args);
+            return runFunction(functionName, args, line);
         }
     }
 
-    public static Value runFunction(String functionName, ArgumentList args) {
+    public static Value runFunction(String functionName, ArgumentList args, ScriptLine line) {
 
         Function fn = getFunction(functionName);
         if (fn != null) {
             return fn.invoke(args);
         }
-        Value returnVal = ESDK.function(functionName, args);
+        Value returnVal = ESDK.function(functionName, args, line);
         if (returnVal == null) {
             throw new ScriptException("unknown function " + functionName);
         } else {

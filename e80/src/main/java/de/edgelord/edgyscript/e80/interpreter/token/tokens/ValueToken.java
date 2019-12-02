@@ -26,6 +26,11 @@ public class ValueToken extends Token {
     }
 
     @Override
+    public boolean isDelimiterSymbol() {
+        return value.equals(",") || value.equals(";");
+    }
+
+    @Override
     public String getID() {
         return id;
     }

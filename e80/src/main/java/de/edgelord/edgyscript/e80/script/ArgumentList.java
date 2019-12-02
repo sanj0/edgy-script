@@ -24,6 +24,13 @@ public class ArgumentList extends ArrayList<Value> {
         return super.get(index);
     }
 
+    public Value get(int index, String param) {
+        if (index >= size()) {
+            throw new ScriptException("Function " + function + " requires argument " + (index + 1) + " " + param + "!");
+        }
+        return super.get(index);
+    }
+
     public List<String> toStringList() {
         List<String> list = new LinkedList<>();
 

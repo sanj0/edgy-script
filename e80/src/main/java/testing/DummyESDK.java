@@ -4,12 +4,13 @@ import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.script.ArgumentList;
+import de.edgelord.edgyscript.e80.script.ScriptLine;
 
 import java.util.Scanner;
 
 public class DummyESDK implements NativeProvider {
     @Override
-    public Value function(String function, ArgumentList args) {
+    public Value function(String function, ArgumentList args, ScriptLine line) {
 
         System.out.println("native call to " + function);
         if (function.equalsIgnoreCase("println")) {

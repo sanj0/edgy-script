@@ -19,6 +19,10 @@ public abstract class Token implements Serializable {
     public abstract boolean isEqualSign();
     public abstract boolean isBracket();
 
+    public boolean isDelimiterSymbol() {
+        return false;
+    }
+
     private ValueType valueType;
 
     public Token(ValueType valueType) {

@@ -21,7 +21,10 @@ public class Tokenizer {
 
         if (spaceSeparatorMode) {
             for (Token token : tokens) {
-                values.add(token.toValue());
+
+                if (!token.isDelimiterSymbol()) {
+                    values.add(token.toValue());
+                }
             }
             return values;
         } else {

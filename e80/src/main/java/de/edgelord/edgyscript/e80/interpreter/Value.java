@@ -36,4 +36,9 @@ public abstract class Value extends Token {
     public Value toValue() {
         return this;
     }
+
+    @Override
+    public String toString() {
+        return getValue();
+    }
 }
