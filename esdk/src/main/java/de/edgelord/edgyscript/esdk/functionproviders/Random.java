@@ -4,12 +4,13 @@ import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.script.ArgumentList;
+import de.edgelord.edgyscript.e80.script.ScriptLine;
 
 public class Random implements NativeProvider {
 
     private static java.util.Random rng = new java.util.Random();
     @Override
-    public Value function(String function, ArgumentList args) {
+    public Value function(String function, ArgumentList args, ScriptLine line) {
 
         switch (function.toLowerCase()) {
             case "rng":

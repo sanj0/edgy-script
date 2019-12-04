@@ -58,7 +58,7 @@ public class Script {
             int indentionLevel;
 
             if (insideMultipleLineComment) {
-                if (line.startsWith("*/")) {
+                if (line.endsWith("*/")) {
                     insideMultipleLineComment = false;
                 }
                 continue;

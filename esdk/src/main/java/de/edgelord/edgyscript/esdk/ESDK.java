@@ -4,6 +4,8 @@ import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.script.ArgumentList;
+import de.edgelord.edgyscript.e80.script.ScriptException;
+import de.edgelord.edgyscript.e80.script.ScriptLine;
 
 import java.util.*;
 
@@ -11,8 +13,12 @@ public class ESDK implements NativeProvider {
 
     private Map<String, NativeProvider> usedNativeProviders = new HashMap<>();
 
+    public ESDK() {
+        usedNativeProviders.put("", new Essentials());
+    }
+
     @Override
-    public Value function(String function, ArgumentList args) {
+    public Value function(String function, ArgumentList args, ScriptLine line) {
 
         // use a dependency e.g. use stdio
         if (function.equalsIgnoreCase("use") || function.equalsIgnoreCase("import")) {
@@ -22,6 +28,9 @@ public class ESDK implements NativeProvider {
             if (args.size() >= 3) {
                 if (args.get(1).getValue().equalsIgnoreCase("as")) {
                     usedName = args.get(2).getValue();
+                    if (usedName.equals("")) {
+                        throw new ScriptException("cannot use " + usedName + " as " + "\"\"");
+                    }
                 }
             }
             try {
@@ -35,12 +44,12 @@ public class ESDK implements NativeProvider {
 
             if (function.contains(".")) {
                 String[] parts = function.split("\\.", 2);
-                return usedNativeProviders.get(parts[0]).function(parts[1], args);
+                return usedNativeProviders.get(parts[0]).function(parts[1], args, line);
             }
 
             for (Map.Entry<String, NativeProvider> stringNativeProviderEntry : usedNativeProviders.entrySet()) {
                 NativeProvider np = (NativeProvider) ((Map.Entry) stringNativeProviderEntry).getValue();
-                returnVal = np.function(function, args);
+                returnVal = np.function(function, args, line);
 
                 if (returnVal != null) {
                     break;
@@ -97,6 +106,9 @@ public class ESDK implements NativeProvider {
             case "random":
             case "rng":
                 return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Random").asSubclass(NativeProvider.class).newInstance();
+
+            case "arrays":
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Arrays").asSubclass(NativeProvider.class).newInstance();
 
             default:
                 return Class.forName(name).asSubclass(NativeProvider.class).newInstance();

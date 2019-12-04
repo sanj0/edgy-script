@@ -4,6 +4,7 @@ import de.edgelord.edgyscript.e80.interpreter.DirectValue;
 import de.edgelord.edgyscript.e80.interpreter.NativeProvider;
 import de.edgelord.edgyscript.e80.interpreter.Value;
 import de.edgelord.edgyscript.e80.script.ArgumentList;
+import de.edgelord.edgyscript.e80.script.ScriptLine;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.nio.file.Files;
 
 public class FileIO implements NativeProvider {
     @Override
-    public Value function(String function, ArgumentList args) {
+    public Value function(String function, ArgumentList args, ScriptLine line) {
 
         switch (function.toLowerCase()) {
             case "readfile":

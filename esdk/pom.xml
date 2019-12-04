@@ -45,7 +45,7 @@
         <dependency>
             <groupId>de.edgelord.edgy-script</groupId>
             <artifactId>e80</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
