@@ -1,5 +1,7 @@
 package de.edgelord.edgyscript.e80.interpreter;
 
+import de.edgelord.edgyscript.e80.script.ScriptException;
+
 import javax.script.Bindings;
 
 public class LinkedValue extends Value {
@@ -32,9 +34,19 @@ public class LinkedValue extends Value {
     public String getValue() {
 
         if (Interpreter.SCOPE.containsKey(getID())) {
-            return Interpreter.SCOPE.get(getID()).toString();
+            String val = Interpreter.SCOPE.get(getID()).toString();
+            if (val == null) {
+                throw new ScriptException("variable value is NULL");
+            } else {
+                return val;
+            }
         } else if (source.containsKey(getID())) {
-            return source.get(getID()).toString();
+            String val = source.get(getID()).toString();
+            if (val == null) {
+                throw new ScriptException("variable value is NULL");
+            } else {
+                return val;
+            }
         } else {
             return getID();
         }

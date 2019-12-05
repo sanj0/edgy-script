@@ -19,6 +19,7 @@ public class Arrays implements NativeProvider {
         Interpreter.SPECIAL_NATIVE_FUNCTIONS.add("foreach");
         Interpreter.SPECIAL_NATIVE_FUNCTIONS.add("set");
         Interpreter.SPECIAL_NATIVE_FUNCTIONS.add("get");
+        Interpreter.SPECIAL_NATIVE_FUNCTIONS.add("contains");
 
         Interpreter.SPECIAL_NATIVE_FUNCTIONS.add("array");
         Interpreter.SPECIAL_NATIVE_FUNCTIONS.add("create");
@@ -43,18 +44,22 @@ public class Arrays implements NativeProvider {
 
             case "length":
             case "len":
+                checkArray(arrayName);
                 return new DirectValue(String.valueOf(arrays.get(arrayName).length));
 
             case "set":
+                checkArray(arrayName);
                 String value = args.get(2, "new value for array entry").getValue();
                 arrays.get(arrayName)[args.get(1).getInt()] = value;
                 return new DirectValue(value);
 
             case "get":
+                checkArray(arrayName);
                 return new DirectValue(arrays.get(arrayName)[args.get(1, "index of desired element").getInt()]);
 
             case "clone":
             case "copy":
+                checkArray(arrayName);
                 String targetArrayName = args.get(1).getValue();
                 String[] originArray = arrays.get(arrayName);
                 int startIndex = 0;
@@ -74,6 +79,7 @@ public class Arrays implements NativeProvider {
                 return new DirectValue(targetArrayName);
 
             case "tostring":
+                checkArray(arrayName);
                 String delimiter = "";
                 StringBuilder builder = new StringBuilder();
 
@@ -97,14 +103,15 @@ public class Arrays implements NativeProvider {
             case "foreach":
                 // foreach name in names
                 if (!args.get(1).getValue().equalsIgnoreCase("in")) {
-                    throw new ScriptException("foreach syntax: foreach element in array: ");
+                    throw new ScriptException("foreach syntax: \"foreach element in array:\"");
                 }
 
                 String varName = arrayName;
                 arrayName = args.get(2).getValue();
+                checkArray(arrayName);
                 String[] subject = arrays.get(arrayName);
                 int index = 0;
-                String indexName = varName + "Index";
+                String indexName = "iteration";
 
                 for (String s : subject) {
                     Interpreter.SCOPE.put(varName, s);
@@ -112,8 +119,28 @@ public class Arrays implements NativeProvider {
                     line.runSubLines();
                     index++;
                 }
+                Interpreter.SCOPE.remove(varName);
+                Interpreter.SCOPE.remove(indexName);
                 return new DirectValue("null");
+
+            case "contains":
+                checkArray(arrayName);
+                String[] arr = arrays.get(arrayName);
+                String val = args.get(1).getValue();
+
+                for (String s : arr) {
+                    if (s.equals(val)) {
+                        return new DirectValue(String.valueOf(true));
+                    }
+                }
+                return new DirectValue(String.valueOf(false));
         }
         return null;
+    }
+
+    private static void checkArray(String name) {
+        if (!arrays.containsKey(name)) {
+            throw new ScriptException("array " + name + " does not exist");
+        }
     }
 }

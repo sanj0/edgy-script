@@ -194,6 +194,7 @@ public class Interpreter {
 
                 case "while":
                     INSIDE_LOOP = true;
+                    SCOPE.put("iteration", "0");
                     int iteration = 0;
                     while (args.get(0).getBoolean()) {
                         SCOPE.put("iteration", String.valueOf(iteration));

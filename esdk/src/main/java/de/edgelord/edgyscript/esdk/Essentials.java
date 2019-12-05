@@ -22,7 +22,7 @@ public class Essentials implements NativeProvider {
             case "rmscopevar":
             case "removescopevar":
                 String varName = args.get(0).getValue();
-                Interpreter.SCOPE.remove(varName);<<
+                Interpreter.SCOPE.remove(varName);
                 return new DirectValue(varName);
 
             case "deletevar":

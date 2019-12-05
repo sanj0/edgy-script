@@ -179,12 +179,6 @@ public class Script {
      * Runs the script.
      */
     public void run() {
-
-        Interpreter.FUNCTIONS.forEach(function -> {
-            if (function.getName().equalsIgnoreCase("main") && function.getRequiredArgs().size() == 0) {
-                function.invoke(new ArgumentList(new LinkedList<>(), function.getName()));
-            }
-        });
         for (ScriptLine line : lines) {
             ScriptException.LINE_NUMBER = line.getLineNumber();
             Interpreter.run(line);
