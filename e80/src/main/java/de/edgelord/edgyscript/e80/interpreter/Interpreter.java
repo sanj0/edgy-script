@@ -52,13 +52,12 @@ public class Interpreter {
         KEYWORDS.add("}");
         KEYWORDS.add("if");
         KEYWORDS.add("else");
-        KEYWORDS.add("ifelse");
+        KEYWORDS.add("elseif");
         KEYWORDS.add("elif");
         KEYWORDS.add("while");
         KEYWORDS.add("for");
         KEYWORDS.add("use");
         SPECIAL_BUILTINS.add("use");
-        KEYWORDS.add("import");
         SPECIAL_BUILTINS.add("import");
 
         KEYWORDS.add("def");
@@ -210,11 +209,24 @@ public class Interpreter {
                     INSIDE_LOOP = false;
                     return new DirectValue(String.valueOf(true));
 
+                //non-cascading switch to avoid the double usage of break
+                // syntax:
+                // switch VALUE:
+                //     case VAL1, VAL2, VAL3:
+                //         // is executed when VALUE is either VAL1, VAl2, or VAL3
+                case "switch":
+
                 default:
                     return new DirectValue("null");
             }
         } else if (args.size() == 0) {
-            return runFunction(functionName, args, line);
+            Value value = runFunction(functionName, args, line);
+
+            if (value == null) {
+                throw new ScriptException("Unknown function " + functionName);
+            } else {
+                return value;
+            }
         } else if (args.get(0).isEqualSign()) {
             Value newVal = getPartialValue(args, 1, args.size());
             String varName = function.getID();
@@ -222,7 +234,13 @@ public class Interpreter {
             MEMORY.put(varName, newVal.getValue());
             return new DirectValue(newVal.getValue());
         } else {
-            return runFunction(functionName, args, line);
+            Value value = runFunction(functionName, args, line);
+
+            if (value == null) {
+                throw new ScriptException("Unknown function " + functionName);
+            } else {
+                return value;
+            }
         }
     }
 
@@ -232,19 +250,15 @@ public class Interpreter {
         if (fn != null) {
             return fn.invoke(args);
         }
-        Value returnVal = ESDK.function(functionName, args, line);
-        if (returnVal == null) {
-            throw new ScriptException("unknown function " + functionName);
-        } else {
-            return returnVal;
-        }
+
+        return ESDK.function(functionName, args, line);
     }
 
     /**
      * Returns the function with the given name or null.
      *
      * @param name the name
-     * @return teh function with the given name or null
+     * @return the function with the given name or null
      */
     private static Function getFunction(String name) {
         for (Function f : FUNCTIONS) {
@@ -277,7 +291,7 @@ public class Interpreter {
     }
 
     public static boolean isSplitChar(String s) {
-        if (s.length() > 1) {
+        if (s.length() != 1) {
             return false;
         } else {
             return isSplitChar(s.charAt(0));

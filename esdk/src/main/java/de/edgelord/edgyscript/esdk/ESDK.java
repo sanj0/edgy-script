@@ -110,6 +110,9 @@ public class ESDK implements NativeProvider {
             case "arrays":
                 return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Arrays").asSubclass(NativeProvider.class).newInstance();
 
+            case "thread":
+                return Class.forName("de.edgelord.edgyscript.esdk.functionproviders.Thread").asSubclass(NativeProvider.class).newInstance();
+
             default:
                 return Class.forName(name).asSubclass(NativeProvider.class).newInstance();
         }

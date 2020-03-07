@@ -2,7 +2,6 @@ package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 import de.edgelord.edgyscript.e80.interpreter.token.TokenBuilder;
-import de.edgelord.edgyscript.e80.script.ScriptException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,12 @@ import java.util.List;
  * This class Tokenizes a given String.
  */
 public class Lexer {
+
+    /*
+    TODO: Add period operator, which swaps primary argument and function name, e.g.
+    toLowerCase "Hello, WoRlD" -> "Hello, WoRlD".toLowerCase // or
+    contains myArray "hello world!" -> myArray.contains "hello world!"
+     */
 
     private Mode mode = Mode.INIT;
     private Token.ValueType currentValueType = Token.ValueType.AUTO;
@@ -52,6 +57,8 @@ public class Lexer {
                 }
             }
         }
+
+        // check for period operator here
 
         return tokens;
     }

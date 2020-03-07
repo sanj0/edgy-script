@@ -7,6 +7,8 @@ import de.edgelord.edgyscript.e80.script.ArgumentList;
 import de.edgelord.edgyscript.e80.script.ScriptException;
 import de.edgelord.edgyscript.e80.script.ScriptLine;
 
+import java.util.concurrent.TimeUnit;
+
 public class System implements NativeProvider {
     @Override
     public Value function(String function, ArgumentList args, ScriptLine line) {
@@ -48,6 +50,15 @@ public class System implements NativeProvider {
                     value.getValue();
                 }
                 return new DirectValue("");
+
+            case "wait":
+                long delay = args.get(0).getInt();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return new DirectValue(String.valueOf(delay));
         }
         return null;
     }

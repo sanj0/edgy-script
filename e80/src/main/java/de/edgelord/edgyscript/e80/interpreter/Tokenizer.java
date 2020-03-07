@@ -26,9 +26,7 @@ public class Tokenizer {
                     values.add(token.toValue());
                 }
             }
-            return values;
         } else {
-
             for (Token token : tokens) {
                 if (token instanceof InlineToken) {
                     currentTokens.add(token);
@@ -41,12 +39,11 @@ public class Tokenizer {
             }
 
             if (currentTokens.size() > 0) {
-
                 addToValueList(values, currentTokens);
             }
 
-            return values;
         }
+        return values;
     }
 
     private static void addToValueList(List<Value> values, List<Token> currentTokens) {
