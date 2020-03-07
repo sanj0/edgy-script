@@ -10,6 +10,10 @@ public class DirectValue extends Value {
         super(value, String.valueOf(value.hashCode()), valueType);
     }
 
+    public static DirectValue nullValue() {
+        return new DirectValue("null");
+    }
+
     @Override
     public boolean isEqualSign() {
         return getValue().equals("=");
