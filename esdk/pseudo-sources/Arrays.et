@@ -1,0 +1,59 @@
+/**
+ * The Arrays provider adds high level arrays to the language.
+ * For all functions, the first arguments is the name of the subject array.
+ * Any pseudo-call to "native" is not functional code and should only represent what happens.
+**/
+provider arrays
+
+
+def array array length:
+    native(new array[length]);
+    return array;
+
+def create array length:
+    return $[array array, length];
+    
+def createArray array length:
+    return $[array array, length];
+
+def new array length:
+    return $[array array, length];
+
+def newArray array length:
+    return $[array array, length];
+
+
+def length array:
+    return $[native(array.length)];
+
+def len array:
+    return $[length array];
+
+
+def set array index value:
+    native(array[index] = value);
+    
+    return value;
+
+def get array index:
+    return $[native array[index]];
+
+
+def clone originArray targetArray:
+    native(targetArray = originArray.clone);
+    return targetArray;
+
+def clone originArray targetArray endIndex:
+    native(targetArray = originArray.clone until endIndex);
+    return targetArray;
+
+def clone originArray targetArray startIndex endIndex:
+    native(targetArray = originArray.clone from startInedx to endIndex);
+    return targetArray;
+
+
+def toString array:
+    return $[native array.toString];
+
+def toString array delimeter:
+    return $[native array.toString with delimiter];
