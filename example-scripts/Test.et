@@ -1,0 +1,5 @@
+import stdio;
+
+var name = "edgelord";
+
+print name;

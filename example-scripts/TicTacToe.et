@@ -1,0 +1,61 @@
+/*
+ * TicTacToe with a computer controlled enemy writte in Edgy Script.
+ * The human player plays as "X", the PC plays as "O"
+**/
+import stdio;
+import arrays;
+import random;
+import vars;
+
+array board 9;
+main();
+
+def main:
+    init_board();
+    var turnc = 0;
+    
+    while turnc <= 8:
+        if turnc % 2 == 0:
+            human_turn();
+        else:
+            computer_turn();
+        show_board();
+        turnc = turnc + 1;
+    
+def debug_show_board:
+    print $[toString board];
+    
+def init_board:
+    while iteration != 8:
+        set board iteration iteration;
+            
+def human_turn:
+    print "input position: ";
+    position = $[input];
+    
+    while position < 0 || position > 8:
+        print "invaild position, please input position: ";
+        position = $[input];
+    if !$[isNumeric $[get board position]]:
+        print "You're tryna cheat?!";
+    set board position "X";
+    
+def computer_turn:
+    print "\nNice moves, but mine are better!\n";
+    nextPCMove = $[rng(0, 8)];
+    while !$[isNumeric $[get board nextPCMove]]:
+        nextPCMove = $[rng(0, 8)];
+    set board nextPCMove "O";
+    
+def show_board:
+    /*
+    * X | O | X
+    * O | 5 | O
+    * X | O | X
+    **/
+    print "\n";
+    foreach pos in board:
+        if iteration == 2 || iteration == 5 || iteration == 8:
+            print pos + "\n";
+        else:
+            print pos + " | ";

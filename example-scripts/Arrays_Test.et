@@ -1,0 +1,22 @@
+import arrays;
+import stdio;
+
+var i = 1 + 2;
+
+array countries 5;
+
+countries:set 0 "Germany";
+countries:set 1 "Great Britain";
+countries:set 2 "USA";
+countries:set 3 "Brazil";
+countries:set 4 "Russia";
+
+countries:copy europe, 0, 2;
+
+print $[toString countries, ", "];
+print "\n";
+print $[toString europe, "-"];
+
+print "\n";
+foreach country in countries:
+    print "Country number " + iteration + " is " + country + "\n";

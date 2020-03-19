@@ -1,0 +1,45 @@
+/**
+ * Flash timer program for League of Legends
+ *
+**/
+use stdio;
+use system;
+use arrays;
+use strings;
+use thread;
+
+// 5 positions, as there are only five memebers in the enemy team
+// the cooldown array stores the time in milliseconds, when the flash will be on again
+// and NOT the time UNTIL it comes off-cd again
+createArray cooldowns 5;
+createArray champions 5;
+nextChamp = 0;
+
+thread cdWatcher, $[watchCooldowns];
+
+initArrays();
+loop cdWatcher, true;
+while true:
+    usrInput = $[input];
+    if $[contains champions usrInput]:
+        set cooldowns $[indexOf champions usrInput] $[millis];
+    else:
+        set champions nextChamp usrInput
+        nextChamp = nextChamp + 1;
+        set cooldowns $[eval "nextChamp - 1"] $[millis];
+
+
+def initArrays:
+    while iteration < 4:
+        set cooldowns iteration 0;
+        set champions iteration $[join "Summoner" + iteration];
+        
+def watchCooldowns:
+    time = $[millis];
+    foreach cooldown in cooldowns:
+        if cooldown != 0:
+            if time >= cooldown:
+                print $[get champions iteration] + " has flash off cooldown now!";
+                set cooldowns iteration 0;
+    wait 1000;
+        
