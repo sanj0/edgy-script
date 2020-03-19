@@ -1,0 +1,6 @@
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/bin/Debug/esrun.exe
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/bin/Debug/esrun.pdb
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/obj/x86/Debug/esrun.csprojAssemblyReference.cache
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/obj/x86/Debug/esrun.csproj.CoreCompileInputs.cache
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/obj/x86/Debug/esrun.exe
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/obj/x86/Debug/esrun.pdb

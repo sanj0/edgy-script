@@ -1,0 +1,2 @@
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/bin/Release/esrun.exe
+/Users/edgelord/git/edgy-script/esrun/win/esrun/esrun/obj/x86/Release/esrun.exe
