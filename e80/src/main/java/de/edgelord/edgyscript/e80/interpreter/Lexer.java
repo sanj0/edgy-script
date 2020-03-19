@@ -2,6 +2,7 @@ package de.edgelord.edgyscript.e80.interpreter;
 
 import de.edgelord.edgyscript.e80.interpreter.token.Token;
 import de.edgelord.edgyscript.e80.interpreter.token.TokenBuilder;
+import de.edgelord.edgyscript.e80.interpreter.token.tokens.SpecialToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,9 @@ import java.util.List;
 public class Lexer {
 
     /*
-    TODO: Add period operator, which swaps primary argument and function name, e.g.
-    toLowerCase "Hello, WoRlD" -> "Hello, WoRlD".toLowerCase // or
-    contains myArray "hello world!" -> myArray.contains "hello world!"
+    TODO: Add colon operator, which swaps primary argument and function name, e.g.
+    toLowerCase "Hello, WoRlD" -> "Hello, WoRlD":toLowerCase // or
+    contains myArray "hello world!" -> myArray:contains "hello world!"
      */
 
     private Mode mode = Mode.INIT;
@@ -36,7 +37,6 @@ public class Lexer {
             Token subToken = next(c);
             if ((i == chars.length - 1 || mode == Mode.DONE) && mode != Mode.INIT && mode != Mode.START) {
                 if (tokenBuilder.length() > 0) {
-
                     tokens.add(Token.getToken(tokenBuilder.toString(), tokenBuilder.getType(), currentValueType));
                     mode = Mode.INIT;
                 }
@@ -58,13 +58,27 @@ public class Lexer {
             }
         }
 
-        // check for period operator here
+        // check for colon operator here
+        if (tokens.size() > 1) {
+            for (int i = 0; i < tokens.size(); i++) {
+                Token token = tokens.get(i);
+
+                if (token instanceof SpecialToken && token.getValue().equals(":")) {
+                    Token previousToken = tokens.get(i - 1);
+                    tokens.set(i - 1, tokens.get(i + 1));
+                    tokens.set(i + 1, previousToken);
+                    tokens.add(i + 2, new SpecialToken(",", Token.ValueType.NUMBER));
+                    tokens.remove(i);
+                    ++i;
+                }
+            }
+        }
 
         return tokens;
     }
 
     /**
-     * Builds {@link #tokenBuilder} and can return an additional subtoken (e.g. parentheses ()).
+     * Builds the {@link #tokenBuilder} and can return an additional subtoken (e.g. parentheses ()).
      * TODO: make [] be ignored inside ""
      *
      * @param character the next character to process

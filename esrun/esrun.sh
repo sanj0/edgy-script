@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # the first argument is the file
-file="$PWD"/"$1"
+file=$(python -c "import os,sys; print os.path.realpath(sys.argv[1])" $1)
 fileDir=$(dirname "$file")
 startDir=$PWD
 e80Path="$HOME/.edgy-script/bin/e80/e80.jar"

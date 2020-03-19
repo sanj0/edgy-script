@@ -56,9 +56,11 @@ public class Interpreter {
         KEYWORDS.add("elif");
         KEYWORDS.add("while");
         KEYWORDS.add("for");
-        KEYWORDS.add("use");
+        //KEYWORDS.add("use");
+        //KEYWORDS.add("import");
         SPECIAL_BUILTINS.add("use");
         SPECIAL_BUILTINS.add("import");
+        SPECIAL_BUILTINS.add("var");
 
         KEYWORDS.add("def");
         SPECIAL_BUILTINS.add("def");
@@ -86,6 +88,7 @@ public class Interpreter {
         OPERATORS.add("|");
         OPERATORS.add("&&");
         OPERATORS.add("&");
+        OPERATORS.add(":");
     }
 
     public static Value run(ScriptLine line) {

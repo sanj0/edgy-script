@@ -7,7 +7,6 @@ import de.edgelord.edgyscript.e80.interpreter.token.Token;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,6 +23,10 @@ public class Script {
     public Script(String path) {
         scriptFile = new File(path);
         ScriptException.SCRIPT_PATH = path;
+    }
+
+    public Script(File scriptFile) {
+        this.scriptFile = scriptFile;
     }
 
     public void loadPreCompiled() {
